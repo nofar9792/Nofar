@@ -73,8 +73,6 @@
 
             </LinearLayout>
 
-
-
             <LinearLayout android:layout_below="@+id/logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -189,29 +187,15 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/age"
-                    android:id="@+id/lbl_age"
+                    android:text="@string/typeOfUser"
+                    android:id="@+id/lbl_typeOfUser"
                     android:layout_margin="10px"
                     android:textSize="20dp"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/age"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"
-                    android:inputType="number"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -224,7 +208,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/isOwner"
                         android:id="@+id/isOwner"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:onClick="checkTypeOfUserBTNClick"/>
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -232,51 +217,228 @@
                         android:text="@string/isWalker"
                         android:id="@+id/isWalker"
                         android:textSize="15dp"
-                        android:layout_marginRight="30dp"/>
+                        android:layout_marginRight="30dp"
+                        android:onClick="checkTypeOfUserBTNClick"/>
                 </RadioGroup>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/comfortableTime"
-                    android:id="@+id/lbl_comfortableTime"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"/>
+                android:orientation="vertical"
+                android:id="@+id/layoutWalker"
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+                    android:orientation="horizontal">
 
-                    <CheckBox
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/isComfortableOnMorning"
-                        android:textSize="15dp"
-                        android:id="@+id/cbx_isComfortableOnMorning"/>
+                        android:text="@string/age"
+                        android:id="@+id/lbl_age"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"/>
 
-                    <CheckBox
+                    <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/isComfortableOnAfternoon"
-                        android:textSize="15dp"
-                        android:id="@+id/cbx_isComfortableOnAfternoon"
-                        android:layout_marginRight="30dp"/>
+                        android:id="@+id/age"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"
+                        android:inputType="number"/>
 
-                    <CheckBox
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/isComfortableOnEvening"
-                        android:textSize="15dp"
-                        android:id="@+id/cbx_isComfortableOnEvening"
-                        android:layout_marginRight="30dp"/>
+                        android:text="@string/priceForHour"
+                        android:id="@+id/lbl_priceForHour"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/priceForHour"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"
+                        android:inputType="number"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/comfortableTime"
+                        android:id="@+id/lbl_comfortableTime"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/isComfortableOnMorning"
+                            android:textSize="15dp"
+                            android:id="@+id/cbx_isComfortableOnMorning"/>
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/isComfortableOnAfternoon"
+                            android:textSize="15dp"
+                            android:id="@+id/cbx_isComfortableOnAfternoon"
+                            android:layout_marginRight="30dp"/>
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/isComfortableOnEvening"
+                            android:textSize="15dp"
+                            android:id="@+id/cbx_isComfortableOnEvening"
+                            android:layout_marginRight="30dp"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutOwner"
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dogName"
+                        android:id="@+id/lbl_dogName"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dogName"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_below="@+id/logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dogSize"
+                        android:id="@+id/lbl_dogSize"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"/>
+
+                    <RadioGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dogSize"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/isBig"
+                            android:id="@+id/isBig"
+                            android:textSize="15dp" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/isMedium"
+                            android:id="@+id/isMedium"
+                            android:textSize="15dp"
+                            android:layout_marginRight="20dp"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/isSmall"
+                            android:id="@+id/isSmall"
+                            android:textSize="15dp"
+                            android:layout_marginRight="20dp"/>
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dogAge"
+                        android:id="@+id/lbl_dogAge"
+                        android:layout_margin="10px"
+                        android:textSize="20dp" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dogAge"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dogPic"
+                        android:id="@+id/lbl_dogPic"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dogPic"
+                        android:layout_margin="10px"
+                        android:textSize="20dp"/>
 
                 </LinearLayout>
 
