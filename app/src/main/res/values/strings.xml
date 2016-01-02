@@ -18,4 +18,15 @@
     <string name="isComfortableOnAfternoon">צהריים</string>
     <string name="isComfortableOnEvening">ערב</string>
     <string name="comfortableTime">זמנים נוחים לטיול</string>
+    <string name="priceForHour">מחיר לשעת טיול</string>
+    <string name="allDogs">כל הכלבים שברשותי</string>
+    <string name="typeOfUser">סוג המשתמש</string>
+    <string name="dogName">שם הכלב</string>
+    <string name="dogSize">גודל הכלב</string>
+    <string name="isBig">גדול</string>
+    <string name="isMedium">בינוני</string>
+    <string name="isSmall">קטן</string>
+    <string name="dogAge">גיל של הכלב</string>
+    <string name="dogPic">תמונה של הכלב</string>
+
 </resources>
