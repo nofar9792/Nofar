@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">DoGo</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_sign_up">SignUp</string>
+
+    <!-- signUp strings -->
+    <string name="firstName">שם</string>
+    <string name="lastName">שם משפחה</string>
+    <string name="userName">שם משתמש</string>
+    <string name="password">סיסמא</string>
+    <string name="phoneNumber">מספר טלפון</string>
+    <string name="city">עיר</string>
+    <string name="address">כתובת</string>
+    <string name="age">גיל</string>
+    <string name="isWalker">מטייל</string>
+    <string name="isOwner">בעל כלב</string>
+    <string name="isComfortableOnMorning">בוקר</string>
+    <string name="isComfortableOnAfternoon">צהריים</string>
+    <string name="isComfortableOnEvening">ערב</string>
+    <string name="comfortableTime">זמנים נוחים לטיול</string>
 </resources>

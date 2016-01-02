@@ -2,6 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nofarcohenzedek.dogo">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <meta-data
+        android:name="com.parse.APPLICATION_ID"
+        android:value="ClCDxIalYQPR6IrVXUHtHQW99tazxTZOAFUnanLB" />
+    <meta-data
+        android:name="com.parse.CLIENT_KEY"
+        android:value="8EqrsIlUMqsfx8yxs9FjUndl0AO58cDHIJFp6wyY" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
@@ -18,13 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SignUp"
+            android:label="@string/title_activity_sign_up"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <meta-data
-        android:name="com.parse.APPLICATION_ID"
-        android:value="ClCDxIalYQPR6IrVXUHtHQW99tazxTZOAFUnanLB" />
-    <meta-data
-        android:name="com.parse.CLIENT_KEY"
-        android:value="8EqrsIlUMqsfx8yxs9FjUndl0AO58cDHIJFp6wyY" />
+
 </manifest>
