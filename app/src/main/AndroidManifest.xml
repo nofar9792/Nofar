@@ -19,5 +19,12 @@
             </intent-filter>
         </activity>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <meta-data
+        android:name="com.parse.APPLICATION_ID"
+        android:value="ClCDxIalYQPR6IrVXUHtHQW99tazxTZOAFUnanLB" />
+    <meta-data
+        android:name="com.parse.CLIENT_KEY"
+        android:value="8EqrsIlUMqsfx8yxs9FjUndl0AO58cDHIJFp6wyY" />
 </manifest>
