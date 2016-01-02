@@ -31,7 +31,8 @@
         android:layout_below="@+id/logo"
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:background="@color/colorBackground"/>
+        android:background="@color/colorBackground"
+        android:onClick="tempShowMap"/>
 
     <ImageButton
         android:layout_width="match_parent"

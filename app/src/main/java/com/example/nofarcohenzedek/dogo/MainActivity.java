@@ -29,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+
+    public void tempShowMap(View view)
+    {
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivityForResult(intent, 1);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
