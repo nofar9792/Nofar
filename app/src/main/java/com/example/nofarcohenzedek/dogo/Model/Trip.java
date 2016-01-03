@@ -3,48 +3,58 @@ package com.example.nofarcohenzedek.dogo.Model;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import java.util.Date;
+
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class Trip
 {
-    private long id;
-    private DogOwner owner;
+    private long dogOwnerId;
+    private long dogId;
+    private long dogWalkerId;
+    private DogOwner dogOwner;
     private Dog dog;
-    private DogWalker walker;
-    private TimePicker startOfWalking;
-    private TimePicker endOfWalking;
-    private DatePicker dateOfWalking;
+    private DogWalker dogWalker;
+    private Date startOfWalking;
+    private Date endOfWalking;
+    private Date dateOfWalking;
 
-    public Trip(long Id, long OwnerId, long DogId, long WalkerId, TimePicker StartOfWalking,
-                TimePicker EndOfWalking, DatePicker DateOfWalking)
+    public Trip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking,
+                Date endOfWalking, Date dateOfWalking)
     {
-        id = Id;
-        owner = null; // todo: get person by id from model
-        dog = null; // todo: get dog by id from model
-        walker = null; // todo: get person by id from model
-        startOfWalking = StartOfWalking;
-        endOfWalking = EndOfWalking;
-        dateOfWalking = DateOfWalking;
+//        dogOwner = null; // todo: get person by id from model
+//        dog = null; // todo: get dog by id from model
+//        dogWalker = null; // todo: get person by id from model
+        this.dogOwnerId = dogOwnerId;
+        this.dogId = dogId;
+        this.dogWalkerId = dogWalkerId;
+        this.startOfWalking = startOfWalking;
+        this.endOfWalking = endOfWalking;
+        this.dateOfWalking = dateOfWalking;
     }
 
-    public long getId() {
-        return id;
+    public long getDogOwnerId() {
+        return dogOwnerId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getDogId() {
+        return dogId;
     }
 
-    public DogOwner getOwner() {
-        return owner;
+    public long getDogWalkerId() {
+        return dogWalkerId;
     }
 
-    public void setOwner(DogOwner owner) {
-        this.owner = owner;
+    public DogOwner getDogOwner() {
+        return dogOwner;
     }
 
-    public Dog getDogs() {
+    public void setDogOwner(DogOwner dogOwner) {
+        this.dogOwner = dogOwner;
+    }
+
+    public Dog getDog() {
         return dog;
     }
 
@@ -52,35 +62,35 @@ public class Trip
         this.dog = dog;
     }
 
-    public DogWalker getWalker() {
-        return walker;
+    public DogWalker getDogWalker() {
+        return dogWalker;
     }
 
-    public void setWalker(DogWalker walker) {
-        this.walker = walker;
+    public void setDogWalker(DogWalker dogWalker) {
+        this.dogWalker = dogWalker;
     }
 
-    public TimePicker getStartOfWalking() {
+    public Date getStartOfWalking() {
         return startOfWalking;
     }
 
-    public void setStartOfWalking(TimePicker startOfWalking) {
+    public void setStartOfWalking(Date startOfWalking) {
         this.startOfWalking = startOfWalking;
     }
 
-    public TimePicker getEndOfWalking() {
+    public Date getEndOfWalking() {
         return endOfWalking;
     }
 
-    public void setEndOfWalking(TimePicker endOfWalking) {
+    public void setEndOfWalking(Date endOfWalking) {
         this.endOfWalking = endOfWalking;
     }
 
-    public DatePicker getDateOfWalking() {
+    public Date getDateOfWalking() {
         return dateOfWalking;
     }
 
-    public void setDateOfWalking(DatePicker dateOfWalking) {
+    public void setDateOfWalking(Date dateOfWalking) {
         this.dateOfWalking = dateOfWalking;
     }
 }

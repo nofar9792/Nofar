@@ -6,7 +6,6 @@ import java.util.List;
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class DogWalker extends User{
-
     private long age;
     private int priceForHour;
     private double averageRating;
@@ -16,12 +15,10 @@ public class DogWalker extends User{
     private boolean isComfortableOnEvening;
 
     public DogWalker(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
-                     String address, String city,long age, int priceForHour, double averageRating, List<Comment> comments, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
+                     String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
         super(id, userName, password, firstName, lastName, phoneNumber, address, city);
         this.age = age;
         this.priceForHour = priceForHour;
-        this.averageRating = averageRating;
-        this.comments = comments;
         this.isComfortableOnMorning = isComfortableOnMorning;
         this.isComfortableOnAfternoon = isComfortableOnAfternoon;
         this.isComfortableOnEvening = isComfortableOnEvening;
@@ -47,16 +44,18 @@ public class DogWalker extends User{
         return averageRating;
     }
 
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
-    }
-
     public List<Comment> getComments() {
         return comments;
     }
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+
+        int sum = 0;
+        for (Comment comment : this.comments) {
+            sum += comment.getRating();
+        }
+        this.averageRating = sum / this.comments.size();
     }
 
     public boolean isComfortableOnMorning() {

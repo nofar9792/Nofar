@@ -1,5 +1,7 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -9,6 +11,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.barcode.Barcode;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -39,8 +45,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng karkom = new LatLng(31.907013, 35.01363900000001);
+        mMap.addMarker(new MarkerOptions().position(karkom).title("CarmelsHome"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(karkom));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
+        // add all of the dog walkers markers by their address
+
+        // set every one of them a listener and check how can i see which one is pressed
+
+        // when marker is pressed, open details activity
+    }
+
+    public LatLng getLocationFromAddress(String address)
+    {
+        Geocoder coder = new Geocoder(this);
+        List<Address> addresses = null;
+
+        try
+        {
+            addresses = coder.getFromLocationName(address, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (addresses == null)
+        {
+            return null;
+        }
+
+        return new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+
     }
 }
