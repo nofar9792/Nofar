@@ -1,15 +1,21 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.example.nofarcohenzedek.dogo.Model.DogWalker;
+import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.vision.barcode.Barcode;
 
@@ -46,11 +52,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng karkom = new LatLng(31.907013, 35.01363900000001);
-        mMap.addMarker(new MarkerOptions().position(karkom).title("CarmelsHome"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(karkom));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
         // add all of the dog walkers markers by their address
+        Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
+            @Override
+            public void onResult(List<DogWalker> allDogWalkers)
+            {
+                for (DogWalker currentDogWalker: allDogWalkers) {
+                    String finalAddress = currentDogWalker.getAddress() + "," + currentDogWalker.getCity();
+                    LatLng location = getLocationFromAddress(finalAddress);
+
+                    mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
+                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.manwithdog)));
+                    );
+                }
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent intent = new Intent(getApplicationContext(), DogWalkerDetails.class);
+                intent.putExtra("id", marker.getTitle());
+                startActivity(intent);
+
+                return true;
+            }
+        });
 
         // set every one of them a listener and check how can i see which one is pressed
 

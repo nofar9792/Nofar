@@ -133,6 +133,16 @@ public class Model {
         modelParse.addDogWalker(id, userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
     }
 
+    public interface GetDogWalkersListener
+    {
+        void onResult(List<DogWalker> allDogWalkers);
+    }
+
+    public void getAllDogWalkers(final Model.GetDogWalkersListener listener)
+    {
+        modelParse.getAllDogWalkers(listener);
+    }
+
     public interface GetDogOwnerListener {
         public void onResult(DogOwner dogOwner);
     }
