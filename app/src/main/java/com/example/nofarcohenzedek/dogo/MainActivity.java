@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void tempShowMap(View view)
+    public void loginBTNClick(View view)
     {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivityForResult(intent, 1);
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     @Override

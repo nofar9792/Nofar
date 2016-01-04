@@ -53,7 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng karkom = new LatLng(31.907013, 35.01363900000001);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(karkom));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         // add all of the dog walkers markers by their address
         Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
