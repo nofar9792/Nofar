@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
@@ -19,7 +20,6 @@ public class DogWalkerDetails extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_walker_details);
-
 
         Intent intent = getIntent();
         final String dogWalkerId = intent.getStringExtra("id");
@@ -51,13 +51,5 @@ public class DogWalkerDetails extends Activity {
             }
         });
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_prime, menu);
-
-        return super.onCreateOptionsMenu(menu);
     }
 }
