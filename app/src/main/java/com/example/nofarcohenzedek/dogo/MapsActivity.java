@@ -1,11 +1,13 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
@@ -13,6 +15,7 @@ import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -24,7 +27,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import java.io.IOException;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends Activity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -37,7 +40,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         getActionBar().setDisplayShowTitleEnabled(false);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -49,6 +52,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         return true;
         //return super.onCreateOptionsMenu(menu);
+    }
+
+        @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.searchDW)
+        {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -72,15 +88,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // add all of the dog walkers markers by their address
         Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
             @Override
-            public void onResult(List<DogWalker> allDogWalkers)
-            {
-                for (DogWalker currentDogWalker: allDogWalkers) {
+            public void onResult(List<DogWalker> allDogWalkers) {
+                for (DogWalker currentDogWalker : allDogWalkers) {
                     String finalAddress = currentDogWalker.getAddress() + "," + currentDogWalker.getCity();
                     LatLng location = getLocationFromAddress(finalAddress);
 
-                    mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
+                    //mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
                     //.icon(BitmapDescriptorFactory.fromResource(R.drawable.manwithdog)));
-                    );
+
+                    mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId())));
+                          //  .icon(BitmapDescriptorFactory.fromPath("/drawable/manwithdog.png")));
                 }
             }
         });

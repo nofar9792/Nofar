@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toolbar;
@@ -39,11 +40,11 @@ public class SearchActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.showMap)
-        {
-            Intent intent = new Intent(this, MapsActivity.class);
-            startActivity(intent);
-        }
+//        if (id == R.id.showMap)
+//        {
+//            Intent intent = new Intent(this, MapsActivity.class);
+//            startActivity(intent);
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -65,6 +66,14 @@ public class SearchActivity extends Activity {
             layoutParameters.setVisibility(View.VISIBLE);
             layoutDistance.setVisibility(View.GONE);
         }
+
+        Button searchBTN = (Button) findViewById(R.id.searchBTN);
+        searchBTN.setEnabled(true);
+    }
+
+    public void searchBTNClick (View view)
+    {
+
     }
 
 }
