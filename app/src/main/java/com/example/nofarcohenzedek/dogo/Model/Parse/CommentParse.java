@@ -1,6 +1,7 @@
 package com.example.nofarcohenzedek.dogo.Model.Parse;
 
 import com.example.nofarcohenzedek.dogo.Model.Comment;
+import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -18,31 +19,6 @@ public class CommentParse {
     final static String TEXT = "text";
     final static String RATING = "rating";
 
-    public static void getCommentsOfDogWalker(long userId, final ModelParse.GetCommentsListener listener) {
-        ParseQuery<ParseObject> dogsQuery = new ParseQuery<ParseObject>(COMMENTS_TABLE);
-        dogsQuery.whereEqualTo(USER_ID, userId);
-
-        dogsQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                List<Comment> comments = new LinkedList<Comment>();
-
-                for (ParseObject po : list) {
-                    Comment comment = null;
-                    if (e == null) {
-                        String text = po.getString(TEXT);
-                        long rating = po.getLong(RATING);
-                        comments.add(new Comment(text, rating));
-
-                        listener.onResult(comments);
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
-
     public static void addToCommentsTable(long userId, String text, long rating){
         ParseObject newCommentParseObject = new ParseObject(COMMENTS_TABLE);
 
@@ -51,5 +27,52 @@ public class CommentParse {
         newCommentParseObject.put(RATING, rating);
 
         newCommentParseObject.saveInBackground();
+    }
+
+    public static void addCommentsToDogWalker(DogWalker dogWalker) {
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(COMMENTS_TABLE);
+        query.whereEqualTo(USER_ID, dogWalker.getId());
+
+        try{
+            List<ParseObject> parseObjects = query.find();
+            List<Comment> comments = new LinkedList<Comment>();
+
+            for (ParseObject parseObject : parseObjects) {
+                    String text = parseObject.getString(TEXT);
+                    long rating = parseObject.getLong(RATING);
+                    comments.add(new Comment(text, rating));
+            }
+
+            dogWalker.setComments(comments);
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    // TODO: delete this func
+    public static void getCommentsOfDogWalker(long userId, final ModelParse.GetCommentsListener listener) {
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(COMMENTS_TABLE);
+        query.whereEqualTo(USER_ID, userId);
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                List<Comment> comments = new LinkedList<Comment>();
+
+                for (ParseObject po : list) {
+                    if (e == null) {
+                        String text = po.getString(TEXT);
+                        long rating = po.getLong(RATING);
+                        comments.add(new Comment(text, rating));
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+
+                listener.onResult(comments);
+            }
+        });
     }
 }

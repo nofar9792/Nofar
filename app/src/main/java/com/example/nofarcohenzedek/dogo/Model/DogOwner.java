@@ -8,10 +8,16 @@ import java.util.List;
 public class DogOwner extends User {
     private List<Dog> dogs;
 
-    public DogOwner(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
+    public DogOwner(long id, String userName, String firstName, String lastName, String phoneNumber,
                     String address, String city,List<Dog> dogs) {
-        super(id, userName, password, firstName, lastName, phoneNumber, address, city);
+        super(id, userName, firstName, lastName, phoneNumber, address, city);
         this.dogs = dogs;
+    }
+
+
+    public DogOwner(long id, String userName, String firstName, String lastName, String phoneNumber,
+                    String address, String city) {
+        super(id, userName, firstName, lastName, phoneNumber, address, city);
     }
 
     public List<Dog> getDogs() {

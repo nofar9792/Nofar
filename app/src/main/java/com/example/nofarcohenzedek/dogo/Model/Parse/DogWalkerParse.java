@@ -1,14 +1,10 @@
 package com.example.nofarcohenzedek.dogo.Model.Parse;
 
-import com.example.nofarcohenzedek.dogo.Model.Comment;
-import com.example.nofarcohenzedek.dogo.Model.Dog;
-import com.example.nofarcohenzedek.dogo.Model.DogSize;
+import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
-import java.util.List;
 
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
@@ -36,6 +32,25 @@ public class DogWalkerParse {
         newDogWalkerParseObject.saveInBackground();
     }
 
+    public static void addDogWalkerDetails(DogWalker dogWalker) {
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOG_WALKERS_TABLE);
+        query.whereEqualTo(USER_ID, dogWalker.getId());
+
+        try {
+            ParseObject parseObject = query.getFirst();
+            dogWalker.setAge(parseObject.getInt(AGE));
+            dogWalker.setPriceForHour(parseObject.getInt(PRICE_FOR_HOUR));
+            dogWalker.setIsComfortableOnMorning(parseObject.getBoolean(IS_COMFORTABLE_ON_MORNING));
+            dogWalker.setIsComfortableOnAfternoon(parseObject.getBoolean(IS_COMFORTABLE_ON_AFTERNOON));
+            dogWalker.setIsComfortableOnEvening(parseObject.getBoolean(IS_COMFORTABLE_ON_EVENING));
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    // TODO: think if to delte this func
     public static void getDogWalkerDetailsById(long id, final ModelParse.GetDogWalkerDetailsListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOG_WALKERS_TABLE);
         query.whereEqualTo(USER_ID, id);

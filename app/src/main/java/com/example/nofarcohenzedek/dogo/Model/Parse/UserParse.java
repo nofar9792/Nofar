@@ -1,7 +1,9 @@
 package com.example.nofarcohenzedek.dogo.Model.Parse;
 
-import com.example.nofarcohenzedek.dogo.Model.Dog;
-import com.example.nofarcohenzedek.dogo.Model.DogSize;
+import com.example.nofarcohenzedek.dogo.Model.DogOwner;
+import com.example.nofarcohenzedek.dogo.Model.DogWalker;
+import com.example.nofarcohenzedek.dogo.Model.User;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -9,23 +11,26 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class UserParse {
-    final static String USERS_TABLE = "User";
     final static String USER_ID = "userId";
-    final static String USER_NAME = "userName";
-    final static String PASSWORD = "password";
     final static String FIRST_NAME = "firstName";
     final static String LAST_NAME = "lastName";
     final static String PHONE_NUMBER = "phoneNumber";
     final static String ADDRESS = "address";
     final static String CITY = "city";
+    final static String IS_DOG_WALKER = "isDogWalker";
 
     public static void addToUsersTable(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
-                                       String address, String city) {
+                                       String address, String city, Boolean isDogWalker) {
         ParseUser user = new ParseUser();
+        //ParseUser.logOut();
+
         user.setUsername(userName);
         user.setPassword(password);
         user.put(USER_ID, id);
@@ -34,7 +39,16 @@ public class UserParse {
         user.put(PHONE_NUMBER, phoneNumber);
         user.put(ADDRESS, address);
         user.put(CITY, city);
-
+        user.put(IS_DOG_WALKER, isDogWalker);
+        //ParseUser.enableRevocableSessionInBackground();
+//try
+//{
+//    user.signUp();
+//
+//}
+//catch (Exception e){
+//e.printStackTrace();
+//}
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
@@ -47,22 +61,83 @@ public class UserParse {
     }
 
     public static void getUserById(long id, final ModelParse.GetUserListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(USERS_TABLE);
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(USER_ID, id);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
 
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
-                    long userId = parseObject.getLong(USER_ID);
-                    String userName = parseObject.getString(USER_NAME);
-                    String password = parseObject.getString(PASSWORD);
-                    String firstName = parseObject.getString(FIRST_NAME);
-                    String lastName = parseObject.getString(LAST_NAME);
-                    String phoneNumber = parseObject.getString(PHONE_NUMBER);
-                    String address = parseObject.getString(ADDRESS);
-                    String city = parseObject.getString(CITY);
-                    listener.onResult(userId, userName, password, firstName, lastName, phoneNumber, address, city);
+                    long userId = parseUser.getLong(USER_ID);
+                    String userName = parseUser.getUsername();
+                    String firstName = parseUser.getString(FIRST_NAME);
+                    String lastName = parseUser.getString(LAST_NAME);
+                    String phoneNumber = parseUser.getString(PHONE_NUMBER);
+                    String address = parseUser.getString(ADDRESS);
+                    String city = parseUser.getString(CITY);
+
+                    listener.onResult(userId, userName, firstName, lastName, phoneNumber, address, city);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void getUserById2(long id, final ModelParse.GetUserListener2 listener) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo(USER_ID, id);
+        ParseUser p = null;
+
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (e == null) {
+                    User user;
+
+                    long userId = parseUser.getLong(USER_ID);
+                    String userName = parseUser.getUsername();
+                    String firstName = parseUser.getString(FIRST_NAME);
+                    String lastName = parseUser.getString(LAST_NAME);
+                    String phoneNumber = parseUser.getString(PHONE_NUMBER);
+                    String address = parseUser.getString(ADDRESS);
+                    String city = parseUser.getString(CITY);
+                    Boolean isDogWalker = parseUser.getBoolean(IS_DOG_WALKER);
+
+                    if (isDogWalker) {
+                        user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
+                    } else {
+                        user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
+                    }
+                    listener.onResult(user);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void getDogWalkerUsers(final ModelParse.GetUsersListener listener) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo(IS_DOG_WALKER, true);
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                List<User> users = new LinkedList<User>();
+                if (e == null) {
+                    for (ParseObject po : list) {
+                        long userId = po.getLong(USER_ID);
+                        String userName = ((ParseUser)po).getUsername();
+                        String firstName = po.getString(FIRST_NAME);
+                        String lastName = po.getString(LAST_NAME);
+                        String phoneNumber = po.getString(PHONE_NUMBER);
+                        String address = po.getString(ADDRESS);
+                        String city = po.getString(CITY);
+
+                        users.add(new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city));
+                    }
+                    listener.onResult(users);
                 } else {
                     e.printStackTrace();
                 }

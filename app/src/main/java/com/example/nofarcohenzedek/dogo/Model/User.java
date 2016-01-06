@@ -7,19 +7,17 @@ public abstract class User
 {
     private long id;
     private String userName;
-    private String password;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String address;
     private String city;
 
-    public User(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
+    public User(long id, String userName, String firstName, String lastName, String phoneNumber,
                 String address, String city)
     {
         this.id = id;
         this.userName = userName;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -41,13 +39,6 @@ public abstract class User
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
