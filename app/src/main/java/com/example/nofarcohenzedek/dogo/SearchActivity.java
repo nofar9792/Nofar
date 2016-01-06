@@ -45,6 +45,21 @@ public class SearchActivity extends Activity {
             Intent intent = new Intent(this, DogsListActivity.class);
             startActivity(intent);
         }
+        else if (id==R.id.tripsReport)
+        {
+            Intent intent = new Intent(this, TripsReportActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.messages)
+        {
+            Intent intent = new Intent(this, MessagesActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.myProfile)
+        {
+            Intent intent = new Intent(this, MyProfileActivity.class);
+            startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }

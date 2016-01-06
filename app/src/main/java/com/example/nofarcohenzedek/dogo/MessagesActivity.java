@@ -7,22 +7,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 
-import com.example.nofarcohenzedek.dogo.MapsActivity;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
-import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
-import com.example.nofarcohenzedek.dogo.R;
-import com.example.nofarcohenzedek.dogo.SearchActivity;
 
-public class DogsListActivity extends Activity {
+public class MessagesActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dogs_list);
+        setContentView(R.layout.activity_messages);
 
-        setActionBar((Toolbar) findViewById(R.id.dogsListToolBar));
-        // getActionBar().setDisplayShowTitleEnabled(false);
+        setActionBar((Toolbar)findViewById(R.id.messagesToolBar));
+        //getActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override
@@ -56,14 +52,14 @@ public class DogsListActivity extends Activity {
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         }
+        else if (id == R.id.dogsList)
+        {
+            Intent intent = new Intent(this, DogsListActivity.class);
+            startActivity(intent);
+        }
         else if (id==R.id.tripsReport)
         {
             Intent intent = new Intent(this, TripsReportActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.messages)
-        {
-            Intent intent = new Intent(this, MessagesActivity.class);
             startActivity(intent);
         }
         else if (id == R.id.myProfile)
@@ -71,6 +67,7 @@ public class DogsListActivity extends Activity {
             Intent intent = new Intent(this, MyProfileActivity.class);
             startActivity(intent);
         }
+
         return super.onOptionsItemSelected(item);
     }
 

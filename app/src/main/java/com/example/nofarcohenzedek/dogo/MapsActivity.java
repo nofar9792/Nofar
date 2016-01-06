@@ -51,21 +51,27 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
 
         @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+            int id = item.getItemId();
 
-        if (id == R.id.searchDW)
-        {
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.dogsList)
-        {
-            Intent intent = new Intent(this, DogsListActivity.class);
-            startActivity(intent);
-        }
+            if (id == R.id.searchDW) {
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.dogsList) {
+                Intent intent = new Intent(this, DogsListActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.tripsReport) {
+                Intent intent = new Intent(this, TripsReportActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.messages) {
+                Intent intent = new Intent(this, MessagesActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.myProfile) {
+                Intent intent = new Intent(this, MyProfileActivity.class);
+                startActivity(intent);
+            }
 
-        return super.onOptionsItemSelected(item);
-    }
+            return super.onOptionsItemSelected(item);
+        }
 
     /**
      * Manipulates the map once available.
