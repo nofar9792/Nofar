@@ -42,8 +42,8 @@ public class DogWalkerDetails extends Activity {
                 lastName.setText(dogWalker.getLastName());
                 city.setText(dogWalker.getCity());
                 address.setText(dogWalker.getAddress());
-                age.setText((int) dogWalker.getAge());
-                price.setText(dogWalker.getPriceForHour());
+                age.setText(Long.toString(dogWalker.getAge()));
+                price.setText(Integer.toString(dogWalker.getPriceForHour()));
                 morning.setChecked(dogWalker.isComfortableOnMorning());
                 noon.setChecked(dogWalker.isComfortableOnAfternoon());
                 evening.setChecked(dogWalker.isComfortableOnEvening());
