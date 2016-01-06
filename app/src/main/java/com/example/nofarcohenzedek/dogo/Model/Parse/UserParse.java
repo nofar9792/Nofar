@@ -80,8 +80,7 @@ public class UserParse {
         return convertFromParseUserToUser(parseUser);
     }
 
-    public static void logOut()
-    {
+    public static void logOut(){
         ParseUser.logOut();
     }
 //    public static void getUserById(long id, final ModelParse.GetUserListener listener) {

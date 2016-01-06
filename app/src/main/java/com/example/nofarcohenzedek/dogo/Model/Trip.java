@@ -18,10 +18,9 @@ public class Trip
     private DogWalker dogWalker;
     private Date startOfWalking;
     private Date endOfWalking;
-    private Date dateOfWalking;
+    private Boolean isPaid;
 
-    public Trip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking,
-                Date endOfWalking, Date dateOfWalking)
+    public Trip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid)
     {
 //        dogOwner = null; // todo: get person by id from model
 //        dog = null; // todo: get dog by id from model
@@ -31,7 +30,7 @@ public class Trip
         this.dogWalkerId = dogWalkerId;
         this.startOfWalking = startOfWalking;
         this.endOfWalking = endOfWalking;
-        this.dateOfWalking = dateOfWalking;
+        this.isPaid = isPaid;
     }
 
     public long getDogOwnerId() {
@@ -86,11 +85,11 @@ public class Trip
         this.endOfWalking = endOfWalking;
     }
 
-    public Date getDateOfWalking() {
-        return dateOfWalking;
+    public Boolean getIsPaid() {
+        return isPaid;
     }
 
-    public void setDateOfWalking(Date dateOfWalking) {
-        this.dateOfWalking = dateOfWalking;
+    public void setIsPaid(Boolean isPaid) {
+        this.isPaid = isPaid;
     }
 }

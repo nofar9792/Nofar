@@ -1,8 +1,5 @@
 package com.example.nofarcohenzedek.dogo.Model.Parse;
 
-import android.widget.DatePicker;
-import android.widget.TimePicker;
-
 import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
 import com.parse.FindCallback;
@@ -25,18 +22,21 @@ public class TripParse {
     final static String START_OF_WALKING = "startOfWalking";
     final static String END_OF_WALKING = "endOfWalking";
     final static String DATE_OF_WALKING = "dateOfWalking";
+    final static String IS_PAID = "isPaid";
 
-    public static void addToTripsTable(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Date dateOfWalking) {
-        ParseObject newDogParseObject = new ParseObject(TRIPS_TABLE);
 
-        newDogParseObject.put(DOG_OWNER_ID, dogOwnerId);
-        newDogParseObject.put(DOG_ID, dogId);
-        newDogParseObject.put(DOG_WALKER_ID, dogWalkerId);
-        newDogParseObject.put(START_OF_WALKING, startOfWalking);
-        newDogParseObject.put(END_OF_WALKING, endOfWalking);
-        newDogParseObject.put(DATE_OF_WALKING, dateOfWalking);
 
-        newDogParseObject.saveInBackground();
+    public static void addToTripsTable(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
+        ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
+
+        newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
+        newTripParseObject.put(DOG_ID, dogId);
+        newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
+        newTripParseObject.put(START_OF_WALKING, startOfWalking);
+        newTripParseObject.put(END_OF_WALKING, endOfWalking);
+        newTripParseObject.put(IS_PAID, isPaid);
+
+        newTripParseObject.saveInBackground();
     }
 
     public static void getTripsDetailsByDogOwnerId(final long dogOwnerId, final ModelParse.GetTripsDetailsListener listener) {
@@ -49,14 +49,13 @@ public class TripParse {
 
                 if (e == null) {
                     for (ParseObject po : list) {
-                        Dog dog = null;
-
                         long dogId = po.getLong(DOG_ID);
                         long dogWalkerId = po.getLong(DOG_WALKER_ID);
                         Date startOfWalking = po.getDate(START_OF_WALKING);
                         Date endOfWalking = po.getDate(END_OF_WALKING);
-                        Date dateOfWalking = po.getDate(DATE_OF_WALKING);
-                        trips.add(new Trip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, dateOfWalking));
+                        Boolean isPaid = po.getBoolean(IS_PAID);
+
+                        trips.add(new Trip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
                     }
                     listener.onResult(trips);
 
@@ -83,8 +82,9 @@ public class TripParse {
                         long dogId = po.getLong(DOG_ID);
                         Date startOfWalking = po.getDate(START_OF_WALKING);
                         Date endOfWalking = po.getDate(END_OF_WALKING);
-                        Date dateOfWalking = po.getDate(DATE_OF_WALKING);
-                        trips.add(new Trip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, dateOfWalking));
+                        Boolean isPaid = po.getBoolean(IS_PAID);
+
+                        trips.add(new Trip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
                     }
                     listener.onResult(trips);
 

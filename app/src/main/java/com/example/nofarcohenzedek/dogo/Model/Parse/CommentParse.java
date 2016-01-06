@@ -29,26 +29,29 @@ public class CommentParse {
         newCommentParseObject.saveInBackground();
     }
 
-    public static void addCommentsToDogWalker(DogWalker dogWalker) {
+    public static void addCommentsToDogWalker(final DogWalker dogWalker) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(COMMENTS_TABLE);
         query.whereEqualTo(USER_ID, dogWalker.getId());
 
-        try{
-            List<ParseObject> parseObjects = query.find();
-            List<Comment> comments = new LinkedList<Comment>();
+        query.findInBackground(new FindCallback<ParseObject>() {
+           @Override
+           public void done(List<ParseObject> list, ParseException e) {
+               if (e == null) {
+                   List<Comment> comments = new LinkedList<Comment>();
 
-            for (ParseObject parseObject : parseObjects) {
-                    String text = parseObject.getString(TEXT);
-                    long rating = parseObject.getLong(RATING);
-                    comments.add(new Comment(text, rating));
-            }
+                   for (ParseObject parseObject : list) {
+                       String text = parseObject.getString(TEXT);
+                       long rating = parseObject.getLong(RATING);
+                       comments.add(new Comment(text, rating));
+                   }
 
-            dogWalker.setComments(comments);
-        }
-        catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
+                   dogWalker.setComments(comments);
+               } else {
+                   e.printStackTrace();
+               }
+           }
+       }
+        );
     }
 
     // TODO: delete this func

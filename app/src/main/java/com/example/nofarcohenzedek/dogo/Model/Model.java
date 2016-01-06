@@ -139,7 +139,7 @@ public class Model {
 
     public void addDogWalker(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
                              String address, String city, Boolean isDogWalker, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
-        modelParse.addDogWalker(id, userName, password, firstName, lastName, phoneNumber, address, city, isDogWalker, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
+        modelParse.addDogWalker(id, userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
     }
 
     public interface GetDogWalkersListener
@@ -157,8 +157,8 @@ public class Model {
     }
 
     public void addDogOwner(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
-                            String address, String city, Boolean isDogWalker) {
-        modelParse.addDogOwner(id, userName, password, firstName, lastName, phoneNumber, address, city, isDogWalker);
+                            String address, String city, List<Dog> dogs) {
+        modelParse.addDogOwner(id, userName, password, firstName, lastName, phoneNumber, address, city, dogs);
     }
 
     public interface GetTripsListener {
@@ -166,8 +166,8 @@ public class Model {
     }
 
     // Trip methods
-    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Date dateOfWalking) {
-        modelParse.addTrip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, dateOfWalking);
+    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
+        modelParse.addTrip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
     }
 
     public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener){

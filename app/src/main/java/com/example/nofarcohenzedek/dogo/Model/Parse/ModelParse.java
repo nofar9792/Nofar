@@ -11,7 +11,6 @@ import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.parse.Parse;
-import com.parse.ParseUser;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -43,11 +42,22 @@ public class ModelParse {
         DogParse.getDogById(id, listener);
     }
 
-    public void getAllDogsOfOwner(long userId, final Model.GetDogsListener listener) {
-        final List<Long> dogIds = new LinkedList<Long>();
-        DogOwnerConnectDogParse.getDogIdsOfOwner(userId, dogIds);
+    public interface GetDogIds {
+        void onResult(List<Long> dogIds);
+    }
 
-        DogParse.getDogByIds(dogIds, listener);
+    public void getAllDogsOfOwner(long userId, final Model.GetDogsListener listener) {
+        DogOwnerConnectDogParse.getDogIdsOfOwner(userId, new GetDogIds() {
+            @Override
+            public void onResult(List<Long> dogIds) {
+                DogParse.getDogByIds(dogIds, listener);
+            }
+        });
+    }
+
+    public void addDog(long userId, Dog dog) {
+        DogOwnerConnectDogParse.addToDogOwnersConnectDogsTable(userId, dog.getId());
+        DogParse.addToDogsTable(dog);
     }
 
     public void addDog(long userId, long id, String name, final DogSize size, final long age, final String picRef) {
@@ -151,8 +161,8 @@ public class ModelParse {
     }
 
     public void addDogWalker(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city,Boolean isDogWalker, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
-        UserParse.addToUsersTable(id, userName, password, firstName, lastName, phoneNumber, address, city, isDogWalker);
+                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
+        UserParse.addToUsersTable(id, userName, password, firstName, lastName, phoneNumber, address, city, true);
         DogWalkerParse.addToDogWalkersTable(id, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
     }
 
@@ -190,16 +200,19 @@ public class ModelParse {
     }
 
     public void addDogOwner(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, Boolean isDogWalker) {
-        UserParse.addToUsersTable(id, userName, password, firstName, lastName, phoneNumber, address, city, isDogWalker);
+                             String address, String city, List<Dog> dogs) {
+        UserParse.addToUsersTable(id, userName, password, firstName, lastName, phoneNumber, address, city, false);
+        for(Dog dog : dogs) {
+            addDog(id,dog);
+        }
     }
 
     public void addCommentToDogWalker(long userId, String text, long rating) {
         CommentParse.addToCommentsTable(userId, text, rating);
     }
 
-    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Date dateOfWalking) {
-        TripParse.addToTripsTable(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, dateOfWalking);
+    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
+        TripParse.addToTripsTable(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
     }
 
     public interface GetTripsDetailsListener {
@@ -209,23 +222,22 @@ public class ModelParse {
     public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener){
         TripParse.getTripsDetailsByDogOwnerId(dogOwnerId, new GetTripsDetailsListener() {
             @Override
-            public void onResult(List<Trip> trips) {
+            public void onResult(final List<Trip> trips) {
                 for (final Trip trip : trips) {
                     getDogWalkerById2(trip.getDogWalkerId(), new Model.GetDogWalkerListener() {
                         @Override
                         public void onResult(DogWalker dogWalker) {
                             trip.setDogWalker(dogWalker);
-                        }
-                    });
-
-                    getDogById(trip.getDogId(), new Model.GetDogListener() {
-                        @Override
-                        public void onResult(Dog dog) {
-                            trip.setDog(dog);
+                            getDogById(trip.getDogId(), new Model.GetDogListener() {
+                                @Override
+                                public void onResult(Dog dog) {
+                                    trip.setDog(dog);
+                                    listener.onResult(trips);
+                                }
+                            });
                         }
                     });
                 }
-                listener.onResult(trips);
             }
         });
     }
@@ -233,23 +245,26 @@ public class ModelParse {
     public void getTripsByDogWalkerId(long dogWalkerId, final Model.GetTripsListener listener){
         TripParse.getTripsDetailsByDogWalkerId(dogWalkerId, new GetTripsDetailsListener() {
             @Override
-            public void onResult(List<Trip> trips) {
+            public void onResult(final List<Trip> trips) {
                 for (final Trip trip : trips) {
-                    getDogOwnerById2(trip.getDogWalkerId(), new Model.GetDogOwnerListener() {
+                    getDogOwnerById2(trip.getDogOwnerId(), new Model.GetDogOwnerListener() {
                         @Override
                         public void onResult(DogOwner dogOwner) {
                             trip.setDogOwner(dogOwner);
-                        }
-                    });
 
-                    getDogById(trip.getDogId(), new Model.GetDogListener() {
-                        @Override
-                        public void onResult(Dog dog) {
-                            trip.setDog(dog);
+                            for(Dog dog : dogOwner.getDogs())
+                            {
+                                if(dog.getId() == trip.getDogId())
+                                {
+                                    trip.setDog(dog);
+                                    break;
+                                }
+                            }
+                            listener.onResult(trips);
+
                         }
                     });
                 }
-                listener.onResult(trips);
             }
         });
     }

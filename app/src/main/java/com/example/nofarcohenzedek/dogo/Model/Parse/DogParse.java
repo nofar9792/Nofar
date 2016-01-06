@@ -23,6 +23,18 @@ public class DogParse {
     final static String AGE = "age";
     final static String PIC_REF = "picRef";
 
+    public static void addToDogsTable(Dog dog){
+        ParseObject newDogParseObject = new ParseObject(DOGS_TABLE);
+
+        newDogParseObject.put(DOG_ID, dog.getId());
+        newDogParseObject.put(NAME, dog.getName());
+        newDogParseObject.put(SIZE, dog.getSize().name());
+        newDogParseObject.put(AGE, dog.getAge());
+        newDogParseObject.put(PIC_REF, dog.getPicRef());
+
+        newDogParseObject.saveInBackground();
+    }
+
     public static void addToDogsTable(long id, String name, DogSize size, long age, String picRef){
         ParseObject newDogParseObject = new ParseObject(DOGS_TABLE);
 
@@ -67,12 +79,12 @@ public class DogParse {
                 List<Dog> dogs = new LinkedList<Dog>();
 
                 if (e == null) {
-                    for (ParseObject po : list) {
-                        long id = Long.parseLong(po.getString(DOG_ID));
-                        String name = po.getString(NAME);
-                        DogSize dogSize = DogSize.valueOf(po.getString(SIZE));
-                        long age = Long.parseLong(po.getString(AGE));
-                        String picRef = po.getString(PIC_REF);
+                    for (ParseObject parseObject : list) {
+                        long id = parseObject.getLong(DOG_ID);
+                        String name = parseObject.getString(NAME);
+                        DogSize dogSize = DogSize.valueOf(parseObject.getString(SIZE));
+                        long age = parseObject.getLong(AGE);
+                        String picRef = parseObject.getString(PIC_REF);
                         dogs.add(new Dog(id, name, dogSize, age, picRef));
                     }
                     listener.onResult(dogs);
