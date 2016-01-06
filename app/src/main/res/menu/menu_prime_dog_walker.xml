@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/myProfile"
+        android:icon="@drawable/profile_icon"
+        android:showAsAction="always"
+        android:title="myProfile" />
+
+    <item
+        android:id="@+id/dogsList"
+        android:icon="@drawable/dog_icon"
+        android:showAsAction="always"
+        android:title="dogs" />
+
+    <item
+        android:id="@+id/tripsReport"
+        android:icon="@drawable/report_icon"
+        android:showAsAction="always"
+        android:title="tripsReport" />
+
+    <item
+        android:id="@+id/messages"
+        android:icon="@drawable/message_icon"
+        android:title="messages"
+        android:showAsAction="always"/>
+</menu>

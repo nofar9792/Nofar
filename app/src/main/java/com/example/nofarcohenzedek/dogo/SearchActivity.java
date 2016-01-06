@@ -11,8 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toolbar;
 
-import com.example.nofarcohenzedek.dogo.R;
-
 public class SearchActivity extends Activity {
 
     @Override
@@ -20,14 +18,14 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        setActionBar((Toolbar)findViewById(R.id.searchToolBar));
+        setActionBar((Toolbar) findViewById(R.id.searchToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_prime, menu);
+        getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
 
         return true;
         //return super.onCreateOptionsMenu(menu);
@@ -35,16 +33,18 @@ public class SearchActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-//        if (id == R.id.showMap)
-//        {
-//            Intent intent = new Intent(this, MapsActivity.class);
-//            startActivity(intent);
-//        }
+        if (id == R.id.showMap)
+        {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.dogsList)
+        {
+            Intent intent = new Intent(this, DogsListActivity.class);
+            startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }

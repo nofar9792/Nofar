@@ -4,34 +4,35 @@
     <string name="title_activity_sign_up">SignUp</string>
 
     <!-- signUp strings -->
-    <string name="firstName">שם</string>
-    <string name="lastName">שם משפחה</string>
-    <string name="userName">שם משתמש</string>
-    <string name="password">סיסמא</string>
-    <string name="phoneNumber">מספר טלפון</string>
-    <string name="city">עיר</string>
-    <string name="address">כתובת</string>
-    <string name="age">גיל</string>
+    <string name="firstName">שם:</string>
+    <string name="lastName">שם משפחה:</string>
+    <string name="userName">שם משתמש:</string>
+    <string name="password">סיסמא:</string>
+    <string name="phoneNumber">מספר טלפון:</string>
+    <string name="city">עיר:</string>
+    <string name="address">כתובת:</string>
+    <string name="age">גיל:</string>
     <string name="isWalker">מטייל</string>
     <string name="isOwner">בעל כלב</string>
     <string name="isComfortableOnMorning">בוקר</string>
     <string name="isComfortableOnAfternoon">צהריים</string>
     <string name="isComfortableOnEvening">ערב</string>
     <string name="comfortableTime">זמנים נוחים לטיול</string>
-    <string name="priceForHour">מחיר לשעת טיול</string>
+    <string name="priceForHour">מחיר לשעת טיול:</string>
     <string name="allDogs">כל הכלבים שברשותי</string>
     <string name="typeOfUser">סוג המשתמש</string>
-    <string name="dogName">שם הכלב</string>
-    <string name="dogSize">גודל הכלב</string>
+    <string name="dogName">שם הכלב:</string>
+    <string name="dogSize">גודל הכלב:</string>
     <string name="isBig">גדול</string>
     <string name="isMedium">בינוני</string>
     <string name="isSmall">קטן</string>
-    <string name="dogAge">גיל של הכלב</string>
-    <string name="dogPic">תמונה של הכלב</string>
+    <string name="dogAge">גיל של הכלב:</string>
+    <string name="dogPic">תמונה של הכלב:</string>
 
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_dog_walker_details">DogWalkerDetails</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_dogs_list">DogsListActivity</string>
 </resources>

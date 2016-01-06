@@ -67,6 +67,11 @@
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".DogsListActivity"
+            android:label="@string/title_activity_dogs_list"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

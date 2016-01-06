@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,17 +11,13 @@ import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
-import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.barcode.Barcode;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,7 +43,7 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_prime, menu);
+        getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
 
         return true;
         //return super.onCreateOptionsMenu(menu);
@@ -61,6 +56,11 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
         if (id == R.id.searchDW)
         {
             Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.dogsList)
+        {
+            Intent intent = new Intent(this, DogsListActivity.class);
             startActivity(intent);
         }
 

@@ -179,7 +179,7 @@
                 android:id="@+id/morningInDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:editable="false"
+                android:clickable="false"
                 android:text="@string/isComfortableOnMorning"
                 android:textSize="15dp" />
 
@@ -188,7 +188,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
-                android:editable="false"
+                android:clickable="false"
                 android:text="@string/isComfortableOnAfternoon"
                 android:textSize="15dp" />
 
@@ -197,11 +197,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
-                android:editable="false"
+                android:clickable="false"
                 android:text="@string/isComfortableOnEvening"
                 android:textSize="15dp" />
 
         </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="בקש מספר"
+            android:id="@+id/askNumber"/>
+
 
     </LinearLayout>
 </LinearLayout>

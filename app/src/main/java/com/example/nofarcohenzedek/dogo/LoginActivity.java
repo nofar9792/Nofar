@@ -3,10 +3,13 @@ package com.example.nofarcohenzedek.dogo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toolbar;
+import android.widget.EditText;
+
+import com.example.nofarcohenzedek.dogo.Model.DogOwner;
+import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
+import com.example.nofarcohenzedek.dogo.Model.User;
 
 public class LoginActivity extends Activity {
 
@@ -18,8 +21,25 @@ public class LoginActivity extends Activity {
 
     public void loginBtnClick(View view)
     {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
+        EditText userName = (EditText) findViewById(R.id.userNameLogin);
+        EditText password = (EditText) findViewById(R.id.passwordLogin);
+        Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new ModelParse.GetUserListener2() {
+            @Override
+            public void onResult(User user) {
+
+                if (user instanceof DogOwner)
+                {
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    startActivity(intent);
+                }
+                else
+                {
+                    Intent intent = new Intent(getApplicationContext(), DogsListActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
     }
 
 }
