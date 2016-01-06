@@ -40,11 +40,11 @@ public class SearchActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.showMap)
-        {
-            Intent intent = new Intent(this, MapsActivity.class);
-            startActivity(intent);
-        }
+//        if (id == R.id.showMap)
+//        {
+//            Intent intent = new Intent(this, MapsActivity.class);
+//            startActivity(intent);
+//        }
 
         return super.onOptionsItemSelected(item);
     }
