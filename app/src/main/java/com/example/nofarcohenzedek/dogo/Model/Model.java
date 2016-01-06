@@ -1,13 +1,8 @@
 package com.example.nofarcohenzedek.dogo.Model;
 
 import android.content.Context;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
 
-import com.example.nofarcohenzedek.dogo.Model.Parse.DogParse;
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
-import com.example.nofarcohenzedek.dogo.Model.Parse.TripParse;
-import com.example.nofarcohenzedek.dogo.Model.Parse.UserParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
 
 import java.util.Date;
@@ -121,16 +116,17 @@ public class Model {
     }
 
     public interface GetDogWalkerListener {
-        public void onResult(DogWalker dogWalker);
+        void onResult(DogWalker dogWalker);
     }
 
     public void getDogWalkerById(long userId, GetDogWalkerListener listener){
-        modelParse.getDogWalkerById(userId, listener);
+        //modelParse.getDogWalkerById(userId, listener);
+        modelParse.getDogWalkerById2(userId, listener);
     }
 
     public void addDogWalker(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
-        modelParse.addDogWalker(id, userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
+                             String address, String city, Boolean isDogWalker, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
+        modelParse.addDogWalker(id, userName, password, firstName, lastName, phoneNumber, address, city, isDogWalker, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
     }
 
     public interface GetDogWalkersListener
@@ -144,16 +140,16 @@ public class Model {
     }
 
     public interface GetDogOwnerListener {
-        public void onResult(DogOwner dogOwner);
+        void onResult(DogOwner dogOwner);
     }
 
     public void addDogOwner(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
-                            String address, String city) {
-        modelParse.addDogOwner(id, userName, password, firstName, lastName, phoneNumber, address, city);
+                            String address, String city, Boolean isDogWalker) {
+        modelParse.addDogOwner(id, userName, password, firstName, lastName, phoneNumber, address, city, isDogWalker);
     }
 
     public interface GetTripsListener {
-        public void onResult(List<Trip> trips);
+        void onResult(List<Trip> trips);
     }
 
     // Trip methods

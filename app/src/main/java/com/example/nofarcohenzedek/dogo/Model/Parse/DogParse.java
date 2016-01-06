@@ -68,8 +68,6 @@ public class DogParse {
 
                 if (e == null) {
                     for (ParseObject po : list) {
-                        Dog dog = null;
-
                         long id = Long.parseLong(po.getString(DOG_ID));
                         String name = po.getString(NAME);
                         DogSize dogSize = DogSize.valueOf(po.getString(SIZE));

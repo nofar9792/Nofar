@@ -14,14 +14,19 @@ public class DogWalker extends User{
     private boolean isComfortableOnAfternoon;
     private boolean isComfortableOnEvening;
 
-    public DogWalker(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
+    public DogWalker(long id, String userName, String firstName, String lastName, String phoneNumber,
                      String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
-        super(id, userName, password, firstName, lastName, phoneNumber, address, city);
+        super(id, userName, firstName, lastName, phoneNumber, address, city);
         this.age = age;
         this.priceForHour = priceForHour;
         this.isComfortableOnMorning = isComfortableOnMorning;
         this.isComfortableOnAfternoon = isComfortableOnAfternoon;
         this.isComfortableOnEvening = isComfortableOnEvening;
+    }
+
+    public DogWalker(long id, String userName, String firstName, String lastName, String phoneNumber,
+                     String address, String city) {
+        super(id, userName, firstName, lastName, phoneNumber, address, city);
     }
 
     public long getAge() {
@@ -55,7 +60,11 @@ public class DogWalker extends User{
         for (Comment comment : this.comments) {
             sum += comment.getRating();
         }
-        this.averageRating = sum / this.comments.size();
+
+        if(this.comments.size() != 0)
+        {
+            this.averageRating = sum / this.comments.size();
+        }
     }
 
     public boolean isComfortableOnMorning() {
