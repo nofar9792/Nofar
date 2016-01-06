@@ -85,6 +85,19 @@ public class Model {
         return instance;
     }
 
+    public static void logIn(String userName, String password, ModelParse.GetUserListener2 listener){
+        ModelParse.logIn(userName, password, listener);
+    }
+
+    public static User getCurrentUser(){
+        return ModelParse.getCurrentUser();
+    }
+
+    public static void logOut()
+    {
+        ModelParse.logOut();
+    }
+
     // Dog Methods
 
     public interface GetDogListener {

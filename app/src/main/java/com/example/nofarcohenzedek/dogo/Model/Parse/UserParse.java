@@ -5,6 +5,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -60,23 +61,13 @@ public class UserParse {
         });
     }
 
-    public static void getUserById(long id, final ModelParse.GetUserListener listener) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo(USER_ID, id);
-
-        query.getFirstInBackground(new GetCallback<ParseUser>() {
-            @Override
+    public static void logIn(String userName, String password, final ModelParse.GetUserListener2 listener){
+        ParseUser.logInInBackground(userName, password, new LogInCallback() {
             public void done(ParseUser parseUser, ParseException e) {
-                if (e == null) {
-                    long userId = parseUser.getLong(USER_ID);
-                    String userName = parseUser.getUsername();
-                    String firstName = parseUser.getString(FIRST_NAME);
-                    String lastName = parseUser.getString(LAST_NAME);
-                    String phoneNumber = parseUser.getString(PHONE_NUMBER);
-                    String address = parseUser.getString(ADDRESS);
-                    String city = parseUser.getString(CITY);
+                if (parseUser != null) {
+                    User user = convertFromParseUserToUser(parseUser);
 
-                    listener.onResult(userId, userName, firstName, lastName, phoneNumber, address, city);
+                    listener.onResult(user);
                 } else {
                     e.printStackTrace();
                 }
@@ -84,37 +75,76 @@ public class UserParse {
         });
     }
 
+    public static User getCurrentUser() {
+        ParseUser parseUser = ParseUser.getCurrentUser();
+        return convertFromParseUserToUser(parseUser);
+    }
+
+    public static void logOut()
+    {
+        ParseUser.logOut();
+    }
+//    public static void getUserById(long id, final ModelParse.GetUserListener listener) {
+//        ParseQuery<ParseUser> query = ParseUser.getQuery();
+//        query.whereEqualTo(USER_ID, id);
+//
+//        query.getFirstInBackground(new GetCallback<ParseUser>() {
+//            @Override
+//            public void done(ParseUser parseUser, ParseException e) {
+//                if (e == null) {
+//                    long userId = parseUser.getLong(USER_ID);
+//                    String userName = parseUser.getUsername();
+//                    String firstName = parseUser.getString(FIRST_NAME);
+//                    String lastName = parseUser.getString(LAST_NAME);
+//                    String phoneNumber = parseUser.getString(PHONE_NUMBER);
+//                    String address = parseUser.getString(ADDRESS);
+//                    String city = parseUser.getString(CITY);
+//
+//                    listener.onResult(userId, userName, firstName, lastName, phoneNumber, address, city);
+//                } else {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//    }
+
     public static void getUserById2(long id, final ModelParse.GetUserListener2 listener) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(USER_ID, id);
-        ParseUser p = null;
 
         query.getFirstInBackground(new GetCallback<ParseUser>() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
-                    User user;
+                    User user = convertFromParseUserToUser(parseUser);
 
-                    long userId = parseUser.getLong(USER_ID);
-                    String userName = parseUser.getUsername();
-                    String firstName = parseUser.getString(FIRST_NAME);
-                    String lastName = parseUser.getString(LAST_NAME);
-                    String phoneNumber = parseUser.getString(PHONE_NUMBER);
-                    String address = parseUser.getString(ADDRESS);
-                    String city = parseUser.getString(CITY);
-                    Boolean isDogWalker = parseUser.getBoolean(IS_DOG_WALKER);
-
-                    if (isDogWalker) {
-                        user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
-                    } else {
-                        user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
-                    }
                     listener.onResult(user);
                 } else {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    public static User convertFromParseUserToUser(ParseUser parseUser){
+        User user;
+
+        long userId = parseUser.getLong(USER_ID);
+        String userName = parseUser.getUsername();
+        String firstName = parseUser.getString(FIRST_NAME);
+        String lastName = parseUser.getString(LAST_NAME);
+        String phoneNumber = parseUser.getString(PHONE_NUMBER);
+        String address = parseUser.getString(ADDRESS);
+        String city = parseUser.getString(CITY);
+        Boolean isDogWalker = parseUser.getBoolean(IS_DOG_WALKER);
+
+        if (isDogWalker) {
+            user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
+        } else {
+            user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
+        }
+
+        return user;
     }
 
     public static void getDogWalkerUsers(final ModelParse.GetUsersListener listener) {
