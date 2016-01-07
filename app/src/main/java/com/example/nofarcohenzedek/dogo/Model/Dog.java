@@ -19,6 +19,14 @@ public class Dog {
         this.picRef = picRef;
     }
 
+    public Dog(String name, DogSize size, long age, String picRef)
+    {
+        this.name = name;
+        this.size = size;
+        this.age = age;
+        this.picRef = picRef;
+    }
+
     public long getId() {
         return id;
     }

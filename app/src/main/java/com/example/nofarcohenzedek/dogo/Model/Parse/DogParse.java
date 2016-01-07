@@ -23,32 +23,37 @@ public class DogParse {
     final static String AGE = "age";
     final static String PIC_REF = "picRef";
 
-    public static void addToDogsTable(Dog dog){
+    public static long addToDogsTable(Dog dog){
+        long newDogId = getNextId();
         ParseObject newDogParseObject = new ParseObject(DOGS_TABLE);
 
-        newDogParseObject.put(DOG_ID, dog.getId());
+        newDogParseObject.put(DOG_ID, newDogId);
         newDogParseObject.put(NAME, dog.getName());
         newDogParseObject.put(SIZE, dog.getSize().name());
         newDogParseObject.put(AGE, dog.getAge());
         newDogParseObject.put(PIC_REF, dog.getPicRef());
 
         newDogParseObject.saveInBackground();
+        return newDogId;
     }
 
-    public static void addToDogsTable(long id, String name, DogSize size, long age, String picRef){
+    public static long addToDogsTable(String name, DogSize size, long age, String picRef){
+        long newDogId = getNextId();
         ParseObject newDogParseObject = new ParseObject(DOGS_TABLE);
 
-        newDogParseObject.put(DOG_ID, id);
+        newDogParseObject.put(DOG_ID, newDogId);
         newDogParseObject.put(NAME, name);
         newDogParseObject.put(SIZE, size.name());
         newDogParseObject.put(AGE, age);
         newDogParseObject.put(PIC_REF, picRef);
 
         newDogParseObject.saveInBackground();
+        return newDogId;
     }
 
     public static void getDogById(long id, final Model.GetDogListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOGS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(DOGS_TABLE);
+
         query.whereEqualTo(DOG_ID, id);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -117,7 +122,7 @@ public class DogParse {
     }
 
     public static void deleteDog(long id) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOGS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(DOGS_TABLE);
         query.whereEqualTo(DOG_ID, id);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -129,5 +134,19 @@ public class DogParse {
                 }
             }
         });
+    }
+
+    private static long getNextId(){
+        ParseQuery<ParseObject> query = new ParseQuery<>(DOGS_TABLE);
+        ParseObject parseObject = null;
+
+        try {
+            parseObject = query.addDescendingOrder(DOG_ID).getFirst();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return (parseObject.getLong(DOG_ID) + 1);
     }
 }

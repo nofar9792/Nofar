@@ -27,14 +27,15 @@ public class UserParse {
     final static String CITY = "city";
     final static String IS_DOG_WALKER = "isDogWalker";
 
-    public static void addToUsersTable(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
+    public static long addToUsersTable(String userName, String password, String firstName, String lastName, String phoneNumber,
                                        String address, String city, Boolean isDogWalker) {
+        long newUserId = getNextId();
         ParseUser user = new ParseUser();
         //ParseUser.logOut();
 
         user.setUsername(userName);
         user.setPassword(password);
-        user.put(USER_ID, id);
+        user.put(USER_ID, newUserId);
         user.put(FIRST_NAME, firstName);
         user.put(LAST_NAME, lastName);
         user.put(PHONE_NUMBER, phoneNumber);
@@ -59,6 +60,8 @@ public class UserParse {
                 }
             }
         });
+
+        return newUserId;
     }
 
     public static void logIn(String userName, String password, final ModelParse.GetUserListener2 listener){
@@ -83,6 +86,7 @@ public class UserParse {
     public static void logOut(){
         ParseUser.logOut();
     }
+
 //    public static void getUserById(long id, final ModelParse.GetUserListener listener) {
 //        ParseQuery<ParseUser> query = ParseUser.getQuery();
 //        query.whereEqualTo(USER_ID, id);
@@ -125,27 +129,6 @@ public class UserParse {
         });
     }
 
-    public static User convertFromParseUserToUser(ParseUser parseUser){
-        User user;
-
-        long userId = parseUser.getLong(USER_ID);
-        String userName = parseUser.getUsername();
-        String firstName = parseUser.getString(FIRST_NAME);
-        String lastName = parseUser.getString(LAST_NAME);
-        String phoneNumber = parseUser.getString(PHONE_NUMBER);
-        String address = parseUser.getString(ADDRESS);
-        String city = parseUser.getString(CITY);
-        Boolean isDogWalker = parseUser.getBoolean(IS_DOG_WALKER);
-
-        if (isDogWalker) {
-            user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
-        } else {
-            user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
-        }
-
-        return user;
-    }
-
     public static void getDogWalkerUsers(final ModelParse.GetUsersListener listener) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(IS_DOG_WALKER, true);
@@ -173,4 +156,41 @@ public class UserParse {
             }
         });
     }
+
+    //region Private Methods
+    private static long getNextId(){
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        ParseUser parseObject = null;
+
+        try {
+            parseObject = query.addDescendingOrder(USER_ID).getFirst();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return (parseObject.getLong(USER_ID) + 1);
+    }
+
+    private static User convertFromParseUserToUser(ParseUser parseUser){
+        User user;
+
+        long userId = parseUser.getLong(USER_ID);
+        String userName = parseUser.getUsername();
+        String firstName = parseUser.getString(FIRST_NAME);
+        String lastName = parseUser.getString(LAST_NAME);
+        String phoneNumber = parseUser.getString(PHONE_NUMBER);
+        String address = parseUser.getString(ADDRESS);
+        String city = parseUser.getString(CITY);
+        Boolean isDogWalker = parseUser.getBoolean(IS_DOG_WALKER);
+
+        if (isDogWalker) {
+            user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
+        } else {
+            user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
+        }
+
+        return user;
+    }
+    //endregion
 }

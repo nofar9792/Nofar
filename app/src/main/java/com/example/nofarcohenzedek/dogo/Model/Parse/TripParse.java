@@ -7,9 +7,11 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
@@ -24,8 +26,6 @@ public class TripParse {
     final static String DATE_OF_WALKING = "dateOfWalking";
     final static String IS_PAID = "isPaid";
 
-
-
     public static void addToTripsTable(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
         ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
 
@@ -39,13 +39,28 @@ public class TripParse {
         newTripParseObject.saveInBackground();
     }
 
+    public static void startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
+        ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
+
+        newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
+        newTripParseObject.put(DOG_ID, dogId);
+        newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
+        newTripParseObject.put(START_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")));
+        newTripParseObject.put(IS_PAID, false);
+
+        newTripParseObject.saveInBackground();
+    }
+
+    public static void endTrip(long tripId) {
+    }
+
     public static void getTripsDetailsByDogOwnerId(final long dogOwnerId, final ModelParse.GetTripsDetailsListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(TRIPS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
         query.whereEqualTo(DOG_OWNER_ID, dogOwnerId);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                List<Trip> trips = new LinkedList<Trip>();
+                List<Trip> trips = new LinkedList<>();
 
                 if (e == null) {
                     for (ParseObject po : list) {
@@ -76,8 +91,6 @@ public class TripParse {
 
                 if (e == null) {
                     for (ParseObject po : list) {
-                        Dog dog = null;
-
                         long dogOwnerId = po.getLong(DOG_OWNER_ID);
                         long dogId = po.getLong(DOG_ID);
                         Date startOfWalking = po.getDate(START_OF_WALKING);

@@ -2,6 +2,7 @@ package com.example.nofarcohenzedek.dogo.Model.Parse;
 
 import com.example.nofarcohenzedek.dogo.Model.Comment;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
+import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -55,8 +56,8 @@ public class CommentParse {
     }
 
     // TODO: delete this func
-    public static void getCommentsOfDogWalker(long userId, final ModelParse.GetCommentsListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(COMMENTS_TABLE);
+    public static void getCommentsOfDogWalker(long userId, final Model.GetCommentsListener listener) {
+        ParseQuery<ParseObject> query = new ParseQuery<>(COMMENTS_TABLE);
         query.whereEqualTo(USER_ID, userId);
 
         query.findInBackground(new FindCallback<ParseObject>() {
