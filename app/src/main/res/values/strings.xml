@@ -26,12 +26,17 @@
     <string name="isBig">גדול</string>
     <string name="isMedium">בינוני</string>
     <string name="isSmall">קטן</string>
-    <string name="dogAge">גיל של הכלב</string>
-    <string name="dogPic">תמונה של הכלב</string>
-
+    <string name="dogAge">גיל של הכלב:</string>
+    <string name="dogPic">תמונה של הכלב:</string>
+    <string name="choosePic">עיון</string>
+    
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_dog_walker_details">DogWalkerDetails</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_trips_report">TripsReportActivity</string>
+    <string name="title_activity_my_profile">MyProfileActivity</string>
+    <string name="title_activity_dogs_list">DogsListActivity</string>
+    <string name="title_activity_messages">MessagesActivity</string>
 </resources>
