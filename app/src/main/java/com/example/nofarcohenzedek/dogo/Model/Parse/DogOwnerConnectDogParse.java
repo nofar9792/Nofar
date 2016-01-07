@@ -25,15 +25,15 @@ public class DogOwnerConnectDogParse {
         newDogOwnerConnectDogParseObject.saveInBackground();
     }
 
-    public static void getDogIdsOfOwner(long userId, final ModelParse.GetDogIds listener){
-        ParseQuery<ParseObject> dogOwnerQuery = new ParseQuery<ParseObject>(DOG_OWNER_CONNECT_DOG_TABLE);
-        dogOwnerQuery.whereEqualTo(USER_ID, userId);
+    public static void getDogIdsOfOwner(long userId, final ModelParse.GetIds listener){
+        ParseQuery<ParseObject> query = new ParseQuery<>(DOG_OWNER_CONNECT_DOG_TABLE);
+        query.whereEqualTo(USER_ID, userId);
 
-        dogOwnerQuery.findInBackground(new FindCallback<ParseObject>() {
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 if (e == null) {
-                    List<Long> dogIds = new LinkedList<Long>();
+                    List<Long> dogIds = new LinkedList<>();
                     for (ParseObject po : list) {
                         dogIds.add(po.getLong(DOG_ID));
                     }

@@ -3,9 +3,11 @@ package com.example.nofarcohenzedek.dogo.Model;
 import android.content.Context;
 
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
+import com.example.nofarcohenzedek.dogo.Model.Parse.RequestParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -72,8 +74,7 @@ public class Model {
         modelParse.getDogWalkerById2(userId, listener);
     }
 
-    public void getAllDogWalkers(final Model.GetDogWalkersListener listener)
-    {
+    public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
         modelParse.getAllDogWalkers(listener);
     }
 
@@ -107,11 +108,33 @@ public class Model {
     }
 
     public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener){
-        modelParse.getTripsByDogOwnerId(dogOwnerId,listener);
+        modelParse.getTripsByDogOwnerId(dogOwnerId, listener);
     }
 
     public void getTripsByDogWalkerId(long dogWalkerId, final Model.GetTripsListener listener) {
         modelParse.getTripsByDogWalkerId(dogWalkerId, listener);
+    }
+    //endregion
+
+    //region Request Methods
+    public void addRequest(long dogOwnerId, long dogWalkerId) {
+        modelParse.addRequest(dogOwnerId, dogWalkerId);
+    }
+
+    public void acceptRequest(long dogOwnerId, long dogWalkerId) {
+        modelParse.acceptRequest(dogOwnerId, dogWalkerId);
+    }
+
+    public void declineRequest(long dogOwnerId, long dogWalkerId) {
+        modelParse.declineRequest(dogOwnerId, dogWalkerId);
+    }
+
+    public void getWalkersConnectToOwner(long dogOwnerId, GetDogWalkersListener listener) {
+        modelParse.getWalkersConnectToOwner(dogOwnerId, listener);
+    }
+
+    public void getOwnersConnectToWalker(long dogWalkerId, GetDogOwnersListener listener) {
+        modelParse.getOwnersConnectToWalker(dogWalkerId, listener);
     }
     //endregion
 
@@ -134,6 +157,10 @@ public class Model {
 
     public interface GetDogOwnerListener {
         void onResult(DogOwner dogOwner);
+    }
+
+    public interface GetDogOwnersListener{
+        void onResult(List<DogOwner> allDogWalkers);
     }
 
     public interface GetCommentsListener {

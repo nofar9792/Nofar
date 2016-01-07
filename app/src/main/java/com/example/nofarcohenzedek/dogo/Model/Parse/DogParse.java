@@ -74,11 +74,11 @@ public class DogParse {
         });
     }
 
-    public static void getDogByIds(List<Long> dogIds, final Model.GetDogsListener listener) {
-        ParseQuery<ParseObject> dogsQuery = new ParseQuery<ParseObject>(DOGS_TABLE);
-        dogsQuery.whereContainedIn(DOG_ID, dogIds);
+    public static void getDogsByIds(List<Long> dogIds, final Model.GetDogsListener listener) {
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOGS_TABLE);
+        query.whereContainedIn(DOG_ID, dogIds);
 
-        dogsQuery.findInBackground(new FindCallback<ParseObject>() {
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
                 List<Dog> dogs = new LinkedList<Dog>();
