@@ -2,6 +2,7 @@ package com.example.nofarcohenzedek.dogo.Model.Parse;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
+import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -64,7 +65,7 @@ public class UserParse {
         return newUserId;
     }
 
-    public static void logIn(String userName, String password, final ModelParse.GetUserListener2 listener){
+    public static void logIn(String userName, String password, final Model.GetUserListener2 listener){
         ParseUser.logInInBackground(userName, password, new LogInCallback() {
             public void done(ParseUser parseUser, ParseException e) {
                 if (parseUser != null) {
@@ -73,14 +74,20 @@ public class UserParse {
                     listener.onResult(user);
                 } else {
                     e.printStackTrace();
+                    listener.onResult(null);
                 }
             }
         });
     }
 
+
+    // todo: maybe should be async
     public static User getCurrentUser() {
         ParseUser parseUser = ParseUser.getCurrentUser();
-        return convertFromParseUserToUser(parseUser);
+        if (parseUser != null) {
+            return convertFromParseUserToUser(parseUser);
+        }
+        return null;
     }
 
     public static void logOut(){
@@ -111,7 +118,7 @@ public class UserParse {
 //        });
 //    }
 
-    public static void getUserById2(long id, final ModelParse.GetUserListener2 listener) {
+    public static void getUserById2(long id, final Model.GetUserListener2 listener) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(USER_ID, id);
 

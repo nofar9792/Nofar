@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.Model;
-import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.example.nofarcohenzedek.dogo.Model.User;
 
 public class LoginActivity extends Activity {
@@ -23,7 +22,7 @@ public class LoginActivity extends Activity {
     {
         EditText userName = (EditText) findViewById(R.id.userNameLogin);
         EditText password = (EditText) findViewById(R.id.passwordLogin);
-        Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new ModelParse.GetUserListener2() {
+        Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new Model.GetUserListener2() {
             @Override
             public void onResult(User user) {
 

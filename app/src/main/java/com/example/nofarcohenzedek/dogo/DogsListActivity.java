@@ -7,12 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 
-import com.example.nofarcohenzedek.dogo.MapsActivity;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
-import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
-import com.example.nofarcohenzedek.dogo.R;
-import com.example.nofarcohenzedek.dogo.SearchActivity;
+import com.example.nofarcohenzedek.dogo.Model.User;
 
 public class DogsListActivity extends Activity {
 
@@ -26,17 +23,19 @@ public class DogsListActivity extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        if (Model.getInstance().getCurrentUser() instanceof DogOwner)
-        {
-            getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-        }
-        else
-        {
-            getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
-        }
+        Model.getInstance().getCurrentUser(new Model.GetUserListener2() {
+            @Override
+            public void onResult(User user) {
+                if (user instanceof DogOwner) {
+                    getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
+                } else {
+                    getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
+                }
+            }
+        });
 
         return true;
         //return super.onCreateOptionsMenu(menu);

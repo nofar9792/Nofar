@@ -28,12 +28,62 @@ public class ModelParse {
     //endregion
 
     //region User Methods
-    public void logIn(String userName, String password, GetUserListener2 listener){
-        UserParse.logIn(userName, password, listener);
+    public void logIn(String userName, String password, final Model.GetUserListener2 listener){
+        UserParse.logIn(userName, password, new Model.GetUserListener2() {
+            @Override
+            public void onResult(User user) {
+                addDetailsByInstance(user, new Model.GetUserListener2() {
+                    @Override
+                    public void onResult(User user) {
+                        listener.onResult(user);
+                    }
+                });
+            }
+        });
     }
 
-    public User getCurrentUser(){
-        return UserParse.getCurrentUser();
+    public void getCurrentUser(final Model.GetUserListener2 listener){
+        User user = UserParse.getCurrentUser();
+        addDetailsByInstance(user, new Model.GetUserListener2() {
+            @Override
+            public void onResult(User user) {
+                listener.onResult(user);
+            }
+        });
+    }
+
+    public void addDetailsByInstance(final User user,final Model.GetUserListener2 listener) {
+        if (user instanceof DogWalker) {
+            DogWalkerParse.getDogWalkerDetailsById(user.getId(), new GetDogWalkerDetailsListener() {
+                @Override
+                public void onResult(long userId, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
+                    final DogWalker dogWalker = (DogWalker) user;
+                    dogWalker.setAge(age);
+                    dogWalker.setPriceForHour(priceForHour);
+                    dogWalker.setIsComfortableOnMorning(isComfortableOnMorning);
+                    dogWalker.setIsComfortableOnAfternoon(isComfortableOnAfternoon);
+                    dogWalker.setIsComfortableOnEvening(isComfortableOnEvening);
+
+                    getCommentsOfDogWalker(userId, new Model.GetCommentsListener() {
+                        @Override
+                        public void onResult(List<Comment> comments) {
+                            dogWalker.setComments(comments);
+                            listener.onResult(dogWalker);
+                        }
+                    });
+                }
+            });
+        } else {
+            getAllDogsOfOwner(user.getId(), new Model.GetDogsListener() {
+                @Override
+                public void onResult(List<Dog> dogs) {
+                    final DogOwner dogOwner = (DogOwner) user;
+                    ((DogOwner) user).setDogs(dogs);
+
+                    listener.onResult(dogOwner);
+                }
+            });
+        }
     }
 
     public void logOut()
@@ -81,7 +131,7 @@ public class ModelParse {
 
     //region Dog Walker Methods
     public void getDogWalkerById2(final long userId, final Model.GetDogWalkerListener listener) {
-        UserParse.getUserById2(userId, new GetUserListener2() {
+        UserParse.getUserById2(userId, new Model.GetUserListener2() {
             @Override
             public void onResult(final User user) {
                 DogWalkerParse.getDogWalkerDetailsById(userId, new GetDogWalkerDetailsListener() {
@@ -136,7 +186,6 @@ public class ModelParse {
             @Override
             public void onResult(List<User> users) {
                 for (final User user : users) {
-
                     DogWalkerParse.addDogWalkerDetails((DogWalker) user);
                     CommentParse.addCommentsToDogWalker((DogWalker) user);
                     dogWalkers.add((DogWalker) user);
@@ -157,7 +206,7 @@ public class ModelParse {
 
     //region Dog Owner Methods
     public void getDogOwnerById2(final long userId, final Model.GetDogOwnerListener listener) {
-        UserParse.getUserById2(userId, new GetUserListener2() {
+        UserParse.getUserById2(userId, new Model.GetUserListener2() {
             @Override
             public void onResult(final User user) {
                 getAllDogsOfOwner(userId, new Model.GetDogsListener() {
@@ -334,14 +383,6 @@ public class ModelParse {
     //endregion
 
     //region Interfaces
-    public interface GetUserListener {
-        void onResult(long id, String userName, String firstName, String lastName, String phoneNumber, String address, String city);
-    }
-
-    public interface GetUserListener2 {
-        void onResult(User user);
-    }
-
     public interface GetUsersListener {
         void onResult(List<User> users);
     }

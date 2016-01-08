@@ -3,11 +3,9 @@ package com.example.nofarcohenzedek.dogo.Model;
 import android.content.Context;
 
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
-import com.example.nofarcohenzedek.dogo.Model.Parse.RequestParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -35,12 +33,12 @@ public class Model {
     //endregion
 
     //region User Methods
-    public void logIn(String userName, String password, ModelParse.GetUserListener2 listener){
+    public void logIn(String userName, String password, GetUserListener2 listener){
         modelParse.logIn(userName, password, listener);
     }
 
-    public User getCurrentUser(){
-        return modelParse.getCurrentUser();
+    public void getCurrentUser(GetUserListener2 listener){
+        modelParse.getCurrentUser(listener);
     }
 
     public void logOut()
@@ -79,7 +77,7 @@ public class Model {
     }
 
     public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, Boolean isDogWalker, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
+                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
         modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
     }
     //endregion
@@ -139,6 +137,14 @@ public class Model {
     //endregion
 
     //region Interfaces
+    public interface GetUserListener {
+        void onResult(long id, String userName, String firstName, String lastName, String phoneNumber, String address, String city);
+    }
+
+    public interface GetUserListener2 {
+        void onResult(User user);
+    }
+
     public interface GetDogListener {
         public void onResult(Dog dog);
     }

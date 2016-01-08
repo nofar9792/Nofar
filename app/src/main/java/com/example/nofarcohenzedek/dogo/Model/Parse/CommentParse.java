@@ -31,28 +31,25 @@ public class CommentParse {
     }
 
     public static void addCommentsToDogWalker(final DogWalker dogWalker) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(COMMENTS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(COMMENTS_TABLE);
         query.whereEqualTo(USER_ID, dogWalker.getId());
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-           @Override
-           public void done(List<ParseObject> list, ParseException e) {
-               if (e == null) {
-                   List<Comment> comments = new LinkedList<Comment>();
+        try {
+            List<ParseObject> list = query.find();
 
-                   for (ParseObject parseObject : list) {
-                       String text = parseObject.getString(TEXT);
-                       long rating = parseObject.getLong(RATING);
-                       comments.add(new Comment(text, rating));
-                   }
+            List<Comment> comments = new LinkedList<>();
 
-                   dogWalker.setComments(comments);
-               } else {
-                   e.printStackTrace();
-               }
-           }
-       }
-        );
+            for (ParseObject parseObject : list) {
+                String text = parseObject.getString(TEXT);
+                long rating = parseObject.getLong(RATING);
+                comments.add(new Comment(text, rating));
+            }
+
+            dogWalker.setComments(comments);
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     // TODO: delete this func
@@ -63,7 +60,7 @@ public class CommentParse {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                List<Comment> comments = new LinkedList<Comment>();
+                List<Comment> comments = new LinkedList<>();
 
                 for (ParseObject po : list) {
                     if (e == null) {
@@ -74,7 +71,6 @@ public class CommentParse {
                         e.printStackTrace();
                     }
                 }
-
                 listener.onResult(comments);
             }
         });

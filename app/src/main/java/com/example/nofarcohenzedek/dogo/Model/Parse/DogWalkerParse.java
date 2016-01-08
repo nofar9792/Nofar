@@ -33,7 +33,7 @@ public class DogWalkerParse {
     }
 
     public static void addDogWalkerDetails(DogWalker dogWalker) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOG_WALKERS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(DOG_WALKERS_TABLE);
         query.whereEqualTo(USER_ID, dogWalker.getId());
 
         try {
@@ -52,7 +52,7 @@ public class DogWalkerParse {
 
     // TODO: think if to delte this func
     public static void getDogWalkerDetailsById(long id, final ModelParse.GetDogWalkerDetailsListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOG_WALKERS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(DOG_WALKERS_TABLE);
         query.whereEqualTo(USER_ID, id);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
