@@ -5,7 +5,6 @@ import android.content.Context;
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -76,9 +75,9 @@ public class Model {
         modelParse.getAllDogWalkers(listener);
     }
 
-    public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
+    public long addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
                              String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
-        modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
+        return modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
     }
     //endregion
 
@@ -88,9 +87,9 @@ public class Model {
         modelParse.getDogOwnerById2(userId, listener);
     }
 
-    public void addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
+    public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
                             String address, String city, List<Dog> dogs) {
-        modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dogs);
+        return modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dogs);
     }
     //endregion
 
@@ -101,10 +100,6 @@ public class Model {
     //endregion
 
     //region Trip Methods
-    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
-        modelParse.addTrip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
-    }
-
     public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener){
         modelParse.getTripsByDogOwnerId(dogOwnerId, listener);
     }
@@ -112,6 +107,23 @@ public class Model {
     public void getTripsByDogWalkerId(long dogWalkerId, final Model.GetTripsListener listener) {
         modelParse.getTripsByDogWalkerId(dogWalkerId, listener);
     }
+
+//    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
+//        modelParse.addTrip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
+//    }
+
+    public long startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
+        return modelParse.startTrip(dogOwnerId, dogId, dogWalkerId);
+    }
+
+    public void endTrip(long tripId) {
+        modelParse.endTrip(tripId);
+    }
+
+    public void payTrip(long tripId) {
+        modelParse.payTrip(tripId);
+    }
+
     //endregion
 
     //region Request Methods

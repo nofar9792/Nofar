@@ -13,7 +13,6 @@ import com.example.nofarcohenzedek.dogo.Model.Trip;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.parse.Parse;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -307,17 +306,22 @@ public class ModelParse {
         });
     }
 
-    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
-        TripParse.addToTripsTable(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
-    }
+//    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
+//        TripParse.addToTripsTable(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
+//    }
 
-    public void startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
-        TripParse.startTrip(dogOwnerId, dogId, dogWalkerId);
+    public long startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
+        return TripParse.startTrip(dogOwnerId, dogId, dogWalkerId);
     }
 
     public void endTrip(long tripId) {
         TripParse.endTrip(tripId);
     }
+
+    public void payTrip(long tripId) {
+        TripParse.changeTripToPaid(tripId);
+    }
+
     // endregion
 
     //region Request Methods

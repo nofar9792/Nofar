@@ -1,8 +1,5 @@
 package com.example.nofarcohenzedek.dogo.Model;
 
-import android.widget.DatePicker;
-import android.widget.TimePicker;
-
 import java.util.Date;
 
 /**
@@ -10,6 +7,7 @@ import java.util.Date;
  */
 public class Trip
 {
+    private long id;
     private long dogOwnerId;
     private long dogId;
     private long dogWalkerId;
@@ -20,17 +18,23 @@ public class Trip
     private Date endOfWalking;
     private Boolean isPaid;
 
-    public Trip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid)
+    public Trip(long id,long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid)
     {
-//        dogOwner = null; // todo: get person by id from model
-//        dog = null; // todo: get dog by id from model
-//        dogWalker = null; // todo: get person by id from model
+        this.id = id;
         this.dogOwnerId = dogOwnerId;
         this.dogId = dogId;
         this.dogWalkerId = dogWalkerId;
         this.startOfWalking = startOfWalking;
         this.endOfWalking = endOfWalking;
         this.isPaid = isPaid;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getDogOwnerId() {

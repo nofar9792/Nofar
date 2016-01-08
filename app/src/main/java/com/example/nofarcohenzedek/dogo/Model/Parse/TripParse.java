@@ -1,8 +1,8 @@
 package com.example.nofarcohenzedek.dogo.Model.Parse;
 
-import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -18,40 +18,79 @@ import java.util.TimeZone;
  */
 public class TripParse {
     final static String TRIPS_TABLE = "TRIPS";
+    final static String TRIP_ID = "tripId";
     final static String DOG_OWNER_ID = "dogOwnerId";
     final static String DOG_ID = "dogId";
     final static String DOG_WALKER_ID = "dogWalkerId";
     final static String START_OF_WALKING = "startOfWalking";
     final static String END_OF_WALKING = "endOfWalking";
-    final static String DATE_OF_WALKING = "dateOfWalking";
     final static String IS_PAID = "isPaid";
 
-    public static void addToTripsTable(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
+//    public static long addToTripsTable(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
+//        long newTripId = getNextId();
+//        ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
+//
+//        newTripParseObject.put(TRIP_ID, 1);
+//        newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
+//        newTripParseObject.put(DOG_ID, dogId);
+//        newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
+//        newTripParseObject.put(START_OF_WALKING, startOfWalking);
+//        newTripParseObject.put(END_OF_WALKING, endOfWalking);
+//        newTripParseObject.put(IS_PAID, isPaid);
+//
+//        newTripParseObject.saveInBackground();
+//
+//        return newTripId;
+//    }
+
+    public static long startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
+        long newTripId = getNextId();
         ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
 
+        newTripParseObject.put(TRIP_ID, newTripId);
         newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
         newTripParseObject.put(DOG_ID, dogId);
         newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
-        newTripParseObject.put(START_OF_WALKING, startOfWalking);
-        newTripParseObject.put(END_OF_WALKING, endOfWalking);
-        newTripParseObject.put(IS_PAID, isPaid);
-
-        newTripParseObject.saveInBackground();
-    }
-
-    public static void startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
-        ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
-
-        newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
-        newTripParseObject.put(DOG_ID, dogId);
-        newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
-        newTripParseObject.put(START_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")));
+        newTripParseObject.put(START_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")).getTime());
         newTripParseObject.put(IS_PAID, false);
 
         newTripParseObject.saveInBackground();
+
+        return newTripId;
     }
 
     public static void endTrip(long tripId) {
+        ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
+        query.whereEqualTo(TRIP_ID, tripId);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    parseObject.put(END_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")).getTime());
+
+                    parseObject.saveInBackground();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void changeTripToPaid(long tripId) {
+        ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
+        query.whereEqualTo(TRIP_ID, tripId);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    parseObject.put(IS_PAID, true);
+
+                    parseObject.saveInBackground();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public static void getTripsDetailsByDogOwnerId(final long dogOwnerId, final ModelParse.GetTripsDetailsListener listener) {
@@ -64,13 +103,14 @@ public class TripParse {
 
                 if (e == null) {
                     for (ParseObject po : list) {
+                        long tripId = po.getLong(TRIP_ID);
                         long dogId = po.getLong(DOG_ID);
                         long dogWalkerId = po.getLong(DOG_WALKER_ID);
                         Date startOfWalking = po.getDate(START_OF_WALKING);
                         Date endOfWalking = po.getDate(END_OF_WALKING);
                         Boolean isPaid = po.getBoolean(IS_PAID);
 
-                        trips.add(new Trip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
+                        trips.add(new Trip(tripId, dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
                     }
                     listener.onResult(trips);
 
@@ -91,13 +131,14 @@ public class TripParse {
 
                 if (e == null) {
                     for (ParseObject po : list) {
+                        long tripId = po.getLong(TRIP_ID);
                         long dogOwnerId = po.getLong(DOG_OWNER_ID);
                         long dogId = po.getLong(DOG_ID);
                         Date startOfWalking = po.getDate(START_OF_WALKING);
                         Date endOfWalking = po.getDate(END_OF_WALKING);
                         Boolean isPaid = po.getBoolean(IS_PAID);
 
-                        trips.add(new Trip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
+                        trips.add(new Trip(tripId, dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
                     }
                     listener.onResult(trips);
 
@@ -106,5 +147,19 @@ public class TripParse {
                 }
             }
         });
+    }
+
+    private static long getNextId(){
+        ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
+        ParseObject parseObject = null;
+
+        try {
+            parseObject = query.addDescendingOrder(TRIP_ID).getFirst();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return (parseObject.getLong(TRIP_ID) + 1);
     }
 }

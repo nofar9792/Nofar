@@ -75,7 +75,7 @@ public class DogParse {
     }
 
     public static void getDogsByIds(List<Long> dogIds, final Model.GetDogsListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOGS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(DOGS_TABLE);
         query.whereContainedIn(DOG_ID, dogIds);
 
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -102,7 +102,7 @@ public class DogParse {
     }
 
     public static void updateDog(long id, final String name, final DogSize size, final long age, final String picRef) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(DOGS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(DOGS_TABLE);
         query.whereEqualTo(DOG_ID, id);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override

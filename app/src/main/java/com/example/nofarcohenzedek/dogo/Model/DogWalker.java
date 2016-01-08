@@ -63,7 +63,7 @@ public class DogWalker extends User{
 
         if(this.comments.size() != 0)
         {
-            this.averageRating = sum / this.comments.size();
+            this.averageRating = (double)sum / this.comments.size();
         }
     }
 
