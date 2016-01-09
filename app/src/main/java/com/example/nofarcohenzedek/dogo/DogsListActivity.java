@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class DogsListActivity extends Activity {
 
-    Boolean isOwner;
+   // Boolean isOwner;
     Long userId;
     List<DogOwner> list;
 
@@ -32,7 +33,7 @@ public class DogsListActivity extends Activity {
         setActionBar((Toolbar) findViewById(R.id.dogsListToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);
 
-        isOwner = getIntent().getBooleanExtra("isOwner", false);
+        //isOwner = getIntent().getBooleanExtra("isOwner", false);
         userId = getIntent().getLongExtra("userId", 0);
 
         Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
@@ -46,6 +47,32 @@ public class DogsListActivity extends Activity {
             CustomAdapter adapter = new CustomAdapter();
             ListView listView = (ListView) findViewById(R.id.dogsOfDogWalker);
             listView.setAdapter(adapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                {
+                    if (view.getTag() == "startTripTag")
+                    {
+                        View currentListItem = (View) view.getParent();
+
+                        currentListItem.findViewById(R.id.endTripBtn).setEnabled(true);
+                        currentListItem.findViewById(R.id.startTripBtn).setEnabled(false);
+
+                        // TODO : start trip in DB
+                    }
+                    else if (view.getTag() == "endTripTag")
+                    {
+                        View currentListItem = (View) view.getParent();
+
+                        currentListItem.findViewById(R.id.endTripBtn).setEnabled(false);
+                        currentListItem.findViewById(R.id.startTripBtn).setEnabled(true);
+
+                        // TODO : end trip in DB
+                    }
+
+                }
+            });
         }
         else
         {
@@ -72,13 +99,14 @@ public class DogsListActivity extends Activity {
         //}
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        if (isOwner) {
-            getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-        } else {
+       // if (isOwner) {
+         //   getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
+        //} else {
             getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
-        }
+        //}
 
         return true;
     }
@@ -102,7 +130,7 @@ public class DogsListActivity extends Activity {
 
         }
 
-        intent.putExtra("isOwner", isOwner);
+        intent.putExtra("isOwner", false);
         intent.putExtra("userId", getIntent().getLongExtra("userId", 0));
         startActivity(intent);
 
@@ -145,6 +173,16 @@ public class DogsListActivity extends Activity {
 
 
             return convertView;
+        }
+
+        public void startTripClick(View view)
+        {
+
+        }
+
+        public void endTripClick(View view)
+        {
+
         }
     }
 

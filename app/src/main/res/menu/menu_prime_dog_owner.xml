@@ -19,12 +19,6 @@
         android:title="myProfile" />
 
     <item
-        android:id="@+id/dogsList"
-        android:icon="@drawable/dog_icon"
-        android:showAsAction="always"
-        android:title="dogs" />
-
-    <item
         android:id="@+id/tripsReport"
         android:icon="@drawable/report_icon"
         android:showAsAction="always"

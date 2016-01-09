@@ -79,13 +79,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="התחל טיול"
-            android:id="@+id/startTripClick"/>
+            android:id="@+id/startTripBtn"
+            android:tag="startTripTag"
+            android:onClick="startTripClick"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="סיים טיול"
-            android:id="@+id/endTripClick"/>
+            android:id="@+id/endTripBtn"
+            android:tag="endTripTag"
+            android:onClick="endTripClick"/>
 
     </LinearLayout>
 
