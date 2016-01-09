@@ -20,6 +20,7 @@ import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
+import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
 
 import java.io.FileNotFoundException;
@@ -39,13 +40,13 @@ public class SignUp extends Activity {
     private String city;
     private String address;
     private String dogName;
-    private Long dogAge;
+    private String dogAge;
     private String dogPic;
     private RadioButton isSmall;
     private RadioButton isMedium;
     private RadioButton isBig;
-    private Long age;
-    private int priceForHour;
+    private String  age;
+    private String priceForHour;
     private CheckBox isComfortableOnAfternoon;
     private CheckBox isComfortableOnMorning;
     private CheckBox isComfortableOnEvening;
@@ -97,31 +98,31 @@ public class SignUp extends Activity {
         initAllDetails();
 
         // Check if all details are validate
-        isValidate();
-
-        // Check the type of user, and create the object 'newUser' respectively
-        if(isOwner.isChecked())
+        if(isValidate())
         {
-            // TODO: 06/01/2016 - get the last id from DB, instead '0'
-            Dog myDog = new Dog(0, dogName,
-                    (isSmall.isChecked() ? DogSize.Small : (isMedium.isChecked() ? DogSize.Medium : DogSize.Large)),
-                    dogAge, dogPic);
+            // Check the type of user, and create the object 'newUser' respectively
+            if (isOwner.isChecked()) {
+                // TODO: 06/01/2016 - get the last id from DB, instead '0'
+                Dog myDog = new Dog(0, dogName,
+                        (isSmall.isChecked() ? DogSize.Small : (isMedium.isChecked() ? DogSize.Medium : DogSize.Large)),
+                        Long.parseLong(dogAge), dogPic);
 
-            List<Dog> allDogs = new ArrayList<>();
-            allDogs.add(myDog);
+                List<Dog> allDogs = new ArrayList<>();
+                allDogs.add(myDog);
 
-            // TODO: 06/01/2016 - get the last id from DB, instead '0'
-            newUser = new DogOwner(0, userName, firstName, lastName, phoneNumber, address, city, allDogs);
+                // TODO: 06/01/2016 - get the last id from DB, instead '0'
+                newUser = new DogOwner(0, userName, firstName, lastName, phoneNumber, address, city, allDogs);
+            } else {
+                // TODO: 06/01/2016 - get the last id from DB, instead '0'
+                newUser = new DogWalker(0, userName, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
+                        Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
+                        isComfortableOnEvening.isChecked());
+            }
+
+            newUser.getAddress();
+
+            // TODO: 06/01/2016 - save the user on DB
         }
-        else
-        {
-            // TODO: 06/01/2016 - get the last id from DB, instead '0'
-            newUser = new DogWalker(0, userName, firstName, lastName, phoneNumber, address, city, age, priceForHour,
-                                    isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
-                                    isComfortableOnEvening.isChecked());
-        }
-
-        // TODO: 06/01/2016 - save tue user on DB
     }
 
     /**
@@ -141,30 +142,43 @@ public class SignUp extends Activity {
      */
     private boolean isValidate()
     {
-//        if(!isOwner.isChecked() && !isWalker.isChecked())
-//        {
-//            errorMessage = "תבחר/י בבקשה את סוג המשתמש";
-//        }
-//        else if(firstName.isEmpty() ||
-//        private String lastName;
-//        private String userName;
-//        private String password;
-//        private String phoneNumber;
-//        private String city;
-//        private String address;
-//        private String dogName;
-//        private Long dogAge;
-//        private String dogPic;
-//        private RadioButton isSmall;
-//        private RadioButton isMedium;
-//        private RadioButton isBig;
-//        private Long age;
-//        private int priceForHour;)
-//        {
-//
-//        }
+        boolean isValid = true;
+        errorMessage = "";
 
-        return true;
+        if(!isOwner.isChecked() && !isWalker.isChecked())
+        {
+            errorMessage = "תבחר/י בבקשה את סוג המשתמש";
+            isValid = false;
+        }
+        else if(firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || password.isEmpty() || phoneNumber.isEmpty() ||
+                city.isEmpty() || address.isEmpty())
+        {
+            errorMessage = "אנא מלא את כל שדות ההרשמה.";
+            isValid = false;
+        }
+        else if (isOwner.isChecked())
+        {
+            if (dogName.isEmpty() || dogAge.isEmpty() ||
+                    (!isBig.isChecked() && !isMedium.isChecked() && !isSmall.isChecked()))
+            {
+                errorMessage = "אנא מלא את פרטי הכלב.";
+                isValid = false;
+            }
+        }
+
+        else if (isWalker.isChecked())
+        {
+            if (priceForHour.isEmpty() || age.isEmpty())
+            {
+                errorMessage = "אנא מלא את כל הפרטים.";
+                isValid = false;
+            }
+        }
+
+        TextView error = (TextView)findViewById(R.id.error);
+        error.setText(errorMessage);
+
+        return isValid;
     }
 
     /**
@@ -182,12 +196,12 @@ public class SignUp extends Activity {
         city = ((EditText)findViewById(R.id.city)).getText().toString();
         address = ((EditText)findViewById(R.id.address)).getText().toString();
         dogName = ((EditText)findViewById(R.id.dogName)).getText().toString();
-        dogAge = Long.parseLong(((EditText) findViewById(R.id.dogAge)).getText().toString());
+        dogAge = ((EditText) findViewById(R.id.dogAge)).getText().toString();
         isSmall = (RadioButton)findViewById(R.id.isSmall);
         isMedium = (RadioButton)findViewById(R.id.isMedium);
         isBig = (RadioButton)findViewById(R.id.isBig);
-        age = Long.parseLong(((EditText) findViewById(R.id.age)).getText().toString());
-        priceForHour = Integer.parseInt(((EditText) findViewById(R.id.priceForHour)).getText().toString());
+        age = ((EditText) findViewById(R.id.age)).getText().toString();
+        priceForHour = ((EditText) findViewById(R.id.priceForHour)).getText().toString();
         isComfortableOnAfternoon = (CheckBox)findViewById(R.id.cbx_isComfortableOnAfternoon);
         isComfortableOnMorning = (CheckBox)findViewById(R.id.cbx_isComfortableOnMorning);
         isComfortableOnEvening = (CheckBox)findViewById(R.id.cbx_isComfortableOnEvening);
