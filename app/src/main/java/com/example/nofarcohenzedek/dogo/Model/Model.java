@@ -32,43 +32,54 @@ public class Model {
     //endregion
 
     //region User Methods
-    public void logIn(String userName, String password, GetUserListener2 listener){
+    public void logIn(String userName, String password, GetUserListener listener) {
         modelParse.logIn(userName, password, listener);
     }
 
-    public void getCurrentUser(GetUserListener2 listener){
+    public void getCurrentUser(GetUserListener listener) {
         modelParse.getCurrentUser(listener);
     }
 
-    public void logOut()
-    {
+    public void logOut() {
         modelParse.logOut();
+    }
+
+    public void updateUser(long id,  String firstName,  String lastName,  String phoneNumber,  String address,  String city) {
+        modelParse.updateUser(id, firstName, lastName, phoneNumber, address, city);
     }
     //endregion
 
     //region Dog Methods
-    public void getDogById(long id, GetDogListener listener) {
-        modelParse.getDogById(id, listener);
+//    public void getDogById(long id, GetDogListener listener) {
+//        modelParse.getDogById(id, listener);
+//    }
+
+    public void getDogByUserId(long userId, final Model.GetDogListener listener) {
+        modelParse.getDogByUserId(userId, listener);
+    }
+
+    public void addDog(long userId, Dog dog) {
+        modelParse.addDog(userId, dog);
     }
 
     public void addDog(long userId, String name, final DogSize size, final long age, final String picRef) {
         modelParse.addDog(userId, name, size, age, picRef);
     }
 
-    public void updateDog(long dogId, final String name, final DogSize size, final long age, final String picRef){
+    public void updateDog(long dogId, final String name, final DogSize size, final long age, final String picRef) {
         modelParse.updateDog(dogId, name, size, age, picRef);
     }
 
-    public void deleteDog(long id) {
-        modelParse.deleteDog(id);
-    }
+//    public void deleteDog(long id) {
+//        modelParse.deleteDog(id);
+//    }
 
     //endregion
 
     //region Dog Walker Methods
-    public void getDogWalkerById(long userId, GetDogWalkerListener listener){
+    public void getDogWalkerById(long userId, GetDogWalkerListener listener) {
         //modelParse.getDogWalkerById(userId, listener);
-        modelParse.getDogWalkerById2(userId, listener);
+        modelParse.getDogWalkerById(userId, listener);
     }
 
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
@@ -82,14 +93,14 @@ public class Model {
     //endregion
 
     //region Dog Owner Methods
-    public void getDogOwnerById(long userId, GetDogOwnerListener listener){
+    public void getDogOwnerById(long userId, GetDogOwnerListener listener) {
         //modelParse.getDogWalkerById(userId, listener);
-        modelParse.getDogOwnerById2(userId, listener);
+        modelParse.getDogOwnerById(userId, listener);
     }
 
     public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
-                            String address, String city, List<Dog> dogs) {
-        return modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dogs);
+                            String address, String city, Dog dog) {
+        return modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
     }
     //endregion
 
@@ -100,7 +111,7 @@ public class Model {
     //endregion
 
     //region Trip Methods
-    public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener){
+    public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener) {
         modelParse.getTripsByDogOwnerId(dogOwnerId, listener);
     }
 
@@ -112,8 +123,8 @@ public class Model {
 //        modelParse.addTrip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
 //    }
 
-    public long startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
-        return modelParse.startTrip(dogOwnerId, dogId, dogWalkerId);
+    public long startTrip(long dogOwnerId, long dogWalkerId) {
+        return modelParse.startTrip(dogOwnerId, dogWalkerId);
     }
 
     public void endTrip(long tripId) {
@@ -146,39 +157,45 @@ public class Model {
     public void getOwnersConnectToWalker(long dogWalkerId, GetDogOwnersListener listener) {
         modelParse.getOwnersConnectToWalker(dogWalkerId, listener);
     }
+
+    // Messages for dog walker
+    public void getRequestForDogWalker(long dogWalkerId, GetDogOwnersListener listener) {
+        modelParse.getRequestForDogWalker(dogWalkerId, listener);
+    }
+
+    // Messages of dog owner
+    public void getRequestOfDogOwner(long dogOwnerId, GetDogWalkersListener listener) {
+        modelParse.getRequestOfDogOwner(dogOwnerId, listener);
+    }
     //endregion
 
     //region Interfaces
     public interface GetUserListener {
-        void onResult(long id, String userName, String firstName, String lastName, String phoneNumber, String address, String city);
-    }
-
-    public interface GetUserListener2 {
         void onResult(User user);
     }
 
     public interface GetDogListener {
-        public void onResult(Dog dog);
+        void onResult(Dog dog);
     }
 
-    public interface GetDogsListener {
-        public void onResult(List<Dog> dogs);
-    }
+//    public interface GetDogsListener {
+//        void onResult(List<Dog> dogs);
+//    }
 
     public interface GetDogWalkerListener {
         void onResult(DogWalker dogWalker);
     }
 
-    public interface GetDogWalkersListener{
-        void onResult(List<DogWalker> allDogWalkers);
+    public interface GetDogWalkersListener {
+        void onResult(List<DogWalker> dogWalkers);
     }
 
     public interface GetDogOwnerListener {
         void onResult(DogOwner dogOwner);
     }
 
-    public interface GetDogOwnersListener{
-        void onResult(List<DogOwner> allDogWalkers);
+    public interface GetDogOwnersListener {
+        void onResult(List<DogOwner> dogOwners);
     }
 
     public interface GetCommentsListener {
@@ -188,6 +205,10 @@ public class Model {
     public interface GetTripsListener {
         void onResult(List<Trip> trips);
     }
+
+//    public interface GetRequestsListener {
+//        void onResult(List<Request> requests);
+//    }
     //endregion
 }
 

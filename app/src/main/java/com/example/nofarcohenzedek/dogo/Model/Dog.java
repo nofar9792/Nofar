@@ -4,20 +4,11 @@ package com.example.nofarcohenzedek.dogo.Model;
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class Dog {
-    private long id;
     private String name;
     private DogSize size;
     private long age;
     private String picRef;
 
-    public Dog(long id, String name, DogSize size, long age, String picRef)
-    {
-        this.id = id;
-        this.name = name;
-        this.size = size;
-        this.age = age;
-        this.picRef = picRef;
-    }
 
     public Dog(String name, DogSize size, long age, String picRef)
     {
@@ -25,14 +16,6 @@ public class Dog {
         this.size = size;
         this.age = age;
         this.picRef = picRef;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

@@ -27,23 +27,26 @@ public class ModelParse {
     //endregion
 
     //region User Methods
-    public void logIn(String userName, String password, final Model.GetUserListener2 listener){
-        UserParse.logIn(userName, password, new Model.GetUserListener2() {
+    public void logIn(String userName, String password, final Model.GetUserListener listener) {
+        UserParse.logIn(userName, password, new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
-                addDetailsByInstance(user, new Model.GetUserListener2() {
-                    @Override
-                    public void onResult(User user) {
-                        listener.onResult(user);
-                    }
-                });
+                if (user != null) {
+                    addDetailsByInstance(user, new Model.GetUserListener() {
+                        @Override
+                        public void onResult(User user) {
+                            listener.onResult(user);
+                        }
+                    });
+                }
+                listener.onResult(user);
             }
         });
     }
 
-    public void getCurrentUser(final Model.GetUserListener2 listener){
+    public void getCurrentUser(final Model.GetUserListener listener){
         User user = UserParse.getCurrentUser();
-        addDetailsByInstance(user, new Model.GetUserListener2() {
+        addDetailsByInstance(user, new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
                 listener.onResult(user);
@@ -51,7 +54,7 @@ public class ModelParse {
         });
     }
 
-    public void addDetailsByInstance(final User user,final Model.GetUserListener2 listener) {
+    public void addDetailsByInstance(final User user,final Model.GetUserListener listener) {
         if (user instanceof DogWalker) {
             DogWalkerParse.getDogWalkerDetailsById(user.getId(), new GetDogWalkerDetailsListener() {
                 @Override
@@ -73,11 +76,11 @@ public class ModelParse {
                 }
             });
         } else {
-            getAllDogsOfOwner(user.getId(), new Model.GetDogsListener() {
+            getDogByUserId(user.getId(), new Model.GetDogListener() {
                 @Override
-                public void onResult(List<Dog> dogs) {
+                public void onResult(Dog dog) {
                     final DogOwner dogOwner = (DogOwner) user;
-                    ((DogOwner) user).setDogs(dogs);
+                    ((DogOwner) user).setDog(dog);
 
                     listener.onResult(dogOwner);
                 }
@@ -85,52 +88,41 @@ public class ModelParse {
         }
     }
 
-    public void logOut()
-    {
+    public void logOut() {
         UserParse.logOut();
     }
-    //endregion
+
+    public static void updateUser(long id,  String firstName,  String lastName,  String phoneNumber,  String address,  String city) {
+        UserParse.updateUser(id, firstName, lastName, phoneNumber, address, city);
+    }
+        //endregion
 
     //region Dog Methods
-    public void getDogById(long id, final Model.GetDogListener listener) {
-        DogParse.getDogById(id, listener);
+//    public void getDogById(long id, final Model.GetDogListener listener) {
+//        DogParse.getDogById(id, listener);
+//    }
+
+    public void getDogByUserId(long userId, final Model.GetDogListener listener) {
+        DogParse.getDogByUserId(userId, listener);
     }
 
-    public void getAllDogsOfOwner(long userId, final Model.GetDogsListener listener) {
-        DogOwnerConnectDogParse.getDogIdsOfOwner(userId, new GetIds() {
-            @Override
-            public void onResult(List<Long> dogIds) {
-                DogParse.getDogsByIds(dogIds, listener);
-            }
-        });
+    public void addDog(long userId, Dog dog) {
+        DogParse.addToDogsTable(userId, dog);
     }
 
-    public long addDog(long userId, Dog dog) {
-        long newDogId = DogParse.addToDogsTable(dog);
-        DogOwnerConnectDogParse.addToDogOwnersConnectDogsTable(userId, newDogId);
-
-        return newDogId;
+    public void addDog(long userId, String name, DogSize size, long age, String picRef) {
+        DogParse.addToDogsTable(userId, name, size, age, picRef);
     }
 
-    public long addDog(long userId, String name, final DogSize size, final long age, final String picRef) {
-        long newDogId = DogParse.addToDogsTable(name, size, age, picRef);
-        DogOwnerConnectDogParse.addToDogOwnersConnectDogsTable(userId, newDogId);
-
-        return newDogId;
+    public void updateDog(long userId, final String name, final DogSize size, final long age, final String picRef){
+        DogParse.updateDog(userId, name, size, age, picRef);
     }
 
-    public void updateDog(long id, final String name, final DogSize size, final long age, final String picRef){
-        DogParse.updateDog(id, name, size, age, picRef);
-    }
-
-    public void deleteDog(long id){
-        DogParse.deleteDog(id);
-    }
     //endregion
 
     //region Dog Walker Methods
-    public void getDogWalkerById2(final long userId, final Model.GetDogWalkerListener listener) {
-        UserParse.getUserById2(userId, new Model.GetUserListener2() {
+    public void getDogWalkerById(final long userId, final Model.GetDogWalkerListener listener) {
+        UserParse.getUserById(userId, new Model.GetUserListener() {
             @Override
             public void onResult(final User user) {
                 DogWalkerParse.getDogWalkerDetailsById(userId, new GetDogWalkerDetailsListener() {
@@ -178,6 +170,16 @@ public class ModelParse {
 //        });
 //    }
 
+    public DogWalker getDogWalkerByIdSync(long userId) {
+        User user = UserParse.getUserByIdSync(userId);
+        if(user != null){
+            DogWalkerParse.addDogWalkerDetails((DogWalker) user);
+            CommentParse.addCommentsToDogWalker((DogWalker) user);
+            return (DogWalker)user;
+        }
+       return null;
+    }
+
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
         final List<DogWalker> dogWalkers = new LinkedList<>();
 
@@ -204,15 +206,15 @@ public class ModelParse {
     //endregion
 
     //region Dog Owner Methods
-    public void getDogOwnerById2(final long userId, final Model.GetDogOwnerListener listener) {
-        UserParse.getUserById2(userId, new Model.GetUserListener2() {
+    public void getDogOwnerById(long userId, final Model.GetDogOwnerListener listener) {
+        UserParse.getUserById(userId, new Model.GetUserListener() {
             @Override
             public void onResult(final User user) {
-                getAllDogsOfOwner(userId, new Model.GetDogsListener() {
+                DogParse.getDogByUserId(user.getId(), new Model.GetDogListener() {
                     @Override
-                    public void onResult(List<Dog> dogs) {
-                        final DogOwner dogOwner = (DogOwner) user;
-                        ((DogOwner) user).setDogs(dogs);
+                    public void onResult(Dog dog) {
+                        DogOwner dogOwner = (DogOwner) user;
+                        ((DogOwner) user).setDog(dog);
 
                         listener.onResult(dogOwner);
                     }
@@ -221,28 +223,19 @@ public class ModelParse {
         });
     }
 
-//    public void getDogOwnerById(final long userId, final Model.GetDogOwnerListener listener) {
-//        UserParse.getUserById(userId, new GetUserListener() {
-//            @Override
-//            public void onResult(long id, final String userName, final String firstName, final String lastName, final String phoneNumber, final String address, final String city) {
-//                getAllDogsOfOwner(userId, new Model.GetDogsListener() {
-//                    @Override
-//                    public void onResult(List<Dog> dogs) {
-//                        DogOwner dogOwner = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city, dogs);
-//
-//                        listener.onResult(dogOwner);
-//                    }
-//                });
-//            }
-//        });
-//    }
+    public DogOwner getDogOwnerByIdSync(long userId) {
+        final User user = UserParse.getUserByIdSync(userId);
+        if (user != null) {
+            ((DogOwner) user).setDog(DogParse.getDogByUserIdSync(userId));
+            return (DogOwner) user;
+        }
+        return null;
+    }
 
     public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, List<Dog> dogs) {
+                             String address, String city, Dog dog) {
         long newUserId = UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, false);
-        for(Dog dog : dogs) {
-            addDog(newUserId, dog);
-        }
+        addDog(newUserId, dog);
 
         return newUserId;
     }
@@ -264,44 +257,22 @@ public class ModelParse {
             @Override
             public void onResult(final List<Trip> trips) {
                 for (final Trip trip : trips) {
-                    getDogWalkerById2(trip.getDogWalkerId(), new Model.GetDogWalkerListener() {
-                        @Override
-                        public void onResult(DogWalker dogWalker) {
-                            trip.setDogWalker(dogWalker);
-                            getDogById(trip.getDogId(), new Model.GetDogListener() {
-                                @Override
-                                public void onResult(Dog dog) {
-                                    trip.setDog(dog);
-                                    listener.onResult(trips);
-                                }
-                            });
-                        }
-                    });
+                    trip.setDogWalker(getDogWalkerByIdSync(trip.getDogWalkerId()));
                 }
+                listener.onResult(trips);
             }
         });
     }
 
-    public void getTripsByDogWalkerId(long dogWalkerId, final Model.GetTripsListener listener){
+    public void getTripsByDogWalkerId(long dogWalkerId, final Model.GetTripsListener listener) {
         TripParse.getTripsDetailsByDogWalkerId(dogWalkerId, new GetTripsDetailsListener() {
             @Override
             public void onResult(final List<Trip> trips) {
                 for (final Trip trip : trips) {
-                    getDogOwnerById2(trip.getDogOwnerId(), new Model.GetDogOwnerListener() {
-                        @Override
-                        public void onResult(DogOwner dogOwner) {
-                            trip.setDogOwner(dogOwner);
+                    trip.setDogOwner(getDogOwnerByIdSync(trip.getDogOwnerId()));
 
-                            for (Dog dog : dogOwner.getDogs()) {
-                                if (dog.getId() == trip.getDogId()) {
-                                    trip.setDog(dog);
-                                    break;
-                                }
-                            }
-                            listener.onResult(trips);
-                        }
-                    });
                 }
+                listener.onResult(trips);
             }
         });
     }
@@ -310,8 +281,8 @@ public class ModelParse {
 //        TripParse.addToTripsTable(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
 //    }
 
-    public long startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
-        return TripParse.startTrip(dogOwnerId, dogId, dogWalkerId);
+    public long startTrip(long dogOwnerId, long dogWalkerId) {
+        return TripParse.startTrip(dogOwnerId, dogWalkerId);
     }
 
     public void endTrip(long tripId) {
@@ -337,50 +308,55 @@ public class ModelParse {
         RequestParse.updateRequest(dogOwnerId, dogWalkerId, RequestStatus.Declined);
     }
 
+    // todo: im not sure we need this func
     public void getWalkersConnectToOwner(long dogOwnerId, final Model.GetDogWalkersListener listener) {
-        RequestParse.getDogWalkersIdsOfOwner(dogOwnerId, new GetIds() {
+        RequestParse.getWalkersIdsConnectedToOwner(dogOwnerId, new GetIdsListener() {
             @Override
             public void onResult(List<Long> ids) {
                 final List<DogWalker> dogWalkers = new LinkedList<>();
                 for (long dogWalkerId : ids) {
-                    getDogWalkerById2(dogWalkerId, new Model.GetDogWalkerListener() {
-                        @Override
-                        public void onResult(DogWalker dogWalker) {
-                            dogWalkers.add(dogWalker);
-                            listener.notify();
-                        }
-                    });
+                    dogWalkers.add(getDogWalkerByIdSync(dogWalkerId));
                 }
-                try {
-                    listener.wait();
-                    listener.onResult(dogWalkers);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                listener.onResult(dogWalkers);
             }
         });
     }
 
     public void getOwnersConnectToWalker(long dogWalkerId, final Model.GetDogOwnersListener listener) {
-        RequestParse.getDogOwnersIdsOfWalker(dogWalkerId, new GetIds() {
+        RequestParse.getOwnersIdsConnectedToWalker(dogWalkerId, new GetIdsListener() {
             @Override
             public void onResult(List<Long> ids) {
                 final List<DogOwner> dogOwners = new LinkedList<>();
-                for (long dogOwnerId : ids) {
-                    getDogOwnerById2(dogOwnerId, new Model.GetDogOwnerListener() {
-                        @Override
-                        public void onResult(DogOwner dogOwner) {
-                            dogOwners.add(dogOwner);
-                            listener.notify();
-                        }
-                    });
+                for (long dogWalkerId : ids) {
+                    dogOwners.add(getDogOwnerByIdSync(dogWalkerId));
                 }
-                try {
-                    listener.wait();
-                    listener.onResult(dogOwners);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                listener.onResult(dogOwners);
+            }
+        });
+    }
+
+    public void getRequestForDogWalker(long dogWalkerId, final Model.GetDogOwnersListener listener){
+        RequestParse.getRequestForDogWalker(dogWalkerId, new GetIdsListener() {
+            @Override
+            public void onResult(List<Long> ids) {
+                final List<DogOwner> dogOwners = new LinkedList<>();
+                for (long dogWalkerId : ids) {
+                    dogOwners.add(getDogOwnerByIdSync(dogWalkerId));
                 }
+                listener.onResult(dogOwners);
+            }
+        });
+    }
+
+    public void getRequestOfDogOwner(long dogOwnerId, final Model.GetDogWalkersListener listener){
+        RequestParse.getRequestOfDogOwner(dogOwnerId, new GetIdsListener() {
+            @Override
+            public void onResult(List<Long> ids) {
+                final List<DogWalker> dogWalkers = new LinkedList<>();
+                for (long dogWalkerId : ids) {
+                    dogWalkers.add(getDogWalkerByIdSync(dogWalkerId));
+                }
+                listener.onResult(dogWalkers);
             }
         });
     }
@@ -391,7 +367,7 @@ public class ModelParse {
         void onResult(List<User> users);
     }
 
-    public interface GetIds {
+    public interface GetIdsListener {
         void onResult(List<Long> ids);
     }
 

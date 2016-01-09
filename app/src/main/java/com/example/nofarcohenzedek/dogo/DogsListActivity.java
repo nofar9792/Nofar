@@ -168,7 +168,7 @@ public class DogsListActivity extends Activity {
             DogOwner owner = list.get(position);
 
             ownerName.setText(owner.getFirstName() + " " + owner.getLastName());
-            dogName.setText(owner.getDogs().get(0).getName());
+            dogName.setText(owner.getDog().getName());
             address.setText(owner.getAddress());
 
 

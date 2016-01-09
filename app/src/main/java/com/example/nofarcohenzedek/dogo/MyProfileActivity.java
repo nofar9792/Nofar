@@ -34,7 +34,7 @@ public class MyProfileActivity extends Activity {
             findViewById(R.id.dogWalkerSectionInMyProfile).setVisibility(View.VISIBLE);
         }
 
-        Model.getInstance().getCurrentUser(new Model.GetUserListener2() {
+        Model.getInstance().getCurrentUser(new Model.GetUserListener() {
             @Override
             public void onResult(User user)
             {

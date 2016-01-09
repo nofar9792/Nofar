@@ -29,7 +29,7 @@ public class RequestParse {
         newDogOwnerConnectDogWalkerParseObject.saveInBackground();
     }
 
-    public static void getDogWalkersIdsOfOwner(long dogOwnerId, final ModelParse.GetIds listener){
+    public static void getWalkersIdsConnectedToOwner(long dogOwnerId, final ModelParse.GetIdsListener listener){
         ParseQuery<ParseObject> query = new ParseQuery<>(REQUESTS_TABLE);
         query.whereEqualTo(DOG_OWNER_ID, dogOwnerId).whereEqualTo(REQUEST_STATUS, RequestStatus.Accepted.name());
 
@@ -49,7 +49,7 @@ public class RequestParse {
         });
     }
 
-    public static void getDogOwnersIdsOfWalker(long dogWalkerId, final ModelParse.GetIds listener){
+    public static void getOwnersIdsConnectedToWalker(long dogWalkerId, final ModelParse.GetIdsListener listener){
         ParseQuery<ParseObject> query = new ParseQuery<>(REQUESTS_TABLE);
         query.whereEqualTo(DOG_WALKER_ID, dogWalkerId).whereEqualTo(REQUEST_STATUS, RequestStatus.Accepted.name());
 
@@ -62,6 +62,47 @@ public class RequestParse {
                         dogOwnersIds.add(po.getLong(DOG_OWNER_ID));
                     }
                     listener.onResult(dogOwnersIds);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void getRequestForDogWalker(long dogWalkerId, final ModelParse.GetIdsListener listener){
+        ParseQuery<ParseObject> query = new ParseQuery<>(REQUESTS_TABLE);
+        query.whereEqualTo(DOG_WALKER_ID, dogWalkerId).whereEqualTo(REQUEST_STATUS, RequestStatus.Waiting.name());
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    List<Long> dogOwnersIds = new LinkedList<>();
+                    for (ParseObject po : list) {
+                        dogOwnersIds.add(po.getLong(DOG_OWNER_ID));
+                    }
+                    listener.onResult(dogOwnersIds);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    // Messages of dog owner
+    public static void getRequestOfDogOwner(long dogOwnerId, final ModelParse.GetIdsListener listener){
+        ParseQuery<ParseObject> query = new ParseQuery<>(REQUESTS_TABLE);
+        query.whereEqualTo(DOG_OWNER_ID, dogOwnerId).whereEqualTo(REQUEST_STATUS, RequestStatus.Waiting.name());
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    List<Long> dogWalkersIds = new LinkedList<>();
+                    for (ParseObject po : list) {
+                        dogWalkersIds.add(po.getLong(DOG_WALKER_ID));
+                    }
+                    listener.onResult(dogWalkersIds);
                 } else {
                     e.printStackTrace();
                 }

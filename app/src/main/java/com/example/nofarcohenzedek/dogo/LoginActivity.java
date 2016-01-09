@@ -26,7 +26,7 @@ public class LoginActivity extends Activity {
         EditText password = (EditText) findViewById(R.id.passwordLogin);
 
         if (isValid(userName.getText().toString(), password.getText().toString())) {
-            Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new Model.GetUserListener2() {
+            Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new Model.GetUserListener() {
                 @Override
                 public void onResult(User user)
                 {

@@ -9,20 +9,17 @@ public class Trip
 {
     private long id;
     private long dogOwnerId;
-    private long dogId;
     private long dogWalkerId;
     private DogOwner dogOwner;
-    private Dog dog;
     private DogWalker dogWalker;
     private Date startOfWalking;
     private Date endOfWalking;
     private Boolean isPaid;
 
-    public Trip(long id,long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid)
+    public Trip(long id,long dogOwnerId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid)
     {
         this.id = id;
         this.dogOwnerId = dogOwnerId;
-        this.dogId = dogId;
         this.dogWalkerId = dogWalkerId;
         this.startOfWalking = startOfWalking;
         this.endOfWalking = endOfWalking;
@@ -41,10 +38,6 @@ public class Trip
         return dogOwnerId;
     }
 
-    public long getDogId() {
-        return dogId;
-    }
-
     public long getDogWalkerId() {
         return dogWalkerId;
     }
@@ -55,14 +48,6 @@ public class Trip
 
     public void setDogOwner(DogOwner dogOwner) {
         this.dogOwner = dogOwner;
-    }
-
-    public Dog getDog() {
-        return dog;
-    }
-
-    public void setDog(Dog dog) {
-        this.dog = dog;
     }
 
     public DogWalker getDogWalker() {

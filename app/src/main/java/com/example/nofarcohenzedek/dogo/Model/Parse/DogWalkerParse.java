@@ -43,9 +43,7 @@ public class DogWalkerParse {
             dogWalker.setIsComfortableOnMorning(parseObject.getBoolean(IS_COMFORTABLE_ON_MORNING));
             dogWalker.setIsComfortableOnAfternoon(parseObject.getBoolean(IS_COMFORTABLE_ON_AFTERNOON));
             dogWalker.setIsComfortableOnEvening(parseObject.getBoolean(IS_COMFORTABLE_ON_EVENING));
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

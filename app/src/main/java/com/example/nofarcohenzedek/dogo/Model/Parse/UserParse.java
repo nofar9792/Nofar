@@ -32,7 +32,6 @@ public class UserParse {
                                        String address, String city, Boolean isDogWalker) {
         long newUserId = getNextId();
         ParseUser user = new ParseUser();
-        //ParseUser.logOut();
 
         user.setUsername(userName);
         user.setPassword(password);
@@ -43,21 +42,14 @@ public class UserParse {
         user.put(ADDRESS, address);
         user.put(CITY, city);
         user.put(IS_DOG_WALKER, isDogWalker);
-        //ParseUser.enableRevocableSessionInBackground();
-//try
-//{
-//    user.signUp();
-//
-//}
-//catch (Exception e){
-//e.printStackTrace();
-//}
+
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
                     // Hooray! Let them use the app now.
                 } else {
                     e.printStackTrace();
+                    // todo: i dont know how to throw exception without surround it with try catch
                 }
             }
         });
@@ -65,7 +57,7 @@ public class UserParse {
         return newUserId;
     }
 
-    public static void logIn(String userName, String password, final Model.GetUserListener2 listener){
+    public static void logIn(String userName, String password, final Model.GetUserListener listener){
         ParseUser.logInInBackground(userName, password, new LogInCallback() {
             public void done(ParseUser parseUser, ParseException e) {
                 if (parseUser != null) {
@@ -79,7 +71,6 @@ public class UserParse {
             }
         });
     }
-
 
     // todo: maybe should be async
     public static User getCurrentUser() {
@@ -118,7 +109,7 @@ public class UserParse {
 //        });
 //    }
 
-    public static void getUserById2(long id, final Model.GetUserListener2 listener) {
+    public static void getUserById(long id, final Model.GetUserListener listener) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(USER_ID, id);
 
@@ -134,6 +125,20 @@ public class UserParse {
                 }
             }
         });
+    }
+
+    public static User getUserByIdSync(long id) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo(USER_ID, id);
+
+        try{
+            ParseUser parseUser = query.getFirst();
+           return convertFromParseUserToUser(parseUser);
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void getDogWalkerUsers(final ModelParse.GetUsersListener listener) {
@@ -164,6 +169,26 @@ public class UserParse {
         });
     }
 
+    public static void updateUser(long id, final String firstName, final String lastName, final String phoneNumber, final String address, final String city) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo(USER_ID, id);
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (e == null) {
+                    parseUser.put(FIRST_NAME, firstName);
+                    parseUser.put(LAST_NAME, lastName);
+                    parseUser.put(PHONE_NUMBER, phoneNumber);
+                    parseUser.put(ADDRESS, address);
+                    parseUser.put(CITY, city);
+
+                    parseUser.saveInBackground();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
     //region Private Methods
     private static long getNextId(){
         ParseQuery<ParseUser> query = ParseUser.getQuery();

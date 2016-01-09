@@ -6,12 +6,12 @@ import java.util.List;
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class DogOwner extends User {
-    private List<Dog> dogs;
+    private Dog dog;
 
     public DogOwner(long id, String userName, String firstName, String lastName, String phoneNumber,
-                    String address, String city,List<Dog> dogs) {
+                    String address, String city,Dog dog) {
         super(id, userName, firstName, lastName, phoneNumber, address, city);
-        this.dogs = dogs;
+        this.dog = dog;
     }
 
 
@@ -20,11 +20,11 @@ public class DogOwner extends User {
         super(id, userName, firstName, lastName, phoneNumber, address, city);
     }
 
-    public List<Dog> getDogs() {
-        return dogs;
+    public Dog getDog() {
+        return dog;
     }
 
-    public void setDogs(List<Dog> dogs) {
-        this.dogs = dogs;
+    public void setDog(Dog dog) {
+        this.dog = dog;
     }
 }

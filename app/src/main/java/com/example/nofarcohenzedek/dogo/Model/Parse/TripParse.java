@@ -20,7 +20,6 @@ public class TripParse {
     final static String TRIPS_TABLE = "TRIPS";
     final static String TRIP_ID = "tripId";
     final static String DOG_OWNER_ID = "dogOwnerId";
-    final static String DOG_ID = "dogId";
     final static String DOG_WALKER_ID = "dogWalkerId";
     final static String START_OF_WALKING = "startOfWalking";
     final static String END_OF_WALKING = "endOfWalking";
@@ -43,13 +42,12 @@ public class TripParse {
 //        return newTripId;
 //    }
 
-    public static long startTrip(long dogOwnerId, long dogId, long dogWalkerId) {
+    public static long startTrip(long dogOwnerId, long dogWalkerId) {
         long newTripId = getNextId();
         ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
 
         newTripParseObject.put(TRIP_ID, newTripId);
         newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
-        newTripParseObject.put(DOG_ID, dogId);
         newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
         newTripParseObject.put(START_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")).getTime());
         newTripParseObject.put(IS_PAID, false);
@@ -104,13 +102,12 @@ public class TripParse {
                 if (e == null) {
                     for (ParseObject po : list) {
                         long tripId = po.getLong(TRIP_ID);
-                        long dogId = po.getLong(DOG_ID);
                         long dogWalkerId = po.getLong(DOG_WALKER_ID);
                         Date startOfWalking = po.getDate(START_OF_WALKING);
                         Date endOfWalking = po.getDate(END_OF_WALKING);
                         Boolean isPaid = po.getBoolean(IS_PAID);
 
-                        trips.add(new Trip(tripId, dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
+                        trips.add(new Trip(tripId, dogOwnerId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
                     }
                     listener.onResult(trips);
 
@@ -122,23 +119,22 @@ public class TripParse {
     }
 
     public static void getTripsDetailsByDogWalkerId(final long dogWalkerId, final ModelParse.GetTripsDetailsListener listener){
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(TRIPS_TABLE);
+        ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
         query.whereEqualTo(DOG_WALKER_ID, dogWalkerId);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                List<Trip> trips = new LinkedList<Trip>();
+                List<Trip> trips = new LinkedList<>();
 
                 if (e == null) {
                     for (ParseObject po : list) {
                         long tripId = po.getLong(TRIP_ID);
                         long dogOwnerId = po.getLong(DOG_OWNER_ID);
-                        long dogId = po.getLong(DOG_ID);
                         Date startOfWalking = po.getDate(START_OF_WALKING);
                         Date endOfWalking = po.getDate(END_OF_WALKING);
                         Boolean isPaid = po.getBoolean(IS_PAID);
 
-                        trips.add(new Trip(tripId, dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
+                        trips.add(new Trip(tripId, dogOwnerId, dogWalkerId, startOfWalking, endOfWalking, isPaid));
                     }
                     listener.onResult(trips);
 

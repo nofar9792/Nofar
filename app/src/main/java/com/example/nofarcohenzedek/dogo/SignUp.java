@@ -102,16 +102,12 @@ public class SignUp extends Activity {
         {
             // Check the type of user, and create the object 'newUser' respectively
             if (isOwner.isChecked()) {
-                // TODO: 06/01/2016 - get the last id from DB, instead '0'
-                Dog myDog = new Dog(0, dogName,
+                Dog dog = new Dog(dogName,
                         (isSmall.isChecked() ? DogSize.Small : (isMedium.isChecked() ? DogSize.Medium : DogSize.Large)),
                         Long.parseLong(dogAge), dogPic);
 
-                List<Dog> allDogs = new ArrayList<>();
-                allDogs.add(myDog);
-
                 // Save the user on DB
-                Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, allDogs);
+                Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
             } else {
                 // Save the user on DB
                 Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
@@ -119,7 +115,7 @@ public class SignUp extends Activity {
                         isComfortableOnEvening.isChecked());
             }
 
-            Model.getInstance().logIn(userName, password, new Model.GetUserListener2() {
+            Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
                 @Override
                 public void onResult(User user)
                 {
@@ -168,7 +164,7 @@ public class SignUp extends Activity {
 
         if(!isOwner.isChecked() && !isWalker.isChecked())
         {
-            errorMessage = "תבחר/י בבקשה את סוג המשתמש";
+            errorMessage = "אנא בחר/י את סוג המשתמש";
             isValid = false;
         }
         else if(firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || password.isEmpty() || phoneNumber.isEmpty() ||
