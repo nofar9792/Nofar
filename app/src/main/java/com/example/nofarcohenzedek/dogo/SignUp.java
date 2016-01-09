@@ -110,18 +110,39 @@ public class SignUp extends Activity {
                 List<Dog> allDogs = new ArrayList<>();
                 allDogs.add(myDog);
 
-                // TODO: 06/01/2016 - get the last id from DB, instead '0'
-                newUser = new DogOwner(0, userName, firstName, lastName, phoneNumber, address, city, allDogs);
+                // Save the user on DB
+                Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, allDogs);
             } else {
-                // TODO: 06/01/2016 - get the last id from DB, instead '0'
-                newUser = new DogWalker(0, userName, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
+                // Save the user on DB
+                Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
                         Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
                         isComfortableOnEvening.isChecked());
             }
 
-            newUser.getAddress();
-
-            // TODO: 06/01/2016 - save the user on DB
+            Model.getInstance().logIn(userName, password, new Model.GetUserListener2() {
+                @Override
+                public void onResult(User user)
+                {
+                    if (user != null) {
+                        if (user instanceof DogOwner) {
+                            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                            intent.putExtra("isOwner", true);
+                            intent.putExtra("userId", user.getId());
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), DogsListActivity.class);
+                            intent.putExtra("isOwner", false);
+                            intent.putExtra("userId", user.getId());
+                            startActivity(intent);
+                        }
+                    }
+                    else
+                    {
+                        TextView error = (TextView)findViewById(R.id.error);
+                        error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
+                    }
+                }
+            });
         }
     }
 
