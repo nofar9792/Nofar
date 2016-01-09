@@ -35,31 +35,24 @@ public class SearchActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.showMap)
-        {
-            Intent intent = new Intent(this, MapsActivity.class);
-            startActivity(intent);
+        Intent intent = null;
+
+        if (id == R.id.dogsList) {
+            intent = new Intent(this, DogsListActivity.class);
+        } else if (id == R.id.map) {
+            intent = new Intent(this, MapsActivity.class);
+        } else if (id == R.id.tripsReport) {
+            intent = new Intent(this, TripsReportActivity.class);
+        } else if (id == R.id.messages) {
+            intent = new Intent(this, MessagesActivity.class);
+        } else if (id == R.id.myProfile) {
+            intent = new Intent(this, MyProfileActivity.class);
+
         }
-        else if (id == R.id.dogsList)
-        {
-            Intent intent = new Intent(this, DogsListActivity.class);
-            startActivity(intent);
-        }
-        else if (id==R.id.tripsReport)
-        {
-            Intent intent = new Intent(this, TripsReportActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.messages)
-        {
-            Intent intent = new Intent(this, MessagesActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.myProfile)
-        {
-            Intent intent = new Intent(this, MyProfileActivity.class);
-            startActivity(intent);
-        }
+
+        intent.putExtra("isOwner", true);
+        intent.putExtra("userId", getIntent().getLongExtra("userId",0));
+        startActivity(intent);
 
         return super.onOptionsItemSelected(item);
     }

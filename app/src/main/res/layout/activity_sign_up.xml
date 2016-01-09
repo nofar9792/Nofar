@@ -4,115 +4,119 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.nofarcohenzedek.dogo.SignUp"
-    android:background="@color/colorBackground" android:orientation="vertical"
-    android:layoutDirection="rtl">
+    android:background="@color/colorBackground"
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    tools:context="com.example.nofarcohenzedek.dogo.SignUp">
 
     <ImageView
+        android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:id="@+id/logo"
-        android:src="@drawable/logo"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/logo" />
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <LinearLayout android:layout_below="@+id/logo"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
             android:orientation="vertical">
 
-            <LinearLayout android:layout_below="@+id/logo"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/logo"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/firstName"
                     android:id="@+id/lbl_firstName"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"/>
-
-                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/firstName"
                     android:layout_margin="10px"
-                    android:textSize="20dp"/>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lastName"
-                    android:id="@+id/lbl_lastName"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/lastName"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout android:layout_below="@+id/logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/userName"
-                    android:id="@+id/lbl_userName"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"/>
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/userName"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/password"
-                    android:id="@+id/lbl_password"
-                    android:layout_margin="10px"
+                    android:text="@string/firstName"
                     android:textSize="20dp" />
 
                 <EditText
+                    android:id="@+id/firstName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lbl_lastName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:text="@string/lastName"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/lastName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/logo"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lbl_userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:text="@string/userName"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lbl_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:text="@string/password"
+                    android:textSize="20dp" />
+
+                <EditText
                     android:id="@+id/password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10px"
-                    android:textSize="20dp"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword"
+                    android:textSize="20dp" />
 
             </LinearLayout>
 
@@ -122,19 +126,19 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/phoneNumber"
                     android:id="@+id/lbl_phoneNumber"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"/>
-
-                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:text="@string/phoneNumber"
+                    android:textSize="20dp" />
+
+                <EditText
                     android:id="@+id/phoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10px"
-                    android:textSize="20dp"/>
+                    android:textSize="20dp" />
 
             </LinearLayout>
 
@@ -144,19 +148,19 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/city"
                     android:id="@+id/lbl_city"
-                    android:layout_margin="10px"
-                    android:textSize="20dp"/>
-
-                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/city"
                     android:layout_margin="10px"
-                    android:textSize="20dp"/>
+                    android:text="@string/city"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:textSize="20dp" />
 
             </LinearLayout>
 
@@ -166,19 +170,19 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/lbl_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/address"
-                    android:id="@+id/lbl_address"
                     android:layout_margin="10px"
-                    android:textSize="20dp"/>
+                    android:text="@string/address"
+                    android:textSize="20dp" />
 
                 <EditText
+                    android:id="@+id/address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/address"
                     android:layout_margin="10px"
-                    android:textSize="20dp"/>
+                    android:textSize="20dp" />
 
             </LinearLayout>
 
@@ -188,44 +192,44 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/lbl_typeOfUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/typeOfUser"
-                    android:id="@+id/lbl_typeOfUser"
                     android:layout_margin="10px"
-                    android:textSize="20dp"/>
+                    android:text="@string/typeOfUser"
+                    android:textSize="20dp" />
 
                 <RadioGroup
+                    android:id="@+id/typeOfUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/typeOfUser"
                     android:orientation="horizontal">
 
                     <RadioButton
+                        android:id="@+id/isOwner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="checkTypeOfUserBTNClick"
                         android:text="@string/isOwner"
-                        android:id="@+id/isOwner"
-                        android:textSize="15dp"
-                        android:onClick="checkTypeOfUserBTNClick"/>
+                        android:textSize="15dp" />
 
                     <RadioButton
+                        android:id="@+id/isWalker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/isWalker"
-                        android:id="@+id/isWalker"
-                        android:textSize="15dp"
                         android:layout_marginRight="30dp"
-                        android:onClick="checkTypeOfUserBTNClick"/>
+                        android:onClick="checkTypeOfUserBTNClick"
+                        android:text="@string/isWalker"
+                        android:textSize="15dp" />
                 </RadioGroup>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutWalker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/layoutWalker"
                 android:layout_marginTop="10dp"
+                android:orientation="vertical"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -234,20 +238,20 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/lbl_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/age"
-                        android:id="@+id/lbl_age"
                         android:layout_margin="10px"
-                        android:textSize="20dp"/>
+                        android:text="@string/age"
+                        android:textSize="20dp" />
 
                     <EditText
+                        android:id="@+id/age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/age"
                         android:layout_margin="10px"
-                        android:textSize="20dp"
-                        android:inputType="number"/>
+                        android:inputType="number"
+                        android:textSize="20dp" />
 
                 </LinearLayout>
 
@@ -257,20 +261,20 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/lbl_priceForHour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/priceForHour"
-                        android:id="@+id/lbl_priceForHour"
                         android:layout_margin="10px"
-                        android:textSize="20dp"/>
+                        android:text="@string/priceForHour"
+                        android:textSize="20dp" />
 
                     <EditText
+                        android:id="@+id/priceForHour"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/priceForHour"
                         android:layout_margin="10px"
-                        android:textSize="20dp"
-                        android:inputType="number"/>
+                        android:inputType="number"
+                        android:textSize="20dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -279,41 +283,41 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/lbl_comfortableTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/comfortableTime"
-                        android:id="@+id/lbl_comfortableTime"
                         android:layout_margin="10px"
-                        android:textSize="20dp"/>
+                        android:text="@string/comfortableTime"
+                        android:textSize="20dp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
 
                         <CheckBox
+                            android:id="@+id/cbx_isComfortableOnMorning"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/isComfortableOnMorning"
-                            android:textSize="15dp"
-                            android:id="@+id/cbx_isComfortableOnMorning"/>
+                            android:textSize="15dp" />
 
                         <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/isComfortableOnAfternoon"
-                            android:textSize="15dp"
                             android:id="@+id/cbx_isComfortableOnAfternoon"
-                            android:layout_marginRight="30dp"/>
-
-                        <CheckBox
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/isComfortableOnEvening"
-                            android:textSize="15dp"
+                            android:layout_marginRight="30dp"
+                            android:text="@string/isComfortableOnAfternoon"
+                            android:textSize="15dp" />
+
+                        <CheckBox
                             android:id="@+id/cbx_isComfortableOnEvening"
-                            android:layout_marginRight="30dp"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="30dp"
+                            android:text="@string/isComfortableOnEvening"
+                            android:textSize="15dp" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -321,11 +325,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutOwner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/layoutOwner"
                 android:layout_marginTop="10dp"
+                android:orientation="vertical"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -334,63 +338,64 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/lbl_dogName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dogName"
-                        android:id="@+id/lbl_dogName"
                         android:layout_margin="10px"
-                        android:textSize="20dp"/>
+                        android:text="@string/dogName"
+                        android:textSize="20dp" />
 
                     <EditText
+                        android:id="@+id/dogName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/dogName"
                         android:layout_margin="10px"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
 
                 </LinearLayout>
 
-                <LinearLayout android:layout_below="@+id/logo"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/logo"
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/lbl_dogSize"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dogSize"
-                        android:id="@+id/lbl_dogSize"
                         android:layout_margin="10px"
-                        android:textSize="20dp"/>
+                        android:text="@string/dogSize"
+                        android:textSize="20dp" />
 
                     <RadioGroup
+                        android:id="@+id/dogSize"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/dogSize"
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/isBig"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/isBig"
-                            android:id="@+id/isBig"
                             android:textSize="15dp" />
 
                         <RadioButton
+                            android:id="@+id/isMedium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
                             android:text="@string/isMedium"
-                            android:id="@+id/isMedium"
-                            android:textSize="15dp"
-                            android:layout_marginRight="20dp"/>
+                            android:textSize="15dp" />
 
                         <RadioButton
+                            android:id="@+id/isSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
                             android:text="@string/isSmall"
-                            android:id="@+id/isSmall"
-                            android:textSize="15dp"
-                            android:layout_marginRight="20dp"/>
+                            android:textSize="15dp" />
                     </RadioGroup>
 
                 </LinearLayout>
@@ -401,20 +406,20 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/lbl_dogAge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dogAge"
-                        android:id="@+id/lbl_dogAge"
                         android:layout_margin="10px"
+                        android:text="@string/dogAge"
                         android:textSize="20dp" />
 
                     <EditText
+                        android:id="@+id/dogAge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/dogAge"
                         android:layout_margin="10px"
-                        android:textSize="20dp"
-                        android:inputType="number"/>
+                        android:inputType="number"
+                        android:textSize="20dp" />
 
                 </LinearLayout>
 
@@ -424,39 +429,39 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/lbl_dogPic"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/dogPic"
-                        android:id="@+id/lbl_dogPic"
                         android:layout_margin="10px"
-                        android:textSize="20dp"/>
+                        android:text="@string/dogPic"
+                        android:textSize="20dp" />
 
                     <ImageView
+                        android:id="@+id/dogPic"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:id="@+id/dogPic"
-                        android:layout_margin="10dp"/>
+                        android:layout_margin="10dp" />
 
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/btn_openGallery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/btn_openGallery"
-                    android:text="@string/choosePic"
-                    android:onClick="openGalleryBTN"/>
+                    android:onClick="openGalleryBTN"
+                    android:text="@string/choosePic" />
 
             </LinearLayout>
 
             <ImageButton
+                android:id="@+id/sign_up_button2"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:src="@drawable/sign_up_button"
-                android:id="@+id/sign_up_button2"
-                android:scaleType="fitCenter"
                 android:layout_marginTop="30dp"
                 android:background="@color/colorBackground"
-                android:onClick="saveBTN"/>
+                android:onClick="saveBTN"
+                android:scaleType="fitCenter"
+                android:src="@drawable/sign_up_button" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

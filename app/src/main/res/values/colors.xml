@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#ff2d2d</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBackground">#ffeeee</color>
+    <color name="holo_light_primary">#080000</color>
+    <color name="screen_background_light">#030000</color>
+    <color name="background_holo_light">#040000</color>
+    <color name="bright_foreground_holo_dark">#080000</color>
+    <color name="bright_foreground_disabled_holo_dark">#070000</color>
 </resources>

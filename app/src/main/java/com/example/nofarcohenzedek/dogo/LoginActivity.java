@@ -12,6 +12,8 @@ import com.example.nofarcohenzedek.dogo.Model.User;
 
 public class LoginActivity extends Activity {
 
+   // public User currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,16 +26,22 @@ public class LoginActivity extends Activity {
         EditText password = (EditText) findViewById(R.id.passwordLogin);
         Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new Model.GetUserListener2() {
             @Override
-            public void onResult(User user) {
+            public void onResult(User user)
+            {
+              //  currentUser = user;
 
                 if (user instanceof DogOwner)
                 {
                     Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    intent.putExtra("isOwner", true);
+                    intent.putExtra("userId", user.getId());
                     startActivity(intent);
                 }
                 else
                 {
                     Intent intent = new Intent(getApplicationContext(), DogsListActivity.class);
+                    intent.putExtra("isOwner", false);
+                    intent.putExtra("userId", user.getId());
                     startActivity(intent);
                 }
 

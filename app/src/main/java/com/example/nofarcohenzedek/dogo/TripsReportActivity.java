@@ -13,6 +13,8 @@ import com.example.nofarcohenzedek.dogo.Model.User;
 
 public class TripsReportActivity extends Activity {
 
+    Boolean isOwner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +22,8 @@ public class TripsReportActivity extends Activity {
 
         setActionBar((Toolbar)findViewById(R.id.tripsReportToolBar));
         //getActionBar().setDisplayShowTitleEnabled(false);
+
+        isOwner = getIntent().getBooleanExtra("isOwner", false);
     }
 
 
@@ -27,16 +31,25 @@ public class TripsReportActivity extends Activity {
     public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        Model.getInstance().getCurrentUser(new Model.GetUserListener2() {
-            @Override
-            public void onResult(User user) {
-                if (user instanceof DogOwner) {
-                    getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-                } else {
-                    getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
-                }
-            }
-        });
+//        Model.getInstance().getCurrentUser(new Model.GetUserListener2() {
+//            @Override
+//            public void onResult(User user) {
+//                if (user instanceof DogOwner) {
+//                    getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
+//                } else {
+//                    getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
+//                }
+//            }
+//        });
+
+        if (isOwner)
+        {
+            getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
+        }
+        else
+        {
+            getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
+        }
 
         return true;
         //return super.onCreateOptionsMenu(menu);
@@ -46,31 +59,24 @@ public class TripsReportActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.searchDW)
-        {
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
+        Intent intent = null;
+
+        if (id == R.id.searchDW) {
+            intent = new Intent(this, SearchActivity.class);
+        } else if (id == R.id.map) {
+            intent = new Intent(this, MapsActivity.class);
+        } else if (id == R.id.dogsList) {
+            intent = new Intent(this, DogsListActivity.class);
+        } else if (id == R.id.messages) {
+            intent = new Intent(this, MessagesActivity.class);
+        } else if (id == R.id.myProfile) {
+            intent = new Intent(this, MyProfileActivity.class);
+
         }
-        else if (id == R.id.showMap)
-        {
-            Intent intent = new Intent(this, MapsActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.dogsList)
-        {
-            Intent intent = new Intent(this, DogsListActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.messages)
-        {
-            Intent intent = new Intent(this, MessagesActivity.class);
-            startActivity(intent);
-        }
-        else if (id == R.id.myProfile)
-        {
-            Intent intent = new Intent(this, MyProfileActivity.class);
-            startActivity(intent);
-        }
+
+        intent.putExtra("isOwner", isOwner);
+        intent.putExtra("userId", getIntent().getLongExtra("userId",0));
+        startActivity(intent);
 
         return super.onOptionsItemSelected(item);
     }

@@ -96,8 +96,8 @@ public class SignUp extends Activity {
         // Get all current details
         initAllDetails();
 
-        // Check if all details are validate
-        isValidate();
+        // Check if all details are valid
+        isInputValid();
 
         // Check the type of user, and create the object 'newUser' respectively
         if(isOwner.isChecked())
@@ -139,7 +139,7 @@ public class SignUp extends Activity {
      * Check if all details of user arn't empty
      * @return
      */
-    private boolean isValidate()
+    private boolean isInputValid()
     {
 //        if(!isOwner.isChecked() && !isWalker.isChecked())
 //        {
