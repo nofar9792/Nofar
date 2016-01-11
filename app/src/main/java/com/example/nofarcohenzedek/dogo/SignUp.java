@@ -98,22 +98,28 @@ public class SignUp extends Activity {
         initAllDetails();
 
         // Check if all details are validate
-        if(isValidate())
+        if(isValid())
         {
             // Check the type of user, and create the object 'newUser' respectively
-            if (isOwner.isChecked()) {
+            if (isOwner.isChecked())
+            {
                 Dog dog = new Dog(dogName,
                         (isSmall.isChecked() ? DogSize.Small : (isMedium.isChecked() ? DogSize.Medium : DogSize.Large)),
                         Long.parseLong(dogAge), dogPic);
 
                 // Save the user on DB
-                try {
+                try
+                {
                     Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     e.printStackTrace();
                     // TODO tell the user that something went wrong (username is already taken)
                 }
-            } else {
+            }
+            else
+            {
                 // Save the user on DB
                 try {
                     Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
@@ -167,7 +173,7 @@ public class SignUp extends Activity {
      * Check if all details of user arn't empty
      * @return
      */
-    private boolean isValidate()
+    private boolean isValid()
     {
         boolean isValid = true;
         errorMessage = "";
