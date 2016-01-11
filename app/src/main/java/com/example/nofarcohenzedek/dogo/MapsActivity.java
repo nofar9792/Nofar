@@ -89,8 +89,9 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng karkom = new LatLng(31.907013, 35.01363900000001);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(karkom));
+
+        LatLng center = getLocationFromAddress(getIntent().getStringExtra("address"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         // add all of the dog walkers markers by their address

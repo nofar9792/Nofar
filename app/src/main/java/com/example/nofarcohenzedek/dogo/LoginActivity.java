@@ -35,6 +35,7 @@ public class LoginActivity extends Activity {
                             Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                             intent.putExtra("isOwner", true);
                             intent.putExtra("userId", user.getId());
+                            intent.putExtra("address", user.getAddress() + ", " + user.getCity());
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(getApplicationContext(), DogsListActivity.class);
