@@ -23,6 +23,10 @@ import java.util.List;
 public class UserParse {
     public static long addToUsersTable(String userName, String password, String firstName, String lastName, String phoneNumber,
                                        String address, String city, Boolean isDogWalker) throws Exception {
+        if(isUserNameAlreadyExist(userName)){
+            throw new Exception("user already exist");
+        }
+
         long newUserId = getNextId();
         ParseUser user = new ParseUser();
 
@@ -36,22 +40,15 @@ public class UserParse {
         user.put(UserConsts.CITY, city);
         user.put(UserConsts.IS_DOG_WALKER, isDogWalker);
 
-        try {
-            user.signUp();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            throw new Exception("sign up failed");
-        }
-//        user.signUpInBackground(new SignUpCallback() {
-//            public void done(ParseException e) {
-//                if (e == null) {
-//                    // Hooray! Let them use the app now.
-//                } else {
-//                    e.printStackTrace();
-//                    // todo: i dont know how to throw exception without surround it with try catch
-//                }
-//            }
-//        });
+        user.signUpInBackground(new SignUpCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Hooray! Let them use the app now.
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
         return newUserId;
     }
 
@@ -184,6 +181,19 @@ public class UserParse {
         return 1;
     }
 
+    private static boolean isUserNameAlreadyExist(String username) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo(UserConsts.USERNAME, username);
+
+        try {
+            query.getFirst();
+            return true;
+
+        } catch (ParseException e) {
+        }
+
+        return false;
+    }
     private static User convertFromParseUserToUser(ParseUser parseUser){
         User user;
 

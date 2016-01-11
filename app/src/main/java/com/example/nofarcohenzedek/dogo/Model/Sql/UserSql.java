@@ -20,7 +20,7 @@ public class UserSql
     public static void create(SQLiteDatabase db) {
         db.execSQL("create table " + UserConsts.USER_TABLE + " (" +
                 UserConsts.USER_ID + " TEXT PRIMARY KEY," +
-                UserConsts.USER_NAME + " TEXT ," +
+                UserConsts.USERNAME + " TEXT ," +
                 UserConsts.FIRST_NAME + " TEXT," +
                 UserConsts.LAST_NAME + " TEXT," +
                 UserConsts.PHONE_NUMBER + " TEXT," +
@@ -43,7 +43,7 @@ public class UserSql
 
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex(UserConsts.USER_ID);
-            int userNameIndex = cursor.getColumnIndex(UserConsts.USER_NAME);
+            int userNameIndex = cursor.getColumnIndex(UserConsts.USERNAME);
             int firstNameIndex = cursor.getColumnIndex(UserConsts.FIRST_NAME);
             int lastNameIndex = cursor.getColumnIndex(UserConsts.LAST_NAME);
             int phoneNumberIndex = cursor.getColumnIndex(UserConsts.PHONE_NUMBER);
@@ -67,7 +67,7 @@ public class UserSql
     public static void addToUsersTable(SQLiteDatabase db,User user) {
         ContentValues values = new ContentValues();
         values.put(UserConsts.USER_ID, user.getId());
-        values.put(UserConsts.USER_NAME, user.getUserName());
+        values.put(UserConsts.USERNAME, user.getUserName());
         values.put(UserConsts.FIRST_NAME, user.getFirstName());
         values.put(UserConsts.LAST_NAME, user.getLastName());
         values.put(UserConsts.PHONE_NUMBER, user.getPhoneNumber());

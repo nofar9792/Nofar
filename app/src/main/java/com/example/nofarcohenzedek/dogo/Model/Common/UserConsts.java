@@ -6,7 +6,7 @@ package com.example.nofarcohenzedek.dogo.Model.Common;
 public class UserConsts {
     public final static String USER_TABLE = "Users";
     public final static String USER_ID = "userId";
-    public final static String USER_NAME = "userName";
+    public final static String USERNAME = "username";
     public final static String FIRST_NAME = "firstName";
     public final static String LAST_NAME = "lastName";
     public final static String PHONE_NUMBER = "phoneNumber";
