@@ -3,27 +3,80 @@ package com.example.nofarcohenzedek.dogo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
+import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
 
-public class MessagesActivity extends Activity {
+import java.util.LinkedList;
+import java.util.List;
 
+public class MessagesActivity extends Activity {
+    ListView list;
+    List<User> data;
     Boolean isOwner;
+    Spinner spinner;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
-
-        setActionBar((Toolbar)findViewById(R.id.messagesToolBar));
+        setActionBar((Toolbar) findViewById(R.id.messagesToolBar));
         //getActionBar().setDisplayShowTitleEnabled(false);
 
         isOwner = getIntent().getBooleanExtra("isOwner", false);
+        spinner = (Spinner) findViewById(R.id.messagesSpinner);
+        data = new LinkedList<>();
+        spinner.setVisibility(View.VISIBLE);
+        list = (ListView) findViewById(R.id.messagesList);
+
+
+        Model.getInstance().getCurrentUser(new Model.GetUserListener() {
+            @Override
+            public void onResult(User user) {
+                currentUser = user;
+
+                if (user instanceof DogWalker) {
+                    Model.getInstance().getRequestForDogWalker(user.getId(), new Model.GetDogOwnersListener() {
+                        @Override
+                        public void onResult(List<DogOwner> dogOwners) {
+                            for (DogOwner dogOwner : dogOwners) {
+                                data.add(dogOwner);
+                                MessagesAdapter adapter = new MessagesAdapter();
+                                list.setAdapter(adapter);
+                                spinner.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                }
+                else{
+                    Model.getInstance().getRequestOfDogOwner(user.getId(), new Model.GetDogWalkersListener() {
+                        @Override
+                        public void onResult(List<DogWalker> dogWalkers) {
+                            for (DogWalker dogWalker : dogWalkers) {
+                                data.add(dogWalker);
+                                MessagesAdapter adapter = new MessagesAdapter();
+                                list.setAdapter(adapter);
+                                spinner.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
@@ -41,12 +94,9 @@ public class MessagesActivity extends Activity {
 //            }
 //        });
 
-        if (isOwner)
-        {
+        if (isOwner) {
             getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-        }
-        else
-        {
+        } else {
             getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
         }
 
@@ -56,6 +106,7 @@ public class MessagesActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // todo: ???
         int id = item.getItemId();
 
         Intent intent = null;
@@ -74,10 +125,75 @@ public class MessagesActivity extends Activity {
         }
 
         intent.putExtra("isOwner", isOwner);
-        intent.putExtra("userId", getIntent().getLongExtra("userId",0));
+        intent.putExtra("userId", getIntent().getLongExtra("userId", 0));
         startActivity(intent);
 
         return super.onOptionsItemSelected(item);
     }
 
+    class MessagesAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return data.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            if(currentUser instanceof DogWalker) {
+                if (convertView == null) {
+                    LayoutInflater inflater = getLayoutInflater();
+                    convertView = inflater.inflate(R.layout.walker_requests_row_layout, null);
+                    Button acceptButton = (Button) convertView.findViewById(R.id.acceptButton);
+                    Button declineButton = (Button) convertView.findViewById(R.id.declineButton);
+                    acceptButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Model.getInstance().acceptRequest(data.get(position).getId(), currentUser.getId());
+                            data.remove(position);
+                            notifyDataSetChanged();
+                        }
+                    });
+
+                    declineButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Model.getInstance().declineRequest(data.get(position).getId(), currentUser.getId());
+                            data.remove(position);
+                            notifyDataSetChanged();
+                        }
+                    });
+                }
+
+                TextView dogOwnerNameTV = (TextView) convertView.findViewById(R.id.dogOwnerName);
+                TextView dogNameTV = (TextView) convertView.findViewById(R.id.dogName);
+
+                DogOwner dogOwner = (DogOwner) data.get(position);
+                dogOwnerNameTV.setText(dogOwner.getFirstName() + " " + dogOwner.getLastName());
+                dogNameTV.setText(dogOwner.getDog().getName());
+            }
+            else{
+                if (convertView == null) {
+                    LayoutInflater inflater = getLayoutInflater();
+                    convertView = inflater.inflate(R.layout.owner_requests_row_layout, null);
+                }
+
+                TextView dogWalkerNameTV = (TextView) convertView.findViewById(R.id.dogWalkerName);
+
+                DogWalker dogWalker = (DogWalker) data.get(position);
+                dogWalkerNameTV.setText(dogWalker.getFirstName() + " " + dogWalker.getLastName());
+            }
+            return convertView;
+        }
+    }
 }

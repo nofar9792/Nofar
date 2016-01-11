@@ -21,5 +21,15 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.example.nofarcohenzedek.dogo.MessagesActivity">
 
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/messagesSpinner"
+            android:visibility="visible"/>
+
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/messagesList" />
     </RelativeLayout>
 </LinearLayout>
