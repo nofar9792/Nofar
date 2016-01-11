@@ -134,7 +134,7 @@ public class DogParse {
 //        });
 //    }
 
-    public static void updateDog(long userId, final String name, final DogSize size, final long age, final String picRef) {
+    public static void updateDog(long userId, final Dog dog) {
         ParseQuery<ParseObject> query = new ParseQuery<>(DOGS_TABLE);
         query.whereEqualTo(USER_ID, userId);
 
@@ -142,10 +142,10 @@ public class DogParse {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
                 if (e == null) {
-                    parseObject.put(NAME, name);
-                    parseObject.put(SIZE, size.name());
-                    parseObject.put(AGE, age);
-                    parseObject.put(PIC_REF, picRef);
+                    parseObject.put(NAME, dog.getName());
+                    parseObject.put(SIZE, dog.getSize().name());
+                    parseObject.put(AGE, dog.getAge());
+                    parseObject.put(PIC_REF, dog.getPicRef());
 
                     parseObject.saveInBackground();
                 } else {

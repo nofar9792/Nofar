@@ -45,36 +45,6 @@ public class Model {
         modelParse.logOut();
     }
 
-    public void updateUser(long id,  String firstName,  String lastName,  String phoneNumber,  String address,  String city) {
-        modelParse.updateUser(id, firstName, lastName, phoneNumber, address, city);
-    }
-    //endregion
-
-    //region Dog Methods
-//    public void getDogById(long id, GetDogListener listener) {
-//        modelParse.getDogById(id, listener);
-//    }
-
-    public void getDogByUserId(long userId, final Model.GetDogListener listener) {
-        modelParse.getDogByUserId(userId, listener);
-    }
-
-    public void addDog(long userId, Dog dog) {
-        modelParse.addDog(userId, dog);
-    }
-
-    public void addDog(long userId, String name, final DogSize size, final long age, final String picRef) {
-        modelParse.addDog(userId, name, size, age, picRef);
-    }
-
-    public void updateDog(long dogId, final String name, final DogSize size, final long age, final String picRef) {
-        modelParse.updateDog(dogId, name, size, age, picRef);
-    }
-
-//    public void deleteDog(long id) {
-//        modelParse.deleteDog(id);
-//    }
-
     //endregion
 
     //region Dog Walker Methods
@@ -107,6 +77,11 @@ public class Model {
                              String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) throws Exception {
         return modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
     }
+
+    public void updateDogWalker(DogWalker dogWalker){
+       modelParse.updateDogWalker(dogWalker);
+    }
+
     //endregion
 
     //region Dog Owner Methods
@@ -118,6 +93,10 @@ public class Model {
     public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
                             String address, String city, Dog dog) throws Exception {
         return modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
+    }
+
+    public void updateDogOwner(DogOwner dogOwner){
+        modelParse.updateDogOwner(dogOwner);
     }
     //endregion
 

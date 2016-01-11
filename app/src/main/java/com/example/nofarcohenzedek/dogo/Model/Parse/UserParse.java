@@ -147,18 +147,18 @@ public class UserParse {
 
     }
 
-    public static void updateUser(long id, final String firstName, final String lastName, final String phoneNumber, final String address, final String city) {
+    public static void updateUser(final User user) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo(UserConsts.USER_ID, id);
+        query.whereEqualTo(UserConsts.USER_ID, user.getId());
         query.getFirstInBackground(new GetCallback<ParseUser>() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if (e == null) {
-                    parseUser.put(UserConsts.FIRST_NAME, firstName);
-                    parseUser.put(UserConsts.LAST_NAME, lastName);
-                    parseUser.put(UserConsts.PHONE_NUMBER, phoneNumber);
-                    parseUser.put(UserConsts.ADDRESS, address);
-                    parseUser.put(UserConsts.CITY, city);
+                    parseUser.put(UserConsts.FIRST_NAME, user.getFirstName());
+                    parseUser.put(UserConsts.LAST_NAME, user.getLastName());
+                    parseUser.put(UserConsts.PHONE_NUMBER, user.getPhoneNumber());
+                    parseUser.put(UserConsts.ADDRESS, user.getAddress());
+                    parseUser.put(UserConsts.CITY, user.getCity());
 
                     parseUser.saveInBackground();
                 } else {

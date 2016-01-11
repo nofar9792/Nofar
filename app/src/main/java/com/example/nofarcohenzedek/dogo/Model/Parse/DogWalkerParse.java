@@ -40,6 +40,28 @@ public class DogWalkerParse {
         }
     }
 
+    public static void updateDogWalker(final DogWalker dogWalker) {
+        ParseQuery<ParseObject> query = new ParseQuery<>(WalkerConsts.DOG_WALKERS_TABLE);
+        query.whereEqualTo(WalkerConsts.USER_ID, dogWalker.getId());
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    parseObject.put(WalkerConsts.AGE, dogWalker.getAge());
+                    parseObject.put(WalkerConsts.PRICE_FOR_HOUR, dogWalker.getPriceForHour());
+                    parseObject.put(WalkerConsts.IS_COMFORTABLE_ON_MORNING, dogWalker.isComfortableOnMorning());
+                    parseObject.put(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON, dogWalker.isComfortableOnAfternoon());
+                    parseObject.put(WalkerConsts.IS_COMFORTABLE_ON_EVENING, dogWalker.isComfortableOnEvening());
+
+                    parseObject.saveInBackground();
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     // TODO: think if to delte this func
     public static void getDogWalkerDetailsById(long id, final ModelParse.GetDogWalkerDetailsListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<>(WalkerConsts.DOG_WALKERS_TABLE);

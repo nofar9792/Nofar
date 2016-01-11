@@ -92,9 +92,6 @@ public class ModelParse {
         UserParse.logOut();
     }
 
-    public static void updateUser(long id,  String firstName,  String lastName,  String phoneNumber,  String address,  String city) {
-        UserParse.updateUser(id, firstName, lastName, phoneNumber, address, city);
-    }
         //endregion
 
     //region Dog Methods
@@ -112,10 +109,6 @@ public class ModelParse {
 
     public void addDog(long userId, String name, DogSize size, long age, String picRef) {
         DogParse.addToDogsTable(userId, name, size, age, picRef);
-    }
-
-    public void updateDog(long userId, final String name, final DogSize size, final long age, final String picRef){
-        DogParse.updateDog(userId, name, size, age, picRef);
     }
 
     //endregion
@@ -177,6 +170,11 @@ public class ModelParse {
         DogWalkerParse.addToDogWalkersTable(newUserId, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
         return newUserId;
     }
+
+    public void updateDogWalker(DogWalker dogWalker){
+        UserParse.updateUser(dogWalker);
+        DogWalkerParse.updateDogWalker(dogWalker);
+    }
     //endregion
 
     //region Dog Owner Methods
@@ -213,6 +211,12 @@ public class ModelParse {
 
         return newUserId;
     }
+
+    public void updateDogOwner(DogOwner dogOwner){
+        UserParse.updateUser(dogOwner);
+        DogParse.updateDog(dogOwner.getId(), dogOwner.getDog());
+    }
+
     //endregion
 
     //region Comment Methods
