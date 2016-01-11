@@ -52,12 +52,13 @@ public class SignUp extends Activity {
     private CheckBox isComfortableOnEvening;
     private static final int SELECT_PHOTO = 100;
     private String errorMessage;
-    User newUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        dogPic = "";
     }
 
     /**
@@ -98,29 +99,25 @@ public class SignUp extends Activity {
         initAllDetails();
 
         // Check if all details are validate
-        if(isValid())
+        if(isValidate())
         {
-            // Check the type of user, and create the object 'newUser' respectively
-            if (isOwner.isChecked())
-            {
+            // Check the type of user, and save this user on db
+            if (isOwner.isChecked()) {
+
+                // Create the dog object
                 Dog dog = new Dog(dogName,
                         (isSmall.isChecked() ? DogSize.Small : (isMedium.isChecked() ? DogSize.Medium : DogSize.Large)),
                         Long.parseLong(dogAge), dogPic);
 
-                // Save the user on DB
-                try
-                {
+                // Save the owner on DB
+                try {
                     Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                     // TODO tell the user that something went wrong (username is already taken)
                 }
-            }
-            else
-            {
-                // Save the user on DB
+            } else {
+                // Save the walker on DB
                 try {
                     Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
                             Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
@@ -131,6 +128,7 @@ public class SignUp extends Activity {
                 }
             }
 
+            // Connect to dogo with the new username and password
             Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
                 @Override
                 public void onResult(User user)
@@ -173,7 +171,7 @@ public class SignUp extends Activity {
      * Check if all details of user arn't empty
      * @return
      */
-    private boolean isValid()
+    private boolean isValidate()
     {
         boolean isValid = true;
         errorMessage = "";
@@ -191,7 +189,7 @@ public class SignUp extends Activity {
         }
         else if (isOwner.isChecked())
         {
-            if (dogName.isEmpty() || dogAge.isEmpty() ||
+            if (dogName.isEmpty() || dogAge.isEmpty() || dogPic.isEmpty() ||
                     (!isBig.isChecked() && !isMedium.isChecked() && !isSmall.isChecked()))
             {
                 errorMessage = "אנא מלא את פרטי הכלב.";
