@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -27,7 +27,7 @@ public class MessagesActivity extends Activity {
     ListView list;
     List<User> data;
     Boolean isOwner;
-    Spinner spinner;
+    ProgressBar progressBar;
     User currentUser;
 
     @Override
@@ -38,9 +38,9 @@ public class MessagesActivity extends Activity {
         //getActionBar().setDisplayShowTitleEnabled(false);
 
         isOwner = getIntent().getBooleanExtra("isOwner", false);
-        spinner = (Spinner) findViewById(R.id.messagesSpinner);
+        progressBar = (ProgressBar) findViewById(R.id.messagesProgressBar);
         data = new LinkedList<>();
-        spinner.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         list = (ListView) findViewById(R.id.messagesList);
 
 
@@ -57,7 +57,7 @@ public class MessagesActivity extends Activity {
                                 data.add(dogOwner);
                                 MessagesAdapter adapter = new MessagesAdapter();
                                 list.setAdapter(adapter);
-                                spinner.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
                     });
@@ -70,7 +70,7 @@ public class MessagesActivity extends Activity {
                                 data.add(dogWalker);
                                 MessagesAdapter adapter = new MessagesAdapter();
                                 list.setAdapter(adapter);
-                                spinner.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
                             }
                         }
                     });

@@ -21,10 +21,11 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.example.nofarcohenzedek.dogo.MessagesActivity">
 
-        <Spinner
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/messagesSpinner"
+        <ProgressBar
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/messagesProgressBar"
             android:visibility="visible"/>
 
         <ListView
