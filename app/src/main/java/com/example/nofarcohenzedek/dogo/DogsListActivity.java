@@ -38,65 +38,49 @@ public class DogsListActivity extends Activity {
 
         Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
             @Override
-            public void onResult(List<DogOwner> allDogWalkers) {
+            public void onResult(List<DogOwner> allDogWalkers)
+            {
                 list = allDogWalkers;
+
+                if (list != null && list.size() != 0)
+                {
+                    CustomAdapter adapter = new CustomAdapter();
+                    ListView listView = (ListView) findViewById(R.id.dogsOfDogWalker);
+                    listView.setAdapter(adapter);
+
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                    {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+                        {
+                            if (view.getTag() == "startTripTag")
+                            {
+                                View currentListItem = (View) view.getParent();
+
+                                currentListItem.findViewById(R.id.endTripBtn).setEnabled(true);
+                                currentListItem.findViewById(R.id.startTripBtn).setEnabled(false);
+
+                                // TODO : start trip in DB
+                            }
+                            else if (view.getTag() == "endTripTag")
+                            {
+                                View currentListItem = (View) view.getParent();
+
+                                currentListItem.findViewById(R.id.endTripBtn).setEnabled(false);
+                                currentListItem.findViewById(R.id.startTripBtn).setEnabled(true);
+
+                                // TODO : end trip in DB
+                            }
+
+                        }
+                    });
+                }
+                else
+                {
+                    ((TextView)findViewById(R.id.errorInDogsList)).setText("אין כלבים להצגה");
+                }
             }
         });
-
-        if (list != null) {
-            CustomAdapter adapter = new CustomAdapter();
-            ListView listView = (ListView) findViewById(R.id.dogsOfDogWalker);
-            listView.setAdapter(adapter);
-
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                {
-                    if (view.getTag() == "startTripTag")
-                    {
-                        View currentListItem = (View) view.getParent();
-
-                        currentListItem.findViewById(R.id.endTripBtn).setEnabled(true);
-                        currentListItem.findViewById(R.id.startTripBtn).setEnabled(false);
-
-                        // TODO : start trip in DB
-                    }
-                    else if (view.getTag() == "endTripTag")
-                    {
-                        View currentListItem = (View) view.getParent();
-
-                        currentListItem.findViewById(R.id.endTripBtn).setEnabled(false);
-                        currentListItem.findViewById(R.id.startTripBtn).setEnabled(true);
-
-                        // TODO : end trip in DB
-                    }
-
-                }
-            });
-        }
-        else
-        {
-            ((TextView)findViewById(R.id.errorInDogsList)).setText("אין כלבים להצגה");
-        }
-
-//        if (isOwner)
-//        {
-//            findViewById(R.id.dogOwnerInDogsList).setVisibility(View.VISIBLE);
-//
-//            // TODO : get all dogs of owner
-//
-//            // temp
-//            Dog[] dogs = {new Dog(2,"Jina", DogSize.Medium, 12,""),
-//                        new Dog(4,"Olive", DogSize.Medium, 5,"")};
-//
-//
-//        }
-        //   else
-        // {
-        //findViewById(R.id.dogWalkerInDogsList).setVisibility(View.VISIBLE);
-
-
-        //}
     }
 
 
@@ -161,9 +145,9 @@ public class DogsListActivity extends Activity {
                 convertView = inflater.inflate(R.layout.dog_in_dogs_list, null);
             }
 
-            TextView ownerName = (TextView) findViewById(R.id.ownerNameInDogsList);
-            TextView dogName = (TextView) findViewById(R.id.dogNameInDogsList);
-            TextView address = (TextView) findViewById(R.id.addressInDogsList);
+            TextView ownerName = (TextView) convertView.findViewById(R.id.ownerNameInDogsList);
+            TextView dogName = (TextView) convertView.findViewById(R.id.dogNameInDogsList);
+            TextView address = (TextView) convertView.findViewById(R.id.addressInDogsList);
 
             DogOwner owner = list.get(position);
 

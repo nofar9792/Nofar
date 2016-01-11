@@ -242,7 +242,7 @@ public class MyProfileActivity extends Activity {
         }
         else if (isOwner)
         {
-            if (dogName.getText().toString().isEmpty() || dogAge.getText().toString().isEmpty() ||
+            if (dogName.getText().toString().isEmpty() || dogAge.getText().toString().isEmpty() || dogPic.isEmpty() ||
                     (!isBig.isChecked() && !isMedium.isChecked() && !isSmall.isChecked()))
             {
                 errorMessage = "אנא מלא את פרטי הכלב.";
