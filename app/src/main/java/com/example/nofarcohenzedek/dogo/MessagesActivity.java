@@ -42,7 +42,7 @@ public class MessagesActivity extends Activity {
         data = new LinkedList<>();
         progressBar.setVisibility(View.VISIBLE);
         list = (ListView) findViewById(R.id.messagesList);
-
+        final MessagesAdapter adapter = new MessagesAdapter();
 
         Model.getInstance().getCurrentUser(new Model.GetUserListener() {
             @Override
@@ -55,10 +55,9 @@ public class MessagesActivity extends Activity {
                         public void onResult(List<DogOwner> dogOwners) {
                             for (DogOwner dogOwner : dogOwners) {
                                 data.add(dogOwner);
-                                MessagesAdapter adapter = new MessagesAdapter();
                                 list.setAdapter(adapter);
-                                progressBar.setVisibility(View.GONE);
                             }
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -68,10 +67,9 @@ public class MessagesActivity extends Activity {
                         public void onResult(List<DogWalker> dogWalkers) {
                             for (DogWalker dogWalker : dogWalkers) {
                                 data.add(dogWalker);
-                                MessagesAdapter adapter = new MessagesAdapter();
                                 list.setAdapter(adapter);
-                                progressBar.setVisibility(View.GONE);
                             }
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
                 }
