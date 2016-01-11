@@ -1,6 +1,7 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.content.Intent;
+import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -17,13 +19,17 @@ import android.widget.Toolbar;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DogsListActivity extends Activity {
 
-   // Boolean isOwner;
     Long userId;
     List<DogOwner> list;
+    Map<Long, Long> tripsByOwnerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +39,9 @@ public class DogsListActivity extends Activity {
         setActionBar((Toolbar) findViewById(R.id.dogsListToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);
 
-        //isOwner = getIntent().getBooleanExtra("isOwner", false);
         userId = getIntent().getLongExtra("userId", 0);
+
+        tripsByOwnerId = new HashMap<Long, Long>();
 
         Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
             @Override
@@ -47,33 +54,6 @@ public class DogsListActivity extends Activity {
                     CustomAdapter adapter = new CustomAdapter();
                     ListView listView = (ListView) findViewById(R.id.dogsOfDogWalker);
                     listView.setAdapter(adapter);
-
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-                    {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                        {
-                            if (view.getTag() == "startTripTag")
-                            {
-                                View currentListItem = (View) view.getParent();
-
-                                currentListItem.findViewById(R.id.endTripBtn).setEnabled(true);
-                                currentListItem.findViewById(R.id.startTripBtn).setEnabled(false);
-
-                                // TODO : start trip in DB
-                            }
-                            else if (view.getTag() == "endTripTag")
-                            {
-                                View currentListItem = (View) view.getParent();
-
-                                currentListItem.findViewById(R.id.endTripBtn).setEnabled(false);
-                                currentListItem.findViewById(R.id.startTripBtn).setEnabled(true);
-
-                                // TODO : end trip in DB
-                            }
-
-                        }
-                    });
                 }
                 else
                 {
@@ -83,14 +63,34 @@ public class DogsListActivity extends Activity {
         });
     }
 
+    public void onItemClickListener(View view, Long ownerId)
+    {
+        if (view.getTag().equals("startTripTag"))
+        {
+            View currentListItem = (View) view.getParent();
+
+            currentListItem.findViewById(R.id.endTripBtn).setEnabled(true);
+            currentListItem.findViewById(R.id.startTripBtn).setEnabled(false);
+
+            Long tripId = Model.getInstance().startTrip(ownerId, userId);
+            tripsByOwnerId.put(ownerId,tripId);
+
+        }
+        else if (view.getTag().equals("endTripTag"))
+        {
+            View currentListItem = (View) view.getParent();
+
+            currentListItem.findViewById(R.id.endTripBtn).setEnabled(false);
+            currentListItem.findViewById(R.id.startTripBtn).setEnabled(true);
+
+            Model.getInstance().endTrip(tripsByOwnerId.get(ownerId));
+            tripsByOwnerId.remove(ownerId);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-       // if (isOwner) {
-         //   getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-        //} else {
             getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
-        //}
 
         return true;
     }
@@ -149,24 +149,31 @@ public class DogsListActivity extends Activity {
             TextView dogName = (TextView) convertView.findViewById(R.id.dogNameInDogsList);
             TextView address = (TextView) convertView.findViewById(R.id.addressInDogsList);
 
-            DogOwner owner = list.get(position);
+            final DogOwner owner = list.get(position);
 
             ownerName.setText(owner.getFirstName() + " " + owner.getLastName());
             dogName.setText(owner.getDog().getName());
             address.setText(owner.getAddress());
 
+            // work around
+            Button startTrip = (Button) convertView.findViewById(R.id.startTripBtn);
+            Button endTrip = (Button) convertView.findViewById(R.id.endTripBtn);
+
+            startTrip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener(v, owner.getId());
+                }
+            });
+
+            endTrip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener(v, owner.getId());
+                }
+            });
 
             return convertView;
-        }
-
-        public void startTripClick(View view)
-        {
-
-        }
-
-        public void endTripClick(View view)
-        {
-
         }
     }
 
