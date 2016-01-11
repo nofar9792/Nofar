@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -78,16 +79,32 @@ public class Model {
 
     //region Dog Walker Methods
     public void getDogWalkerById(long userId, GetDogWalkerListener listener) {
-        //modelParse.getDogWalkerById(userId, listener);
         modelParse.getDogWalkerById(userId, listener);
     }
 
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
-        modelParse.getAllDogWalkers(listener);
+        final List<DogWalker> dogWalkersResult = modelSql.getAllDogWalkers();
+        String lastUpdateDate = modelSql.getDogWalkersLastUpdateDate();
+
+        modelParse.getAllDogWalkers(lastUpdateDate, new GetDogWalkersListener() {
+            @Override
+            public void onResult(List<DogWalker> dogWalkers) {
+                if (dogWalkers.size() > 0) {
+                    for (DogWalker dogWalker : dogWalkers) {
+                        modelSql.addDogWalker(dogWalker);
+                    }
+
+                    dogWalkersResult.removeAll(dogWalkersResult);
+                    dogWalkersResult.addAll(modelSql.getAllDogWalkers());
+                }
+                modelSql.setDogWalkersLastUpdateDate(Calendar.getInstance().getTime());
+                listener.onResult(dogWalkersResult);
+            }
+        });
     }
 
     public long addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
+                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) throws Exception {
         return modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
     }
     //endregion
@@ -99,7 +116,7 @@ public class Model {
     }
 
     public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
-                            String address, String city, Dog dog) {
+                            String address, String city, Dog dog) throws Exception {
         return modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
     }
     //endregion

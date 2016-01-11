@@ -137,6 +137,7 @@ public class DogParse {
     public static void updateDog(long userId, final String name, final DogSize size, final long age, final String picRef) {
         ParseQuery<ParseObject> query = new ParseQuery<>(DOGS_TABLE);
         query.whereEqualTo(USER_ID, userId);
+
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {

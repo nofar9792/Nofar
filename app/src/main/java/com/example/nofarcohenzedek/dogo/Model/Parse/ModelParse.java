@@ -148,28 +148,6 @@ public class ModelParse {
         });
     }
 
-    //    public void getDogWalkerById(final long userId, final Model.GetDogWalkerListener listener) {
-//        UserParse.getUserById(userId, new GetUserListener() {
-//            @Override
-//            public void onResult(long id, final String userName, final String firstName, final String lastName, final String phoneNumber, final String address, final String city) {
-//                DogWalkerParse.getDogWalkerDetailsById(userId, new GetDogWalkerDetailsListener() {
-//                    @Override
-//                    public void onResult(long userId, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
-//                        final DogWalker dogWalker = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
-//
-//                        CommentParse.getCommentsOfDogWalker(userId, new GetCommentsListener() {
-//                            @Override
-//                            public void onResult(List<Comment> comments) {
-//                                dogWalker.setComments(comments);
-//                                listener.onResult(dogWalker);
-//                            }
-//                        });
-//                    }
-//                });
-//            }
-//        });
-//    }
-
     public DogWalker getDogWalkerByIdSync(long userId) {
         User user = UserParse.getUserByIdSync(userId);
         if(user != null){
@@ -180,17 +158,13 @@ public class ModelParse {
        return null;
     }
 
-    public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
-        final List<DogWalker> dogWalkers = new LinkedList<>();
-
-        UserParse.getDogWalkerUsers(new GetUsersListener() {
+    public void getAllDogWalkers(String fromDate, final Model.GetDogWalkersListener listener) {
+        UserParse.getDogWalkerUsers(fromDate, new Model.GetDogWalkersListener() {
             @Override
-            public void onResult(List<User> users) {
-                for (final User user : users) {
-                    DogWalkerParse.addDogWalkerDetails((DogWalker) user);
-                    CommentParse.addCommentsToDogWalker((DogWalker) user);
-                    dogWalkers.add((DogWalker) user);
-
+            public void onResult(List<DogWalker> dogWalkers) {
+                for (final DogWalker dogWalker : dogWalkers) {
+                    DogWalkerParse.addDogWalkerDetails(dogWalker);
+                    CommentParse.addCommentsToDogWalker(dogWalker);
                 }
                 listener.onResult(dogWalkers);
             }
@@ -198,7 +172,7 @@ public class ModelParse {
     }
 
     public long addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
+                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) throws Exception {
         long newUserId = UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, true);
         DogWalkerParse.addToDogWalkersTable(newUserId, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
         return newUserId;
@@ -233,7 +207,7 @@ public class ModelParse {
     }
 
     public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, Dog dog) {
+                             String address, String city, Dog dog) throws Exception {
         long newUserId = UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, false);
         addDog(newUserId, dog);
 

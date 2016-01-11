@@ -107,12 +107,22 @@ public class SignUp extends Activity {
                         Long.parseLong(dogAge), dogPic);
 
                 // Save the user on DB
-                Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
+                try {
+                    Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // TODO tell the user that something went wrong (username is already taken)
+                }
             } else {
                 // Save the user on DB
-                Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
-                        Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
-                        isComfortableOnEvening.isChecked());
+                try {
+                    Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
+                            Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
+                            isComfortableOnEvening.isChecked());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // TODO tell the user that something went wrong (username is already taken)
+                }
             }
 
             Model.getInstance().logIn(userName, password, new Model.GetUserListener() {

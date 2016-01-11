@@ -1,9 +1,14 @@
 package com.example.nofarcohenzedek.dogo.Model.Sql;
 
 import android.content.Context;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.nofarcohenzedek.dogo.Model.Comment;
+import com.example.nofarcohenzedek.dogo.Model.Common.WalkerConsts;
+import com.example.nofarcohenzedek.dogo.Model.DogWalker;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,14 +16,41 @@ import java.util.List;
  */
 public class ModelSql
 {
-    // extends SQLiteOpenHelper
-    //private MyOpenHelper dbHelper;
+    Helper sqlDb;
+    SQLiteDatabase db;
 
     public ModelSql(Context context) {
-//        if (sqlDb == null){
-//            sqlDb = new Helper(context);
-//        }
-        //dbHelper = new MyOpenHelper(applicationContext);
+        if (sqlDb == null){
+            sqlDb = new Helper(context);
+            db = sqlDb.getReadableDatabase();
+        }
+    }
+
+    public List<DogWalker> getAllDogWalkers(){
+        List<DogWalker> dogWalkers = UserSql.getDogWalkerUsers(db);
+        for(DogWalker dogWalker : dogWalkers){
+            DogWalkerSql.addDogWalkerDetails(db, dogWalker);
+            CommentSql.addCommentsToDogWalker(db , dogWalker);
+        }
+        return dogWalkers;
+    }
+
+    public void addDogWalker(DogWalker dogWalker) {
+        SQLiteDatabase db = sqlDb.getReadableDatabase();
+        UserSql.addToUsersTable(db, dogWalker);
+        DogWalkerSql.addToDogWalkersTable(db,dogWalker);
+
+        for(Comment comment : dogWalker.getComments()){
+            CommentSql.addToCommentsTable(db, dogWalker.getId(), comment);
+        }
+    }
+
+    public String getDogWalkersLastUpdateDate() {
+        return LastUpdateSql.getLastUpdateDate(db, WalkerConsts.DOG_WALKERS_TABLE);
+    }
+
+    public void setDogWalkersLastUpdateDate(Date newDate){
+        LastUpdateSql.setLastUpdateDate(db, WalkerConsts.DOG_WALKERS_TABLE, newDate);
     }
 
 //    @Override
@@ -136,5 +168,27 @@ public class ModelSql
 //    public List<Trip> getAllTrips() {
 //        return TripDao.getAllTrips();
 //    }
+
+    class Helper extends SQLiteOpenHelper {
+        public Helper(Context context) {
+            super(context, "database.db", null, 1);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            LastUpdateSql.create(db);
+            UserSql.create(db);
+            DogWalkerSql.create(db);
+            CommentSql.create(db);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            UserSql.drop(db);
+            DogWalkerSql.drop(db);
+            CommentSql.drop(db);
+            onCreate(db);
+        }
+    }
 }
 

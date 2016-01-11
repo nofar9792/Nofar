@@ -151,11 +151,12 @@ public class TripParse {
 
         try {
             parseObject = query.addDescendingOrder(TRIP_ID).getFirst();
+            return (parseObject.getLong(TRIP_ID) + 1);
         }
         catch (Exception e){
             e.printStackTrace();
         }
 
-        return (parseObject.getLong(TRIP_ID) + 1);
+        return 1;
     }
 }

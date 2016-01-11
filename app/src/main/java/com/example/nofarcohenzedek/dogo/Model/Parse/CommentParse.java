@@ -1,6 +1,7 @@
 package com.example.nofarcohenzedek.dogo.Model.Parse;
 
 import com.example.nofarcohenzedek.dogo.Model.Comment;
+import com.example.nofarcohenzedek.dogo.Model.Common.CommentConsts;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.parse.FindCallback;
@@ -15,24 +16,19 @@ import java.util.List;
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class CommentParse {
-    final static String COMMENTS_TABLE = "COMMENTS";
-    final static String USER_ID = "userId";
-    final static String TEXT = "text";
-    final static String RATING = "rating";
-
     public static void addToCommentsTable(long userId, String text, long rating){
-        ParseObject newCommentParseObject = new ParseObject(COMMENTS_TABLE);
+        ParseObject newCommentParseObject = new ParseObject(CommentConsts.COMMENTS_TABLE);
 
-        newCommentParseObject.put(USER_ID, userId);
-        newCommentParseObject.put(TEXT, text);
-        newCommentParseObject.put(RATING, rating);
+        newCommentParseObject.put(CommentConsts.USER_ID, userId);
+        newCommentParseObject.put(CommentConsts.TEXT, text);
+        newCommentParseObject.put(CommentConsts.RATING, rating);
 
         newCommentParseObject.saveInBackground();
     }
 
     public static void addCommentsToDogWalker(final DogWalker dogWalker) {
-        ParseQuery<ParseObject> query = new ParseQuery<>(COMMENTS_TABLE);
-        query.whereEqualTo(USER_ID, dogWalker.getId());
+        ParseQuery<ParseObject> query = new ParseQuery<>(CommentConsts.COMMENTS_TABLE);
+        query.whereEqualTo(CommentConsts.USER_ID, dogWalker.getId());
 
         try {
             List<ParseObject> list = query.find();
@@ -40,8 +36,8 @@ public class CommentParse {
             List<Comment> comments = new LinkedList<>();
 
             for (ParseObject parseObject : list) {
-                String text = parseObject.getString(TEXT);
-                long rating = parseObject.getLong(RATING);
+                String text = parseObject.getString(CommentConsts.TEXT);
+                long rating = parseObject.getLong(CommentConsts.RATING);
                 comments.add(new Comment(text, rating));
             }
 
@@ -54,8 +50,8 @@ public class CommentParse {
 
     // TODO: delete this func
     public static void getCommentsOfDogWalker(long userId, final Model.GetCommentsListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<>(COMMENTS_TABLE);
-        query.whereEqualTo(USER_ID, userId);
+        ParseQuery<ParseObject> query = new ParseQuery<>(CommentConsts.COMMENTS_TABLE);
+        query.whereEqualTo(CommentConsts.USER_ID, userId);
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -64,8 +60,8 @@ public class CommentParse {
 
                 for (ParseObject po : list) {
                     if (e == null) {
-                        String text = po.getString(TEXT);
-                        long rating = po.getLong(RATING);
+                        String text = po.getString(CommentConsts.TEXT);
+                        long rating = po.getLong(CommentConsts.RATING);
                         comments.add(new Comment(text, rating));
                     } else {
                         e.printStackTrace();
