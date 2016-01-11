@@ -236,6 +236,7 @@ public class ModelParse {
             public void onResult(final List<Trip> trips) {
                 for (final Trip trip : trips) {
                     trip.setDogWalker(getDogWalkerByIdSync(trip.getDogWalkerId()));
+                    trip.setDogOwner(getDogOwnerByIdSync(trip.getDogOwnerId()));
                 }
                 listener.onResult(trips);
             }
@@ -248,7 +249,7 @@ public class ModelParse {
             public void onResult(final List<Trip> trips) {
                 for (final Trip trip : trips) {
                     trip.setDogOwner(getDogOwnerByIdSync(trip.getDogOwnerId()));
-
+                    trip.setDogWalker(getDogWalkerByIdSync(trip.getDogWalkerId()));
                 }
                 listener.onResult(trips);
             }

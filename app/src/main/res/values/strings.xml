@@ -39,4 +39,17 @@
     <string name="dogPic">תמונה של הכלב:</string>
     <string name="choosePic">עיון</string>
 
+    <!-- list of trips strings -->
+    <string name="ownerName">בעלים:</string>
+    <string name="walkerName">מטייל:</string>
+    <string name="startTime">שעת התחלה:</string>
+    <string name="endTime">שעת סיום:</string>
+    <string name="priceForTrip">מחיר סופי:</string>
+    <string name="isPaid">האם שולם:</string>
+    <string name="dog">כלב:</string>
+    <string name="date">תאריך:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

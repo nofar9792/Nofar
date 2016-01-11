@@ -21,5 +21,26 @@
     tools:context="com.example.nofarcohenzedek.dogo.TripsReportActivity"
     android:background="@color/colorBackground">
 
+    <LinearLayout
+        android:id="@+id/LayoutContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="visible"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/errorInTripsList"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20dp"/>
+
+        <ListView
+            android:id="@+id/tripsList"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
 </LinearLayout>
 </LinearLayout>
