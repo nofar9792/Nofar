@@ -99,7 +99,7 @@ public class SignUp extends Activity {
         initAllDetails();
 
         // Check if all details are validate
-        if(isValidate())
+        if(isValid())
         {
             // Check the type of user, and save this user on db
             if (isOwner.isChecked()) {
@@ -171,7 +171,7 @@ public class SignUp extends Activity {
      * Check if all details of user arn't empty
      * @return
      */
-    private boolean isValidate()
+    private boolean isValid()
     {
         boolean isValid = true;
         errorMessage = "";
