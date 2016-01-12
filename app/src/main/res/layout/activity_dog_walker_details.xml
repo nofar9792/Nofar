@@ -201,7 +201,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="בקש מספר"
-            android:id="@+id/askNumber"/>
+            android:id="@+id/askNumber"
+            android:onClick="askNumberClick"/>
 
 
     </LinearLayout>

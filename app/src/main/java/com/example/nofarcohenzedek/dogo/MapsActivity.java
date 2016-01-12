@@ -25,6 +25,7 @@ import java.util.List;
 public class MapsActivity extends Activity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    Long userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
 
         setActionBar((Toolbar) findViewById(R.id.mapToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);
+
+        userId = getIntent().getLongExtra("userId",0);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         MapFragment mapFragment = (MapFragment) getFragmentManager()
@@ -69,7 +72,7 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
             }
 
             intent.putExtra("isOwner", true);
-            intent.putExtra("userId", getIntent().getLongExtra("userId",0));
+            intent.putExtra("userId", userId);
             startActivity(intent);
 
             return super.onOptionsItemSelected(item);
@@ -115,7 +118,8 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Intent intent = new Intent(getApplicationContext(), DogWalkerDetails.class);
-                intent.putExtra("id", marker.getTitle());
+                intent.putExtra("walkerId", marker.getTitle());
+                intent.putExtra("ownerId", userId);
                 startActivity(intent);
 
                 return true;

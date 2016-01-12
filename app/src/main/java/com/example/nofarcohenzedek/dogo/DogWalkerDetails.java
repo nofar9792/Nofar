@@ -5,24 +5,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 
-public class DogWalkerDetails extends Activity {
+import java.util.List;
+
+public class DogWalkerDetails extends Activity
+{
+    Long walkerId;
+    Long ownerId;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_walker_details);
 
-        Intent intent = getIntent();
-        final String dogWalkerId = intent.getStringExtra("id");
+        walkerId = Long.valueOf(getIntent().getStringExtra("walkerId"));
+        ownerId = getIntent().getLongExtra("ownerId",0);
 
         final TextView firstName = (TextView) findViewById(R.id.firstNameInDetails);
         final TextView lastName = (TextView) findViewById(R.id.lastNameInDetails);
@@ -34,10 +42,9 @@ public class DogWalkerDetails extends Activity {
         final CheckBox noon = (CheckBox) findViewById(R.id.afternoonInDetails);
         final CheckBox evening = (CheckBox) findViewById(R.id.eveningInDetails);
 
-        Model.getInstance().getDogWalkerById(Long.parseLong(dogWalkerId), new Model.GetDogWalkerListener() {
+        Model.getInstance().getDogWalkerById(walkerId, new Model.GetDogWalkerListener() {
             @Override
-            public void onResult(DogWalker dogWalker)
-            {
+            public void onResult(DogWalker dogWalker) {
                 firstName.setText(dogWalker.getFirstName());
                 lastName.setText(dogWalker.getLastName());
                 city.setText(dogWalker.getCity());
@@ -51,5 +58,28 @@ public class DogWalkerDetails extends Activity {
             }
         });
 
+        final Button askNum = (Button) findViewById(R.id.askNumber);
+
+        Model.getInstance().getRequestForDogWalker(walkerId, new Model.GetDogOwnersListener()
+        {
+            @Override
+            public void onResult(List<DogOwner> dogOwners)
+            {
+                for (DogOwner owner : dogOwners)
+                {
+                    if (owner.getId() == ownerId)
+                    {
+                        askNum.setEnabled(false);
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+    public void askNumberClick(View view)
+    {
+        Model.getInstance().addRequest(ownerId,walkerId);
+        finish();
     }
 }
