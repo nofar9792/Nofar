@@ -23,6 +23,13 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="com.example.nofarcohenzedek.dogo.MyProfileActivity">
 
+        <ProgressBar
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/myProfileProgressBar"
+            android:visibility="visible"/>
+
         <TextView
             android:id="@+id/error"
             android:layout_width="wrap_content"

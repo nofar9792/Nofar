@@ -7,6 +7,8 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
@@ -26,6 +28,7 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     Long userId;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
 
         setActionBar((Toolbar) findViewById(R.id.mapToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);
+        progressBar = (ProgressBar) findViewById(R.id.mapsProgressBar);
 
         userId = getIntent().getLongExtra("userId",0);
 
@@ -101,7 +105,8 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
         Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
             @Override
             public void onResult(List<DogWalker> allDogWalkers) {
-                for (DogWalker currentDogWalker : allDogWalkers) {
+                for (DogWalker currentDogWalker : allDogWalkers)
+                {
                     String finalAddress = currentDogWalker.getAddress() + "," + currentDogWalker.getCity();
                     LatLng location = getLocationFromAddress(finalAddress);
 
@@ -110,6 +115,9 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
 
                     mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId())));
                           //  .icon(BitmapDescriptorFactory.fromPath("/drawable/manwithdog.png")));
+
+                    progressBar.setVisibility(View.GONE);
+
                 }
             }
         });

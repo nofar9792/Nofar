@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -51,14 +52,16 @@ public class MyProfileActivity extends Activity {
 
     private String errorMessage;
     static final int SELECT_PHOTO = 100;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
 
-        setActionBar((Toolbar)findViewById(R.id.myProfileToolBar));
+        setActionBar((Toolbar) findViewById(R.id.myProfileToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);
+        progressBar = (ProgressBar) findViewById(R.id.myProfileProgressBar);
 
         isOwner = getIntent().getBooleanExtra("isOwner", false);
 
@@ -117,6 +120,8 @@ public class MyProfileActivity extends Activity {
 
                     // TODO : DOG PIC IS EMPTY! LOAD PIC!
                 }
+
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
