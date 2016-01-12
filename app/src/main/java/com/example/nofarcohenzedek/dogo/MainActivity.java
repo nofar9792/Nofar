@@ -8,17 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
-import com.example.nofarcohenzedek.dogo.Model.Dog;
-import com.example.nofarcohenzedek.dogo.Model.DogOwner;
-import com.example.nofarcohenzedek.dogo.Model.DogSize;
-import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
-import com.example.nofarcohenzedek.dogo.Model.Trip;
-import com.example.nofarcohenzedek.dogo.Model.User;
-
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -28,14 +18,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Model.getInstance().init(getApplicationContext());
-
-//
-//        Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
-//            @Override
-//            public void onResult(List<DogWalker> dogWalkers) {
-//                String s = dogWalkers.get(0).getCity();
-//            }
-//        });
 
         ImageButton signUp = (ImageButton) findViewById(R.id.sign_up_button);
     }
