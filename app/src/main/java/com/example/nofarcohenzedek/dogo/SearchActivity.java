@@ -8,15 +8,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toolbar;
 
 public class SearchActivity extends Activity {
 
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        progressBar = (ProgressBar) findViewById(R.id.searchProgressBar);
 
         setActionBar((Toolbar) findViewById(R.id.searchToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);

@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -33,6 +34,7 @@ public class TripsReportActivity extends Activity {
     Boolean isOwner;
     Long userId;
     List<Trip> allTrips;
+    ProgressBar progressBar;
 
 
     @Override
@@ -41,6 +43,8 @@ public class TripsReportActivity extends Activity {
         setContentView(R.layout.activity_trips_report);
 
         setActionBar((Toolbar) findViewById(R.id.tripsReportToolBar));
+        getActionBar().setDisplayShowTitleEnabled(false);
+        progressBar = (ProgressBar) findViewById(R.id.tripsReportProgressBar);
 
         isOwner = getIntent().getBooleanExtra("isOwner", false);
         userId = getIntent().getLongExtra("userId",0);
@@ -62,6 +66,7 @@ public class TripsReportActivity extends Activity {
                     {
                         ((TextView)findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
                     }
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         }
@@ -81,6 +86,7 @@ public class TripsReportActivity extends Activity {
                     {
                         ((TextView)findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
                     }
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         }

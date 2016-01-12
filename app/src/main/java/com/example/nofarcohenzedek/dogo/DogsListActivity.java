@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -30,6 +31,7 @@ public class DogsListActivity extends Activity {
     Long userId;
     List<DogOwner> list;
     Map<Long, Long> tripsByOwnerId;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class DogsListActivity extends Activity {
 
         setActionBar((Toolbar) findViewById(R.id.dogsListToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);
+        progressBar = (ProgressBar) findViewById(R.id.dogsListProgressBar);
 
         userId = getIntent().getLongExtra("userId", 0);
 
@@ -59,6 +62,8 @@ public class DogsListActivity extends Activity {
                 {
                     ((TextView)findViewById(R.id.errorInDogsList)).setText("אין כלבים להצגה");
                 }
+
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

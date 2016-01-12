@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -22,12 +23,15 @@ public class DogWalkerDetails extends Activity
 {
     Long walkerId;
     Long ownerId;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_walker_details);
+
+        progressBar = (ProgressBar) findViewById(R.id.dogWalkerDetailsProgressBar);
 
         walkerId = Long.valueOf(getIntent().getStringExtra("walkerId"));
         ownerId = getIntent().getLongExtra("ownerId",0);
@@ -54,7 +58,6 @@ public class DogWalkerDetails extends Activity
                 morning.setChecked(dogWalker.isComfortableOnMorning());
                 noon.setChecked(dogWalker.isComfortableOnAfternoon());
                 evening.setChecked(dogWalker.isComfortableOnEvening());
-
             }
         });
 
@@ -73,6 +76,7 @@ public class DogWalkerDetails extends Activity
                         break;
                     }
                 }
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
