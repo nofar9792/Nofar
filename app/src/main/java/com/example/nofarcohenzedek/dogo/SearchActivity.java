@@ -1,6 +1,8 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.content.Intent;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.app.Activity;
 import android.provider.MediaStore;
@@ -24,6 +26,8 @@ import android.widget.Toolbar;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.Utilities;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +36,7 @@ public class SearchActivity extends Activity {
 
     private List<DogWalker> list;
     private ProgressBar progressBar;
+    private DogOwner owner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +47,12 @@ public class SearchActivity extends Activity {
         setActionBar((Toolbar) findViewById(R.id.searchToolBar));
         getActionBar().setDisplayShowTitleEnabled(false);
 
-        ((ListView)findViewById(R.id.searchResultList)).setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        ((ListView)findViewById(R.id.searchResultList)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                Intent intent = new Intent(getApplicationContext(),DogWalkerDetails.class);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), DogWalkerDetails.class);
                 intent.putExtra("walkerId", Long.toString(id));
-                intent.putExtra("ownerId", getIntent().getLongExtra("userId",0));
+                intent.putExtra("ownerId", getIntent().getLongExtra("userId", 0));
                 startActivity(intent);
             }
         });
@@ -121,11 +124,25 @@ public class SearchActivity extends Activity {
 
         if (byDistance.isChecked())
         {
-            String radius = ((EditText)findViewById(R.id.radiusForSearch)).getText().toString();
+            final String radius = ((EditText)findViewById(R.id.radiusForSearch)).getText().toString();
 
             if (!radius.equals(""))
             {
-                searchByDistance(Long.valueOf(radius));
+                if (owner == null) {
+                    Model.getInstance().getDogOwnerById(getIntent().getLongExtra("userId", 0), new Model.GetDogOwnerListener()
+                    {
+                        @Override
+                        public void onResult(DogOwner dogOwner)
+                        {
+                            owner = dogOwner;
+                            searchByDistance(Long.valueOf(radius));
+                        }
+                    });
+                }
+                else
+                {
+                    searchByDistance(Long.valueOf(radius));
+                }
             }
         }
         else if (byParams.isChecked())
@@ -150,8 +167,43 @@ public class SearchActivity extends Activity {
         progressBar.setVisibility(View.GONE);
     }
 
-    private void searchByDistance(Long radiusInMeters)
+    private void searchByDistance(final Long radiusInMeters)
     {
+        final LatLng ownerCoor = Utilities.getLocationFromAddress(owner.getAddress() + ", " + owner.getCity(),this);
+        final Location ownerLocation = new Location("owner");
+        ownerLocation.setLatitude(ownerCoor.latitude);
+        ownerLocation.setLongitude(ownerCoor.longitude);
+
+        Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener()
+        {
+            @Override
+            public void onResult(List<DogWalker> dogWalkers)
+            {
+                List<DogWalker> temp = new ArrayList<DogWalker>();
+
+                // work around concurrentModificationException
+                for (DogWalker dogWalker : dogWalkers)
+                {
+                    temp.add(dogWalker);
+                }
+
+                for (DogWalker dogWalker : dogWalkers)
+                {
+                    LatLng currentCoor = Utilities.getLocationFromAddress(dogWalker.getAddress() + ", " + dogWalker.getCity(),getApplicationContext());
+                    Location currLocation = new Location("walker");
+                    currLocation.setLatitude(currentCoor.latitude);
+                    currLocation.setLongitude(currentCoor.longitude);
+
+                    if (ownerLocation.distanceTo(currLocation) > (float)radiusInMeters)
+                    {
+                        temp.remove(dogWalker);
+                    }
+
+                }
+
+                list = temp;
+            }
+        });
     }
 
     private  void searchByParameters (final String age, final String price, final boolean morning, final boolean noon, final boolean evening)

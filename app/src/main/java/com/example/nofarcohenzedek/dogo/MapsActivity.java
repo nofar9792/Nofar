@@ -13,6 +13,7 @@ import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -97,7 +98,8 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
 
-        LatLng center = getLocationFromAddress(getIntent().getStringExtra("address"));
+        //LatLng center = getLocationFromAddress(getIntent().getStringExtra("address"));
+        LatLng center = Utilities.getLocationFromAddress(getIntent().getStringExtra("address"),this);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
@@ -108,7 +110,8 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
                 for (DogWalker currentDogWalker : allDogWalkers)
                 {
                     String finalAddress = currentDogWalker.getAddress() + "," + currentDogWalker.getCity();
-                    LatLng location = getLocationFromAddress(finalAddress);
+                    //LatLng location = getLocationFromAddress(finalAddress);
+                    LatLng location = Utilities.getLocationFromAddress(finalAddress,getApplicationContext());
 
                     //mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
                     //.icon(BitmapDescriptorFactory.fromResource(R.drawable.manwithdog)));
@@ -139,24 +142,24 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
         // when marker is pressed, open details activity
     }
 
-    public LatLng getLocationFromAddress(String address)
-    {
-        Geocoder coder = new Geocoder(this);
-        List<Address> addresses = null;
-
-        try
-        {
-            addresses = coder.getFromLocationName(address, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (addresses == null)
-        {
-            return null;
-        }
-
-        return new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-
-    }
+//    public LatLng getLocationFromAddress(String address)
+//    {
+//        Geocoder coder = new Geocoder(this);
+//        List<Address> addresses = null;
+//
+//        try
+//        {
+//            addresses = coder.getFromLocationName(address, 1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (addresses == null)
+//        {
+//            return null;
+//        }
+//
+//        return new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+//
+//    }
 }
