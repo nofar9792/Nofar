@@ -14,8 +14,8 @@ import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 public class DogWalkerSql {
     public static void create(SQLiteDatabase db) {
         db.execSQL("create table IF NOT EXISTS " + WalkerConsts.DOG_WALKERS_TABLE + " (" +
-                WalkerConsts.USER_ID + " PRIMARY KEY INTEGER ," +
-                WalkerConsts.AGE + " INTEGER," +
+                WalkerConsts.USER_ID + " INTEGER PRIMARY KEY, " +
+                WalkerConsts.AGE + " INTEGER, " +
                 WalkerConsts.PRICE_FOR_HOUR + " INTEGER," +
                 WalkerConsts.IS_COMFORTABLE_ON_MORNING + " BOOLEAN," +
                 WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON + " BOOLEAN," +
