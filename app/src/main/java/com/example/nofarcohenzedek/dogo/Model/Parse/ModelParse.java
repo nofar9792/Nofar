@@ -8,6 +8,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.Request;
 import com.example.nofarcohenzedek.dogo.Model.RequestStatus;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
 import com.example.nofarcohenzedek.dogo.Model.User;
@@ -92,7 +93,7 @@ public class ModelParse {
         UserParse.logOut();
     }
 
-        //endregion
+    //endregion
 
     //region Dog Methods
 //    public void getDogById(long id, final Model.GetDogListener listener) {
@@ -148,7 +149,7 @@ public class ModelParse {
             CommentParse.addCommentsToDogWalker((DogWalker) user);
             return (DogWalker)user;
         }
-       return null;
+        return null;
     }
 
     public void getAllDogWalkers(String fromDate, final Model.GetDogWalkersListener listener) {
@@ -205,7 +206,7 @@ public class ModelParse {
     }
 
     public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, Dog dog) throws Exception {
+                            String address, String city, Dog dog) throws Exception {
         long newUserId = UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, false);
         addDog(newUserId, dog);
 
@@ -314,6 +315,9 @@ public class ModelParse {
         });
     }
 
+    /*
+     * get waiting requests for dog walker
+     */
     public void getRequestForDogWalker(long dogWalkerId, final Model.GetDogOwnersListener listener){
         RequestParse.getRequestForDogWalker(dogWalkerId, new GetIdsListener() {
             @Override
@@ -327,6 +331,9 @@ public class ModelParse {
         });
     }
 
+    /*
+     * get waiting requests of dog owner
+     */
     public void getRequestOfDogOwner(long dogOwnerId, final Model.GetDogWalkersListener listener){
         RequestParse.getRequestOfDogOwner(dogOwnerId, new GetIdsListener() {
             @Override
@@ -336,6 +343,21 @@ public class ModelParse {
                     dogWalkers.add(getDogWalkerByIdSync(dogWalkerId));
                 }
                 listener.onResult(dogWalkers);
+            }
+        });
+    }
+
+    /*
+     * get all status requests of dog walker
+     */
+    public void getRequestByDogWalker(long dogWalkerId, String fromDate, final Model.GetRequestsListener listener){
+        RequestParse.getRequestByDogWalker(dogWalkerId, fromDate, new Model.GetRequestsListener() {
+            @Override
+            public void onResult(List<Request> requests) {
+                for (Request request : requests) {
+                    request.setDogOwner(getDogOwnerByIdSync(request.getDogOwnerId()));
+                }
+                listener.onResult(requests);
             }
         });
     }

@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class CommentSql {
     public static void create(SQLiteDatabase db) {
-        db.execSQL("create table " + CommentConsts.COMMENTS_TABLE + " (" +
+        db.execSQL("create table IF NOT EXISTS " + CommentConsts.COMMENTS_TABLE + " (" +
                 CommentConsts.USER_ID + " TEXT ," +
                 CommentConsts.TEXT + " TEXT ," +
                 CommentConsts.RATING + " INTEGER);");

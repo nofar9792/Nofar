@@ -79,7 +79,7 @@ public class Model {
     }
 
     public void updateDogWalker(DogWalker dogWalker){
-       modelParse.updateDogWalker(dogWalker);
+        modelParse.updateDogWalker(dogWalker);
     }
 
     //endregion
@@ -155,8 +155,26 @@ public class Model {
     }
 
     // Messages for dog walker
-    public void getRequestForDogWalker(long dogWalkerId, GetDogOwnersListener listener) {
-        modelParse.getRequestForDogWalker(dogWalkerId, listener);
+    public void getRequestForDogWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
+        final List<DogOwner> dogOwnersResult = modelSql.getRequestForDogWalker(dogWalkerId);
+        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
+
+        modelParse.getRequestByDogWalker(dogWalkerId, lastUpdateDate, new GetRequestsListener() {
+            @Override
+            public void onResult(List<Request> requests) {
+                if (requests.size() > 0) {
+                    for (Request request : requests) {
+                        modelSql.addDogOwner(request.getDogOwner());
+                        modelSql.addRequest(request);
+                    }
+
+                    dogOwnersResult.removeAll(dogOwnersResult);
+                    dogOwnersResult.addAll(modelSql.getRequestForDogWalker(dogWalkerId));
+                }
+                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
+                listener.onResult(dogOwnersResult);
+            }
+        });
     }
 
     // Messages of dog owner
@@ -202,9 +220,9 @@ public class Model {
         void onResult(List<Trip> trips);
     }
 
-//    public interface GetRequestsListener {
-//        void onResult(List<Request> requests);
-//    }
+    public interface GetRequestsListener {
+        void onResult(List<Request> requests);
+    }
     //endregion
 }
 

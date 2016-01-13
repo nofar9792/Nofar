@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.nofarcohenzedek.dogo.Model.Common.UserConsts;
+import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.User;
 
@@ -18,8 +19,8 @@ import java.util.List;
 public class UserSql
 {
     public static void create(SQLiteDatabase db) {
-        db.execSQL("create table " + UserConsts.USER_TABLE + " (" +
-                UserConsts.USER_ID + " TEXT PRIMARY KEY," +
+        db.execSQL("create table IF NOT EXISTS " + UserConsts.USER_TABLE + " (" +
+                UserConsts.USER_ID + " INTEGER PRIMARY KEY," +
                 UserConsts.USERNAME + " TEXT ," +
                 UserConsts.FIRST_NAME + " TEXT," +
                 UserConsts.LAST_NAME + " TEXT," +
@@ -33,8 +34,7 @@ public class UserSql
         db.execSQL("drop table " +  UserConsts.USER_TABLE + ";");
     }
 
-    public static List<DogWalker> getDogWalkerUsers(SQLiteDatabase db)
-    {
+    public static List<DogWalker> getDogWalkerUsers(SQLiteDatabase db) {
         String where = UserConsts.IS_DOG_WALKER + " = ?";
         String[] args = {"1"};
 
@@ -62,6 +62,32 @@ public class UserSql
             } while (cursor.moveToNext());
         }
         return users;
+    }
+
+    public static DogOwner getDogOwnerById(SQLiteDatabase db, long id) {
+        String where = UserConsts.USER_ID + " = ?";
+        String[] args = {Long.toString(id)};
+
+        Cursor cursor = db.query(UserConsts.USER_TABLE, null,  where, args, null, null, null);
+        DogOwner dogOwner = null;
+
+        if (cursor.moveToFirst()) {
+            int userNameIndex = cursor.getColumnIndex(UserConsts.USERNAME);
+            int firstNameIndex = cursor.getColumnIndex(UserConsts.FIRST_NAME);
+            int lastNameIndex = cursor.getColumnIndex(UserConsts.LAST_NAME);
+            int phoneNumberIndex = cursor.getColumnIndex(UserConsts.PHONE_NUMBER);
+            int addressIndex = cursor.getColumnIndex(UserConsts.ADDRESS);
+            int cityIndex = cursor.getColumnIndex(UserConsts.CITY);
+
+            String userName = cursor.getString(userNameIndex);
+            String firstName = cursor.getString(firstNameIndex);
+            String lastName = cursor.getString(lastNameIndex);
+            String phoneNumber = cursor.getString(phoneNumberIndex);
+            String address = cursor.getString(addressIndex);
+            String city = cursor.getString(cityIndex);
+            dogOwner = new DogOwner(id,userName, firstName, lastName, phoneNumber, address, city);
+        }
+        return dogOwner;
     }
 
     public static void addToUsersTable(SQLiteDatabase db,User user) {

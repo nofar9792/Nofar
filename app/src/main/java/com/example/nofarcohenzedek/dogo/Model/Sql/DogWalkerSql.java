@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class DogWalkerSql {
     public static void create(SQLiteDatabase db) {
-        db.execSQL("create table " + WalkerConsts.DOG_WALKERS_TABLE + " (" +
-                WalkerConsts.USER_ID + " TEXT ," +
+        db.execSQL("create table IF NOT EXISTS " + WalkerConsts.DOG_WALKERS_TABLE + " (" +
+                WalkerConsts.USER_ID + " INTEGER ," +
                 WalkerConsts.AGE + " INTEGER," +
                 WalkerConsts.PRICE_FOR_HOUR + " INTEGER," +
                 WalkerConsts.IS_COMFORTABLE_ON_MORNING + " BOOLEAN," +
