@@ -8,15 +8,13 @@ import android.util.Log;
 import com.example.nofarcohenzedek.dogo.Model.Common.WalkerConsts;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 
-import java.util.List;
-
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class DogWalkerSql {
     public static void create(SQLiteDatabase db) {
         db.execSQL("create table IF NOT EXISTS " + WalkerConsts.DOG_WALKERS_TABLE + " (" +
-                WalkerConsts.USER_ID + " INTEGER ," +
+                WalkerConsts.USER_ID + " PRIMARY KEY INTEGER ," +
                 WalkerConsts.AGE + " INTEGER," +
                 WalkerConsts.PRICE_FOR_HOUR + " INTEGER," +
                 WalkerConsts.IS_COMFORTABLE_ON_MORNING + " BOOLEAN," +
@@ -25,10 +23,13 @@ public class DogWalkerSql {
     }
 
     public static void drop(SQLiteDatabase db) {
-        db.execSQL("drop table " +  WalkerConsts.DOG_WALKERS_TABLE + ";");
+        db.execSQL("drop table IF EXISTS " +  WalkerConsts.DOG_WALKERS_TABLE + ";");
     }
 
     public static void addToDogWalkersTable(SQLiteDatabase db, DogWalker dogWalker) {
+        String where = WalkerConsts.USER_ID + " = ?";
+        String[] args = {Long.toString(dogWalker.getId())};
+
         ContentValues values = new ContentValues();
         values.put(WalkerConsts.USER_ID, dogWalker.getId());
         values.put(WalkerConsts.AGE, dogWalker.getAge());
@@ -50,9 +51,12 @@ public class DogWalkerSql {
             values.put(WalkerConsts.IS_COMFORTABLE_ON_EVENING, 0);
         }
 
-        if (db.insert(WalkerConsts.DOG_WALKERS_TABLE, null, values) == -1) {
-            if (db.replace(WalkerConsts.DOG_WALKERS_TABLE, null, values) == -1) {
-                Log.e("DogWalkerSql", "Fail to write to sql");
+        long updateResult = db.update(WalkerConsts.DOG_WALKERS_TABLE, values, where, args);
+
+        // Check in the update didnt succeed(-1) or didnt do nothing(0)
+        if (updateResult == -1 || updateResult == 0) {
+            if (db.insert(WalkerConsts.DOG_WALKERS_TABLE, null, values) == -1) {
+                Log.e("UserSql", "Fail to write to sql");
             }
         }
     }

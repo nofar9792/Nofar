@@ -31,7 +31,7 @@ public class UserSql
     }
 
     public static void drop(SQLiteDatabase db) {
-        db.execSQL("drop table " +  UserConsts.USER_TABLE + ";");
+        db.execSQL("drop table IF EXISTS " +  UserConsts.USER_TABLE + ";");
     }
 
     public static List<DogWalker> getDogWalkerUsers(SQLiteDatabase db) {
@@ -64,12 +64,12 @@ public class UserSql
         return users;
     }
 
-    public static DogOwner getDogOwnerById(SQLiteDatabase db, long id) {
+    public static User getUserById(SQLiteDatabase db, long id) {
         String where = UserConsts.USER_ID + " = ?";
         String[] args = {Long.toString(id)};
 
         Cursor cursor = db.query(UserConsts.USER_TABLE, null,  where, args, null, null, null);
-        DogOwner dogOwner = null;
+        User user = null;
 
         if (cursor.moveToFirst()) {
             int userNameIndex = cursor.getColumnIndex(UserConsts.USERNAME);
@@ -78,6 +78,7 @@ public class UserSql
             int phoneNumberIndex = cursor.getColumnIndex(UserConsts.PHONE_NUMBER);
             int addressIndex = cursor.getColumnIndex(UserConsts.ADDRESS);
             int cityIndex = cursor.getColumnIndex(UserConsts.CITY);
+            int isDogWalkerIndex = cursor.getColumnIndex(UserConsts.IS_DOG_WALKER);
 
             String userName = cursor.getString(userNameIndex);
             String firstName = cursor.getString(firstNameIndex);
@@ -85,12 +86,21 @@ public class UserSql
             String phoneNumber = cursor.getString(phoneNumberIndex);
             String address = cursor.getString(addressIndex);
             String city = cursor.getString(cityIndex);
-            dogOwner = new DogOwner(id,userName, firstName, lastName, phoneNumber, address, city);
+            Boolean isDogWalker = cursor.getInt(isDogWalkerIndex) == 1;
+
+            if(isDogWalker) {
+                user = new DogWalker(id,userName, firstName, lastName, phoneNumber, address, city);
+            }else {
+                user = new DogOwner(id,userName, firstName, lastName, phoneNumber, address, city);
+            }
         }
-        return dogOwner;
+        return user;
     }
 
     public static void addToUsersTable(SQLiteDatabase db,User user) {
+        String where = UserConsts.USER_ID + " = ?";
+        String[] args = { Long.toString(user.getId())};
+
         ContentValues values = new ContentValues();
         values.put(UserConsts.USER_ID, user.getId());
         values.put(UserConsts.USERNAME, user.getUserName());
@@ -105,8 +115,11 @@ public class UserSql
             values.put(UserConsts.IS_DOG_WALKER, 0);
         }
 
-        if (db.insert(UserConsts.USER_TABLE, null, values) == -1) {
-            if (db.replace(UserConsts.USER_TABLE, null, values) == -1) {
+        long updateResult = db.update(UserConsts.USER_TABLE, values, where, args);
+
+        // Check in the update didnt succeed(-1) or didnt do nothing(0)
+        if (updateResult == -1 || updateResult == 0) {
+            if (db.insert(UserConsts.USER_TABLE, null, values) == -1) {
                 Log.e("UserSql", "Fail to write to sql");
             }
         }

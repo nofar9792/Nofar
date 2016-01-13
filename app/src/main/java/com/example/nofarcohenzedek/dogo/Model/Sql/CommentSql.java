@@ -24,7 +24,7 @@ public class CommentSql {
     }
 
     public static void drop(SQLiteDatabase db) {
-        db.execSQL("drop table " +  CommentConsts.COMMENTS_TABLE + ";");
+        db.execSQL("drop table IF EXISTS " +  CommentConsts.COMMENTS_TABLE + ";");
     }
 
     public static void addToCommentsTable(SQLiteDatabase db, long userId, Comment comment){

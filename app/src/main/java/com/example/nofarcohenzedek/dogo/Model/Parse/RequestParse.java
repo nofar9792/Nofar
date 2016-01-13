@@ -135,6 +135,33 @@ public class RequestParse {
         });
     }
 
+    public static void getRequestByDogOwner(final long dogOwnerId, String fromDate, final Model.GetRequestsListener listener){
+        ParseQuery<ParseObject> query = new ParseQuery<>(RequestConsts.REQUESTS_TABLE);
+        query.whereEqualTo(RequestConsts.DOG_OWNER_ID, dogOwnerId);
+
+        if (fromDate != null) {
+            query.whereGreaterThanOrEqualTo("updatedAt", fromDate);
+        }
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    List<Request> requests = new LinkedList<>();
+
+                    for (ParseObject po : list) {
+                        long dogWalkerId = po.getLong(RequestConsts.DOG_WALKER_ID);
+                        RequestStatus requestStatus = RequestStatus.valueOf(po.getString(RequestConsts.REQUEST_STATUS));
+                        requests.add(new Request(dogOwnerId, dogWalkerId, requestStatus));
+                    }
+                    listener.onResult(requests);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public static void updateRequest(long dogOwnerId, long dogWalkerId,final RequestStatus requestStatus) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(RequestConsts.REQUESTS_TABLE);
         query.whereEqualTo(RequestConsts.DOG_OWNER_ID, dogOwnerId).whereEqualTo(RequestConsts.DOG_WALKER_ID,dogWalkerId);

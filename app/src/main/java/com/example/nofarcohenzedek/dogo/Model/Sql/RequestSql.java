@@ -25,7 +25,7 @@ public class RequestSql {
     }
 
     public static void drop(SQLiteDatabase db) {
-        db.execSQL("drop table " +  RequestConsts.REQUESTS_TABLE + ";");
+        db.execSQL("drop table IF EXISTS " +  RequestConsts.REQUESTS_TABLE + ";");
     }
 
     public static List<Long> getRequestForDogWalker(SQLiteDatabase db, long dogWalkerId) {
@@ -40,22 +40,81 @@ public class RequestSql {
             int dogOwnerIdIndex = cursor.getColumnIndex(RequestConsts.DOG_OWNER_ID);
 
             do {
-                long dogOwnerId = cursor.getLong(dogOwnerIdIndex);
+                ids.add(cursor.getLong(dogOwnerIdIndex));
+            } while (cursor.moveToNext());
+        }
+        return ids;
+    }
 
-                ids.add(dogOwnerId);
+    public static List<Long> getRequestForDogOwner(SQLiteDatabase db, long dogOwnerId) {
+        String where = RequestConsts.DOG_OWNER_ID + " = ? AND " +
+                RequestConsts.REQUEST_STATUS + " = ?";
+        String[] args = { Long.toString(dogOwnerId),RequestStatus.Waiting.name()};
+
+        Cursor cursor = db.query(RequestConsts.REQUESTS_TABLE, null,  where, args, null, null, null);
+        List<Long> ids = new LinkedList<>();
+
+        if (cursor.moveToFirst()) {
+            int dogWalkerIdIndex = cursor.getColumnIndex(RequestConsts.DOG_WALKER_ID);
+
+            do {
+                ids.add(cursor.getLong(dogWalkerIdIndex));
+            } while (cursor.moveToNext());
+        }
+        return ids;
+    }
+
+    public static List<Long> getOwnersConnectToWalker(SQLiteDatabase db, long dogWalkerId) {
+        String where = RequestConsts.DOG_WALKER_ID + " = ? AND " +
+                RequestConsts.REQUEST_STATUS + " = ?";
+
+        String[] args = { Long.toString(dogWalkerId),RequestStatus.Accepted.name()};
+
+        Cursor cursor = db.query(RequestConsts.REQUESTS_TABLE, null, where, args, null, null, null);
+        List<Long> ids = new LinkedList<>();
+
+        if (cursor.moveToFirst()) {
+            int dogOwnerIdIndex = cursor.getColumnIndex(RequestConsts.DOG_OWNER_ID);
+
+            do {
+                ids.add(cursor.getLong(dogOwnerIdIndex));
+            } while (cursor.moveToNext());
+        }
+        return ids;
+    }
+
+    public static List<Long> getWalkersConnectToOwner(SQLiteDatabase db, long dogOwnerId) {
+        String where = RequestConsts.DOG_OWNER_ID + " = ? AND " +
+                       RequestConsts.REQUEST_STATUS + " = ?";
+        String[] args = { Long.toString(dogOwnerId),RequestStatus.Accepted.name()};
+
+        Cursor cursor = db.query(RequestConsts.REQUESTS_TABLE, null, where, args, null, null, null);
+        List<Long> ids = new LinkedList<>();
+
+        if (cursor.moveToFirst()) {
+            int dogWalkerIdIndex = cursor.getColumnIndex(RequestConsts.DOG_WALKER_ID);
+
+            do {
+                ids.add(cursor.getLong(dogWalkerIdIndex));
             } while (cursor.moveToNext());
         }
         return ids;
     }
 
     public static void addToRequestTable(SQLiteDatabase db, Request request) {
+        String where = RequestConsts.DOG_OWNER_ID + " = ? AND " +
+                       RequestConsts.DOG_WALKER_ID + " = ?";
+        String[] args = { Long.toString(request.getDogOwnerId()), Long.toString(request.getDogWalkerId())};
+
         ContentValues values = new ContentValues();
         values.put(RequestConsts.DOG_OWNER_ID, request.getDogOwnerId());
         values.put(RequestConsts.DOG_WALKER_ID, request.getDogWalkerId());
         values.put(RequestConsts.REQUEST_STATUS, request.getRequestStatus().name());
 
-        if (db.insert(RequestConsts.REQUESTS_TABLE, null, values) == -1) {
-            if (db.replace(RequestConsts.REQUESTS_TABLE, null, values) == -1) {
+        long updateResult = db.update(RequestConsts.REQUESTS_TABLE, values, where, args);
+        // Check in the update didnt succeed(-1) or didnt do nothing(0)
+        if (updateResult == -1 || updateResult == 0) {
+            if (db.insert(RequestConsts.REQUESTS_TABLE, null, values) == -1) {
                 Log.e("UserSql", "Fail to write to sql");
             }
         }

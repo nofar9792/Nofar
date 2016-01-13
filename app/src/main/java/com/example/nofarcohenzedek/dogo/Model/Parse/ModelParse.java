@@ -361,6 +361,19 @@ public class ModelParse {
             }
         });
     }
+
+    public void getRequestByDogOwner(long dogOwnerId, String fromDate, final Model.GetRequestsListener listener) {
+        RequestParse.getRequestByDogOwner(dogOwnerId, fromDate, new Model.GetRequestsListener() {
+            @Override
+            public void onResult(List<Request> requests) {
+                for (Request request : requests) {
+                    request.setDogWalker(getDogWalkerByIdSync(request.getDogWalkerId()));
+                }
+                listener.onResult(requests);
+            }
+        });
+    }
+
     //endregion
 
     //region Interfaces

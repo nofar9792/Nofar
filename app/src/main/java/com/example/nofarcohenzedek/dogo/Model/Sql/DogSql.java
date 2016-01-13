@@ -15,7 +15,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogSize;
 public class DogSql {
     public static void create(SQLiteDatabase db) {
         db.execSQL("create table IF NOT EXISTS " + DogConsts.DOGS_TABLE + " (" +
-                DogConsts.USER_ID + " INTEGER ," +
+                DogConsts.USER_ID + " INTEGER PRIMARY KEY ," +
                 DogConsts.NAME + " TEXT ," +
                 DogConsts.SIZE + " TEXT," +
                 DogConsts.AGE + " INTEGER," +
@@ -23,19 +23,26 @@ public class DogSql {
     }
 
     public static void drop(SQLiteDatabase db) {
-        db.execSQL("drop table " +  DogConsts.DOGS_TABLE + ";");
+        db.execSQL("drop table IF EXISTS " + DogConsts.DOGS_TABLE + ";");
     }
 
     public static void addToDogsTable(SQLiteDatabase db,long userId, Dog dog) {
+        String where = DogConsts.USER_ID + " = ?";
+        String[] args = {Long.toString(userId)};
+
         ContentValues values = new ContentValues();
         values.put(DogConsts.USER_ID, userId);
         values.put(DogConsts.NAME, dog.getName());
-        values.put(DogConsts.SIZE,dog.getSize().name());
+        values.put(DogConsts.SIZE, dog.getSize().name());
         values.put(DogConsts.AGE, dog.getAge());
         values.put(DogConsts.PIC_REF, dog.getPicRef());
 
-        if (db.insert(DogConsts.DOGS_TABLE, null, values) == -1) {
-            if (db.replace(DogConsts.DOGS_TABLE, null, values) == -1) {
+
+        long updateResult = db.update(DogConsts.DOGS_TABLE, values, where, args);
+
+        // Check in the update didnt succeed(-1) or didnt do nothing(0)
+        if (updateResult == -1 || updateResult == 0) {
+            if (db.insert(DogConsts.DOGS_TABLE, null, values) == -1) {
                 Log.e("UserSql", "Fail to write to sql");
             }
         }

@@ -10,6 +10,7 @@ import com.example.nofarcohenzedek.dogo.Model.Common.WalkerConsts;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Request;
+import com.example.nofarcohenzedek.dogo.Model.User;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -23,12 +24,25 @@ public class ModelSql
     Helper sqlDb;
     SQLiteDatabase db;
 
-    //region Dog Walker Methods
     public ModelSql(Context context) {
         if (sqlDb == null){
             sqlDb = new Helper(context);
             db = sqlDb.getReadableDatabase();
+            //sqlDb.onUpgrade(db,1,2);
         }
+    }
+
+    //region Dog Walker Methods
+    public DogWalker getDogWalkerById(SQLiteDatabase db, long id) {
+        User user = UserSql.getUserById(db, id);
+
+        if(user != null){
+            DogWalkerSql.addDogWalkerDetails(db, (DogWalker)user);
+            CommentSql.addCommentsToDogWalker(db, (DogWalker)user);
+
+            return (DogWalker)user;
+        }
+        return null;
     }
 
     public List<DogWalker> getAllDogWalkers(){
@@ -50,19 +64,23 @@ public class ModelSql
     }
     //endregion
 
+    //region Dog Owner Methods
     public void addDogOwner(DogOwner dogOwner) {
         UserSql.addToUsersTable(db, dogOwner);
         DogSql.addToDogsTable(db,dogOwner.getId(), dogOwner.getDog());
     }
 
     public DogOwner getDogOwnerById(SQLiteDatabase db, long id) {
-        DogOwner dogOwner = UserSql.getDogOwnerById(db, id);
-        if(dogOwner != null){
-            dogOwner.setDog(DogSql.getDogByUserId(db, id));
+        User user = UserSql.getUserById(db, id);
+        if(user != null){
+            ((DogOwner)user).setDog(DogSql.getDogByUserId(db, id));
+            return ((DogOwner)user);
         }
-        return dogOwner;
+        return null;
     }
+    //endregion
 
+    //region Request Methods
     public List<DogOwner> getRequestForDogWalker(long dogWalkerId) {
         List<Long> ids = RequestSql.getRequestForDogWalker(db, dogWalkerId);
         List<DogOwner> dogOwners = new LinkedList<>();
@@ -74,10 +92,45 @@ public class ModelSql
         return  dogOwners;
     }
 
+    public List<DogWalker> getRequestForDogOwner(long dogOwnerId) {
+        List<Long> ids = RequestSql.getRequestForDogOwner(db, dogOwnerId);
+        List<DogWalker> dogWalkers = new LinkedList<>();
+
+        for(long id : ids){
+            dogWalkers.add(getDogWalkerById(db, id));
+        }
+
+        return  dogWalkers;
+    }
+
+    public List<DogOwner> getOwnersConnectToWalker(long dogWalkerId) {
+        List<Long> ids = RequestSql.getOwnersConnectToWalker(db, dogWalkerId);
+        List<DogOwner> dogOwners = new LinkedList<>();
+
+        for(long id : ids){
+            dogOwners.add(getDogOwnerById(db, id));
+        }
+
+        return  dogOwners;
+    }
+
+    public List<DogWalker> getWalkersConnectToOwner(long dogOwnerId) {
+        List<Long> ids = RequestSql.getWalkersConnectToOwner(db, dogOwnerId);
+        List<DogWalker> dogWalkers = new LinkedList<>();
+
+        for(long id : ids){
+            dogWalkers.add(getDogWalkerById(db, id));
+        }
+
+        return  dogWalkers;
+    }
+
     public void addRequest(Request request) {
         RequestSql.addToRequestTable(db, request);
     }
+    // endregion
 
+    //region LastUpdateDate Methods
     public String getDogWalkersLastUpdateDate() {
         return LastUpdateSql.getLastUpdateDate(db, WalkerConsts.DOG_WALKERS_TABLE);
     }
@@ -93,7 +146,7 @@ public class ModelSql
     public void setRequestsLastUpdateDate(Date newDate) {
         LastUpdateSql.setLastUpdateDate(db, RequestConsts.REQUESTS_TABLE, newDate);
     }
-
+    //endregion
 
     class Helper extends SQLiteOpenHelper {
         public Helper(Context context) {
@@ -112,6 +165,7 @@ public class ModelSql
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            LastUpdateSql.drop(db);
             UserSql.drop(db);
             DogWalkerSql.drop(db);
             CommentSql.drop(db);

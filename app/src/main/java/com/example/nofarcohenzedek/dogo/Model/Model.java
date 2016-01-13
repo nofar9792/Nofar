@@ -86,7 +86,6 @@ public class Model {
 
     //region Dog Owner Methods
     public void getDogOwnerById(long userId, GetDogOwnerListener listener) {
-        //modelParse.getDogWalkerById(userId, listener);
         modelParse.getDogOwnerById(userId, listener);
     }
 
@@ -115,10 +114,6 @@ public class Model {
         modelParse.getTripsByDogWalkerId(dogWalkerId, listener);
     }
 
-//    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
-//        modelParse.addTrip(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
-//    }
-
     public long startTrip(long dogOwnerId, long dogWalkerId) {
         return modelParse.startTrip(dogOwnerId, dogWalkerId);
     }
@@ -146,12 +141,50 @@ public class Model {
         modelParse.declineRequest(dogOwnerId, dogWalkerId);
     }
 
-    public void getWalkersConnectToOwner(long dogOwnerId, GetDogWalkersListener listener) {
-        modelParse.getWalkersConnectToOwner(dogOwnerId, listener);
+    // Connections between owner to some walkers
+    public void getWalkersConnectToOwner(final long dogOwnerId, final GetDogWalkersListener listener) {
+        final List<DogWalker> dogWalkersResult = modelSql.getWalkersConnectToOwner(dogOwnerId);
+        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
+
+        modelParse.getRequestByDogOwner(dogOwnerId, lastUpdateDate, new GetRequestsListener() {
+            @Override
+            public void onResult(List<Request> requests) {
+                if (requests.size() > 0) {
+                    for (Request request : requests) {
+                        modelSql.addDogWalker(request.getDogWalker());
+                        modelSql.addRequest(request);
+                    }
+
+                    dogWalkersResult.removeAll(dogWalkersResult);
+                    dogWalkersResult.addAll(modelSql.getWalkersConnectToOwner(dogOwnerId));
+                }
+                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
+                listener.onResult(dogWalkersResult);
+            }
+        });
     }
 
-    public void getOwnersConnectToWalker(long dogWalkerId, GetDogOwnersListener listener) {
-        modelParse.getOwnersConnectToWalker(dogWalkerId, listener);
+    // Connections between walker to some owners
+    public void getOwnersConnectToWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
+        final List<DogOwner> dogOwnersResult = modelSql.getOwnersConnectToWalker(dogWalkerId);
+        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
+
+        modelParse.getRequestByDogWalker(dogWalkerId, lastUpdateDate, new GetRequestsListener() {
+            @Override
+            public void onResult(List<Request> requests) {
+                if (requests.size() > 0) {
+                    for (Request request : requests) {
+                        modelSql.addDogOwner(request.getDogOwner());
+                        modelSql.addRequest(request);
+                    }
+
+                    dogOwnersResult.removeAll(dogOwnersResult);
+                    dogOwnersResult.addAll(modelSql.getOwnersConnectToWalker(dogWalkerId));
+                }
+                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
+                listener.onResult(dogOwnersResult);
+            }
+        });
     }
 
     // Messages for dog walker
@@ -178,8 +211,26 @@ public class Model {
     }
 
     // Messages of dog owner
-    public void getRequestOfDogOwner(long dogOwnerId, GetDogWalkersListener listener) {
-        modelParse.getRequestOfDogOwner(dogOwnerId, listener);
+    public void getRequestOfDogOwner(final long dogOwnerId, final GetDogWalkersListener listener) {
+        final List<DogWalker> dogWalkersResult = modelSql.getRequestForDogOwner(dogOwnerId);
+        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
+
+        modelParse.getRequestByDogOwner(dogOwnerId, lastUpdateDate, new GetRequestsListener() {
+            @Override
+            public void onResult(List<Request> requests) {
+                if (requests.size() > 0) {
+                    for (Request request : requests) {
+                        modelSql.addDogWalker(request.getDogWalker());
+                        modelSql.addRequest(request);
+                    }
+
+                    dogWalkersResult.removeAll(dogWalkersResult);
+                    dogWalkersResult.addAll(modelSql.getRequestForDogOwner(dogOwnerId));
+                }
+                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
+                listener.onResult(dogWalkersResult);
+            }
+        });
     }
     //endregion
 
