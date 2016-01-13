@@ -1,11 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:layoutDirection="rtl"
-    android:focusable="false"
-    android:focusableInTouchMode="false">
+    android:descendantFocusability="blocksDescendants">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -16,36 +15,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10px"
-            android:text="שם בעל הכלב:"
+            android:text="@string/firstName"
             android:textSize="20dp" />
 
         <TextView
+            android:id="@+id/nameInSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10px"
-            android:textSize="20dp"
-            android:id="@+id/ownerNameInDogsList"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:text= "שם הכלב:"
             android:textSize="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:textSize="20dp"
-            android:id="@+id/dogNameInDogsList"/>
 
     </LinearLayout>
 
@@ -58,46 +36,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10px"
-            android:text="כתובת:"
+            android:text="@string/address"
             android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/addressInSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:textSize="20dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10px"
-            android:textSize="20dp"
-            android:id="@+id/addressInDogsList"/>
+            android:text="@string/age"
+            android:textSize="20dp" />
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:focusable="false"
-        android:focusableInTouchMode="false">
-
-        <Button
+        <TextView
+            android:id="@+id/ageInSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="התחל טיול"
-            android:id="@+id/startTripBtn"
-            android:tag="startTripTag"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="סיים טיול"
-            android:id="@+id/endTripBtn"
-            android:tag="endTripTag"
-            android:enabled="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            android:layout_margin="10px"
+            android:inputType="number"
+            android:textSize="20dp" />
 
     </LinearLayout>
-
 
 </LinearLayout>

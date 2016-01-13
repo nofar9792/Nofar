@@ -28,10 +28,10 @@ import java.util.Map;
 
 public class DogsListActivity extends Activity {
 
-    Long userId;
-    List<DogOwner> list;
-    Map<Long, Long> tripsByOwnerId;
-    ProgressBar progressBar;
+    private Long userId;
+    private List<DogOwner> list;
+    private Map<Long, Long> tripsByOwnerId;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +158,7 @@ public class DogsListActivity extends Activity {
 
             ownerName.setText(owner.getFirstName() + " " + owner.getLastName());
             dogName.setText(owner.getDog().getName());
-            address.setText(owner.getAddress());
+            address.setText(owner.getAddress() + ", " + owner.getCity());
 
             // work around
             Button startTrip = (Button) convertView.findViewById(R.id.startTripBtn);

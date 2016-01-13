@@ -27,8 +27,8 @@ import java.util.List;
 public class MapsActivity extends Activity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    Long userId;
-    ProgressBar progressBar;
+    private Long userId;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

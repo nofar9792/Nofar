@@ -24,11 +24,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MessagesActivity extends Activity {
-    ListView list;
-    List<User> data;
-    Boolean isOwner;
-    ProgressBar progressBar;
-    User currentUser;
+    private ListView list;
+    private List<User> data;
+    private Boolean isOwner;
+    private ProgressBar progressBar;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
