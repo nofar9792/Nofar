@@ -31,10 +31,10 @@ import java.util.List;
 
 public class TripsReportActivity extends Activity {
 
-    Boolean isOwner;
-    Long userId;
-    List<Trip> allTrips;
-    ProgressBar progressBar;
+    private Boolean isOwner;
+    private Long userId;
+    private List<Trip> allTrips;
+    private ProgressBar progressBar;
 
 
     @Override

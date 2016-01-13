@@ -21,9 +21,9 @@ import java.util.List;
 
 public class DogWalkerDetails extends Activity
 {
-    Long walkerId;
-    Long ownerId;
-    ProgressBar progressBar;
+    private Long walkerId;
+    private Long ownerId;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

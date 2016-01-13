@@ -29,30 +29,30 @@ import java.io.InputStream;
 
 public class MyProfileActivity extends Activity {
 
-    Boolean isOwner;
-    Long id;
-    String userName;
+    private Boolean isOwner;
+    private Long id;
+    private String userName;
 
-    EditText firstName;
-    EditText lastName;
-    EditText phone;
-    EditText address;
-    EditText city;
-    EditText age;
-    EditText price;
-    CheckBox morning;
-    CheckBox afternoon;
-    CheckBox evening;
-    EditText dogName;
-    RadioButton isBig;
-    RadioButton isMedium;
-    RadioButton isSmall;
-    EditText dogAge;
-    String dogPic;
+    private EditText firstName;
+    private EditText lastName;
+    private EditText phone;
+    private EditText address;
+    private EditText city;
+    private EditText age;
+    private EditText price;
+    private CheckBox morning;
+    private CheckBox afternoon;
+    private CheckBox evening;
+    private EditText dogName;
+    private RadioButton isBig;
+    private RadioButton isMedium;
+    private RadioButton isSmall;
+    private EditText dogAge;
+    private String dogPic;
 
     private String errorMessage;
-    static final int SELECT_PHOTO = 100;
-    ProgressBar progressBar;
+    private static final int SELECT_PHOTO = 100;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
