@@ -152,12 +152,14 @@ public class DogsListActivity extends Fragment
             TextView ownerName = (TextView) convertView.findViewById(R.id.ownerNameInDogsList);
             TextView dogName = (TextView) convertView.findViewById(R.id.dogNameInDogsList);
             TextView address = (TextView) convertView.findViewById(R.id.addressInDogsList);
+            TextView phone = (TextView) convertView.findViewById(R.id.phoneInDogsList);
 
             final DogOwner owner = list.get(position);
 
             ownerName.setText(owner.getFirstName() + " " + owner.getLastName());
             dogName.setText(owner.getDog().getName());
             address.setText(owner.getAddress() + ", " + owner.getCity());
+            phone.setText(owner.getPhoneNumber());
 
             // work around
             Button startTrip = (Button) convertView.findViewById(R.id.startTripBtn);

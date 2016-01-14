@@ -28,7 +28,7 @@ public class ModelSql
         if (sqlDb == null){
             sqlDb = new Helper(context);
             db = sqlDb.getReadableDatabase();
-            //sqlDb.onUpgrade(db,1,2);
+            sqlDb.onUpgrade(db,1,2);
         }
     }
 
