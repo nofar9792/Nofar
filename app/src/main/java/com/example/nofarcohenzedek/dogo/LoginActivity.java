@@ -26,23 +26,27 @@ public class LoginActivity extends Activity {
         EditText password = (EditText) findViewById(R.id.passwordLogin);
 
         if (isValid(userName.getText().toString(), password.getText().toString())) {
-            Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new Model.GetUserListener() {
+            Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new Model.GetUserListener()
+            {
                 @Override
                 public void onResult(User user)
                 {
-                    if (user != null) {
-                        if (user instanceof DogOwner) {
-                            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    if (user != null)
+                    {
+                        Intent intent = new Intent(getApplicationContext(),ActionBarActivity.class);
+                        intent.putExtra("userId", user.getId());
+
+                        if (user instanceof DogOwner)
+                        {
                             intent.putExtra("isOwner", true);
-                            intent.putExtra("userId", user.getId());
                             intent.putExtra("address", user.getAddress() + ", " + user.getCity());
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(getApplicationContext(), DogsListActivity.class);
-                            intent.putExtra("isOwner", false);
-                            intent.putExtra("userId", user.getId());
-                            startActivity(intent);
                         }
+                        else
+                        {
+                            intent.putExtra("isOwner", false);
+                        }
+
+                        startActivity(intent);
                     }
                     else
                     {

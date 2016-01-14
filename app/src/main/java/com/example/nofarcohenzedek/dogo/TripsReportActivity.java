@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -29,25 +30,23 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class TripsReportActivity extends Activity {
+public class TripsReportActivity extends Fragment {
 
     private Boolean isOwner;
     private Long userId;
     private List<Trip> allTrips;
     private ProgressBar progressBar;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trips_report);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        final View view = inflater.inflate(R.layout.activity_trips_report, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        setActionBar((Toolbar) findViewById(R.id.tripsReportToolBar));
-        getActionBar().setDisplayShowTitleEnabled(false);
-        progressBar = (ProgressBar) findViewById(R.id.tripsReportProgressBar);
-
-        isOwner = getIntent().getBooleanExtra("isOwner", false);
-        userId = getIntent().getLongExtra("userId",0);
+        Bundle args = getArguments();
+        progressBar = (ProgressBar) view.findViewById(R.id.tripsReportProgressBar);
+        isOwner = args.getBoolean("isOwner");
+        userId = args.getLong("userId");
 
         // Get all trips that connected to current user
         if(isOwner)
@@ -59,12 +58,12 @@ public class TripsReportActivity extends Activity {
 
                     if (allTrips != null && !allTrips.isEmpty()) {
                         CustomAdapter adapter = new CustomAdapter();
-                        ListView listView = (ListView) findViewById(R.id.tripsList);
+                        ListView listView = (ListView) view.findViewById(R.id.tripsList);
                         listView.setAdapter(adapter);
                     }
                     else
                     {
-                        ((TextView)findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
+                        ((TextView)view.findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
                     }
                     progressBar.setVisibility(View.GONE);
                 }
@@ -79,18 +78,74 @@ public class TripsReportActivity extends Activity {
 
                     if (allTrips != null && !allTrips.isEmpty()) {
                         CustomAdapter adapter = new CustomAdapter();
-                        ListView listView = (ListView) findViewById(R.id.tripsList);
+                        ListView listView = (ListView) view.findViewById(R.id.tripsList);
                         listView.setAdapter(adapter);
                     }
                     else
                     {
-                        ((TextView)findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
+                        ((TextView)view.findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
                     }
                     progressBar.setVisibility(View.GONE);
                 }
             });
         }
+
+        return view;
     }
+//        @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_trips_report);
+//
+//        setActionBar((Toolbar) findViewById(R.id.tripsReportToolBar));
+//        getActionBar().setDisplayShowTitleEnabled(false);
+//        progressBar = (ProgressBar) findViewById(R.id.tripsReportProgressBar);
+//
+//        isOwner = getIntent().getBooleanExtra("isOwner", false);
+//        userId = getIntent().getLongExtra("userId",0);
+//
+//        // Get all trips that connected to current user
+//        if(isOwner)
+//        {
+//            Model.getInstance().getTripsByDogOwnerId(userId, new Model.GetTripsListener() {
+//                @Override
+//                public void onResult(List<Trip> trips) {
+//                    allTrips = trips;
+//
+//                    if (allTrips != null && !allTrips.isEmpty()) {
+//                        CustomAdapter adapter = new CustomAdapter();
+//                        ListView listView = (ListView) findViewById(R.id.tripsList);
+//                        listView.setAdapter(adapter);
+//                    }
+//                    else
+//                    {
+//                        ((TextView)findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
+//                    }
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//            });
+//        }
+//        else
+//        {
+//            Model.getInstance().getTripsByDogWalkerId(userId, new Model.GetTripsListener() {
+//                @Override
+//                public void onResult(List<Trip> trips) {
+//                    allTrips = trips;
+//
+//                    if (allTrips != null && !allTrips.isEmpty()) {
+//                        CustomAdapter adapter = new CustomAdapter();
+//                        ListView listView = (ListView) findViewById(R.id.tripsList);
+//                        listView.setAdapter(adapter);
+//                    }
+//                    else
+//                    {
+//                        ((TextView)findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
+//                    }
+//                    progressBar.setVisibility(View.GONE);
+//                }
+//            });
+//        }
+//    }
 
     /**
      * pay for trip - on select 'isPaid' checkBox
@@ -106,48 +161,6 @@ public class TripsReportActivity extends Activity {
             Model.getInstance().payTrip(((Long) isPaid.getTag()));
             isPaid.setEnabled(false);
         }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        if (isOwner)
-        {
-            getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-        }
-        else
-        {
-            getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        Intent intent = null;
-
-        if (id == R.id.searchDW) {
-            intent = new Intent(this, SearchActivity.class);
-        } else if (id == R.id.map) {
-            intent = new Intent(this, MapsActivity.class);
-        } else if (id == R.id.dogsList) {
-            intent = new Intent(this, DogsListActivity.class);
-        } else if (id == R.id.messages) {
-            intent = new Intent(this, MessagesActivity.class);
-        } else if (id == R.id.myProfile) {
-            intent = new Intent(this, MyProfileActivity.class);
-
-        }
-
-        intent.putExtra("isOwner", isOwner);
-        intent.putExtra("userId", getIntent().getLongExtra("userId",0));
-        startActivity(intent);
-
-        return super.onOptionsItemSelected(item);
     }
 
     class CustomAdapter extends BaseAdapter {
@@ -170,9 +183,16 @@ public class TripsReportActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                LayoutInflater inflater = getLayoutInflater();
+                LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(R.layout.raw_trips_layout, null);
             }
+
+            convertView.findViewById(R.id.isPaid).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    payTripBTN(v);
+                }
+            });
 
             TextView dogName = (TextView) convertView.findViewById(R.id.dogName);
             TextView ownerName = (TextView) convertView.findViewById(R.id.ownerName);

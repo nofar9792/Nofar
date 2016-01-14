@@ -1,5 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.AvoidXfermode;
 import android.os.Bundle;
@@ -26,47 +27,78 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DogsListActivity extends Activity {
-
+public class DogsListActivity extends Fragment
+{
     private Long userId;
     private List<DogOwner> list;
     private Map<Long, Long> tripsByOwnerId;
     private ProgressBar progressBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dogs_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        final View view = inflater.inflate(R.layout.activity_dogs_list, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        setActionBar((Toolbar) findViewById(R.id.dogsListToolBar));
-        getActionBar().setDisplayShowTitleEnabled(false);
-        progressBar = (ProgressBar) findViewById(R.id.dogsListProgressBar);
+        Bundle args = getArguments();
+        progressBar = (ProgressBar) view.findViewById(R.id.dogsListProgressBar);
 
-        userId = getIntent().getLongExtra("userId", 0);
+        userId = args.getLong("userId");
 
         tripsByOwnerId = new HashMap<Long, Long>();
 
         Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
             @Override
-            public void onResult(List<DogOwner> allDogWalkers)
-            {
+            public void onResult(List<DogOwner> allDogWalkers) {
                 list = allDogWalkers;
 
-                if (list != null && list.size() != 0)
-                {
+                if (list != null && list.size() != 0) {
                     CustomAdapter adapter = new CustomAdapter();
-                    ListView listView = (ListView) findViewById(R.id.dogsOfDogWalker);
+                    ListView listView = (ListView) view.findViewById(R.id.dogsOfDogWalker);
                     listView.setAdapter(adapter);
-                }
-                else
-                {
-                    ((TextView)findViewById(R.id.errorInDogsList)).setText("אין כלבים להצגה");
+                } else {
+                    ((TextView) view.findViewById(R.id.errorInDogsList)).setText("אין כלבים להצגה");
                 }
 
                 progressBar.setVisibility(View.GONE);
             }
         });
+
+
+        return view;
     }
+
+//        @Override
+//    protected void onCreate(Bundle savedInstanceState)
+//    {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_dogs_list);
+//
+//        setActionBar((Toolbar) findViewById(R.id.dogsListToolBar));
+//        getActionBar().setDisplayShowTitleEnabled(false);
+//        progressBar = (ProgressBar) findViewById(R.id.dogsListProgressBar);
+//
+//        userId = getIntent().getLongExtra("userId", 0);
+//
+//        tripsByOwnerId = new HashMap<Long, Long>();
+//
+//        Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
+//            @Override
+//            public void onResult(List<DogOwner> allDogWalkers) {
+//                list = allDogWalkers;
+//
+//                if (list != null && list.size() != 0) {
+//                    CustomAdapter adapter = new CustomAdapter();
+//                    ListView listView = (ListView) findViewById(R.id.dogsOfDogWalker);
+//                    listView.setAdapter(adapter);
+//                } else {
+//                    ((TextView) findViewById(R.id.errorInDogsList)).setText("אין כלבים להצגה");
+//                }
+//
+//                progressBar.setVisibility(View.GONE);
+//            }
+//        });
+//    }
 
     public void onItemClickListener(View view, Long ownerId)
     {
@@ -93,39 +125,6 @@ public class DogsListActivity extends Activity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-            getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        Intent intent = null;
-
-        if (id == R.id.searchDW) {
-            intent = new Intent(this, SearchActivity.class);
-        } else if (id == R.id.map) {
-            intent = new Intent(this, MapsActivity.class);
-        } else if (id == R.id.tripsReport) {
-            intent = new Intent(this, TripsReportActivity.class);
-        } else if (id == R.id.messages) {
-            intent = new Intent(this, MessagesActivity.class);
-        } else if (id == R.id.myProfile) {
-            intent = new Intent(this, MyProfileActivity.class);
-
-        }
-
-        intent.putExtra("isOwner", false);
-        intent.putExtra("userId", getIntent().getLongExtra("userId", 0));
-        startActivity(intent);
-
-        return super.onOptionsItemSelected(item);
-    }
-
     class CustomAdapter extends BaseAdapter {
 
         @Override
@@ -146,7 +145,7 @@ public class DogsListActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                LayoutInflater inflater = getLayoutInflater();
+                LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(R.layout.dog_in_dogs_list, null);
             }
 
