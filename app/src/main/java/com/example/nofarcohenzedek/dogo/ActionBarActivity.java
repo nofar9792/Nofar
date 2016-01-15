@@ -16,9 +16,7 @@ public class ActionBarActivity extends Activity
     MessagesActivity messagesFragment;
     DogsListActivity dogsListFragment;
     TripsReportActivity tripsReportActivity;
-
     FragmentManager manager;
-
     Long userId;
     boolean isOwner;
     String address;

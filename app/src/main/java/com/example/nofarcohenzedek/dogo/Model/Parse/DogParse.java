@@ -13,8 +13,6 @@ import com.parse.ParseQuery;
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class DogParse {
-
-
     public static void addToDogsTable(long userId, Dog dog) {
         ParseObject newDogParseObject = new ParseObject(DogConsts.DOGS_TABLE);
 

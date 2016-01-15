@@ -33,11 +33,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class MyProfileActivity extends Fragment {
-
     private Boolean isOwner;
     private Long id;
     private String userName;
-
     private EditText firstName;
     private EditText lastName;
     private EditText phone;
@@ -54,7 +52,6 @@ public class MyProfileActivity extends Fragment {
     private RadioButton isSmall;
     private EditText dogAge;
     private String dogPic;
-
     private String errorMessage;
     private static final int SELECT_PHOTO = 100;
     private ProgressBar progressBar;
@@ -62,7 +59,7 @@ public class MyProfileActivity extends Fragment {
 
     public interface Listener
     {
-        public void onFinish();
+        void onFinish();
     }
 
     Listener listener;
