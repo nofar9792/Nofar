@@ -23,8 +23,12 @@ public class Model {
     }
 
     public void init(Context context) {
-        modelSql = new ModelSql(context);
-        modelParse = new ModelParse(context);
+        if(modelSql == null){
+            modelSql = new ModelSql(context);
+        }
+        if(modelParse == null){
+            modelParse = new ModelParse(context);
+        }
     }
 
     public static Model getInstance() {
