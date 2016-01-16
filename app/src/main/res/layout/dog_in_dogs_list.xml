@@ -1,10 +1,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layoutDirection="rtl">
+    android:layoutDirection="rtl"
+    android:focusable="false"
+    android:focusableInTouchMode="false">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -69,11 +70,33 @@
 
     </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:text="מספר טלפון:"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:textSize="20dp"
+            android:id="@+id/phoneInDogsList"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:focusable="false"
+        android:focusableInTouchMode="false">
 
         <Button
             android:layout_width="wrap_content"
@@ -81,7 +104,8 @@
             android:text="התחל טיול"
             android:id="@+id/startTripBtn"
             android:tag="startTripTag"
-            android:onClick="startTripClick"/>
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -89,7 +113,9 @@
             android:text="סיים טיול"
             android:id="@+id/endTripBtn"
             android:tag="endTripTag"
-            android:onClick="endTripClick"/>
+            android:enabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
 
     </LinearLayout>
 

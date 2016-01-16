@@ -67,15 +67,6 @@ public class UserParse {
         });
     }
 
-    // todo: maybe should be async
-    public static User getCurrentUser() {
-        ParseUser parseUser = ParseUser.getCurrentUser();
-        if (parseUser != null) {
-            return convertFromParseUserToUser(parseUser);
-        }
-        return null;
-    }
-
     public static void logOut(){
         ParseUser.logOut();
     }
@@ -125,15 +116,8 @@ public class UserParse {
             public void done(List<ParseUser> list, ParseException e) {
                 List<DogWalker> dogWalkers = new LinkedList<>();
                 if (e == null) {
-                    for (ParseObject parseUser : list) {
-                        long userId = parseUser.getLong(UserConsts.USER_ID);
-                        String userName = ((ParseUser) parseUser).getUsername();
-                        String firstName = parseUser.getString(UserConsts.FIRST_NAME);
-                        String lastName = parseUser.getString(UserConsts.LAST_NAME);
-                        String phoneNumber = parseUser.getString(UserConsts.PHONE_NUMBER);
-                        String address = parseUser.getString(UserConsts.ADDRESS);
-                        String city = parseUser.getString(UserConsts.CITY);
-                        dogWalkers.add(new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city));
+                    for (ParseUser parseUser : list) {;
+                        dogWalkers.add((DogWalker)convertFromParseUserToUser(parseUser));
                     }
                     listener.onResult(dogWalkers);
                 } else {

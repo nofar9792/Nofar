@@ -1,5 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -23,28 +24,28 @@ import com.example.nofarcohenzedek.dogo.Model.User;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MessagesActivity extends Activity {
-    ListView list;
-    List<User> data;
-    Boolean isOwner;
-    ProgressBar progressBar;
-    User currentUser;
+public class MessagesActivity extends Fragment
+{
+    private ListView list;
+    private List<User> data;
+    private Boolean isOwner;
+    private ProgressBar progressBar;
+    private User currentUser;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_messages);
-        setActionBar((Toolbar) findViewById(R.id.messagesToolBar));
-        //getActionBar().setDisplayShowTitleEnabled(false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.activity_messages, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        isOwner = getIntent().getBooleanExtra("isOwner", false);
-        progressBar = (ProgressBar) findViewById(R.id.messagesProgressBar);
+        Bundle args = getArguments();
+        isOwner = args.getBoolean("isOwner");
+        progressBar = (ProgressBar) view.findViewById(R.id.messagesProgressBar);
         data = new LinkedList<>();
         progressBar.setVisibility(View.VISIBLE);
-        list = (ListView) findViewById(R.id.messagesList);
+        list = (ListView) view.findViewById(R.id.messagesList);
         final MessagesAdapter adapter = new MessagesAdapter();
 
-        Model.getInstance().getCurrentUser(new Model.GetUserListener() {
+        Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
                 currentUser = user;
@@ -53,21 +54,27 @@ public class MessagesActivity extends Activity {
                     Model.getInstance().getRequestForDogWalker(user.getId(), new Model.GetDogOwnersListener() {
                         @Override
                         public void onResult(List<DogOwner> dogOwners) {
-                            for (DogOwner dogOwner : dogOwners) {
-                                data.add(dogOwner);
-                                list.setAdapter(adapter);
+                            if (!dogOwners.isEmpty()) {
+                                for (DogOwner dogOwner : dogOwners) {
+                                    data.add(dogOwner);
+                                    list.setAdapter(adapter);
+                                }
+                            } else {
+                                ((TextView) view.findViewById(R.id.errorInMessagesList)).setText("אין הודעות להצגה");
                             }
                             progressBar.setVisibility(View.GONE);
                         }
                     });
-                }
-                else{
+                } else {
                     Model.getInstance().getRequestOfDogOwner(user.getId(), new Model.GetDogWalkersListener() {
                         @Override
                         public void onResult(List<DogWalker> dogWalkers) {
+                            if (!dogWalkers.isEmpty()) {
                             for (DogWalker dogWalker : dogWalkers) {
                                 data.add(dogWalker);
                                 list.setAdapter(adapter);
+                            }}else {
+                                ((TextView) view.findViewById(R.id.errorInMessagesList)).setText("אין הודעות להצגה");
                             }
                             progressBar.setVisibility(View.GONE);
                         }
@@ -75,58 +82,8 @@ public class MessagesActivity extends Activity {
                 }
             }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-
-//        Model.getInstance().getCurrentUser(new Model.GetUserListener2() {
-//            @Override
-//            public void onResult(User user) {
-//                if (user instanceof DogOwner) {
-//                    getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-//                } else {
-//                    getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
-//                }
-//            }
-//        });
-
-        if (isOwner) {
-            getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_prime_dog_walker, menu);
-        }
-
-        return true;
-        //return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // todo: ???
-        int id = item.getItemId();
-
-        Intent intent = null;
-
-        if (id == R.id.searchDW) {
-            intent = new Intent(this, SearchActivity.class);
-        } else if (id == R.id.map) {
-            intent = new Intent(this, MapsActivity.class);
-        } else if (id == R.id.tripsReport) {
-            intent = new Intent(this, TripsReportActivity.class);
-        } else if (id == R.id.dogsList) {
-            intent = new Intent(this, DogsListActivity.class);
-        } else if (id == R.id.myProfile) {
-            intent = new Intent(this, MyProfileActivity.class);
-
-        }
-
-        intent.putExtra("isOwner", isOwner);
-        intent.putExtra("userId", getIntent().getLongExtra("userId", 0));
-        startActivity(intent);
-
-        return super.onOptionsItemSelected(item);
+        return view;
     }
 
     class MessagesAdapter extends BaseAdapter {
@@ -150,7 +107,7 @@ public class MessagesActivity extends Activity {
         public View getView(final int position, View convertView, ViewGroup parent) {
             if(currentUser instanceof DogWalker) {
                 if (convertView == null) {
-                    LayoutInflater inflater = getLayoutInflater();
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
                     convertView = inflater.inflate(R.layout.walker_requests_row_layout, null);
                     Button acceptButton = (Button) convertView.findViewById(R.id.acceptButton);
                     Button declineButton = (Button) convertView.findViewById(R.id.declineButton);
@@ -182,7 +139,7 @@ public class MessagesActivity extends Activity {
             }
             else{
                 if (convertView == null) {
-                    LayoutInflater inflater = getLayoutInflater();
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
                     convertView = inflater.inflate(R.layout.owner_requests_row_layout, null);
                 }
 

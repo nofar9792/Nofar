@@ -17,14 +17,14 @@ import java.util.List;
  */
 public class CommentSql {
     public static void create(SQLiteDatabase db) {
-        db.execSQL("create table " + CommentConsts.COMMENTS_TABLE + " (" +
+        db.execSQL("create table IF NOT EXISTS " + CommentConsts.COMMENTS_TABLE + " (" +
                 CommentConsts.USER_ID + " TEXT ," +
                 CommentConsts.TEXT + " TEXT ," +
                 CommentConsts.RATING + " INTEGER);");
     }
 
     public static void drop(SQLiteDatabase db) {
-        db.execSQL("drop table " +  CommentConsts.COMMENTS_TABLE + ";");
+        db.execSQL("drop table IF EXISTS " +  CommentConsts.COMMENTS_TABLE + ";");
     }
 
     public static void addToCommentsTable(SQLiteDatabase db, long userId, Comment comment){

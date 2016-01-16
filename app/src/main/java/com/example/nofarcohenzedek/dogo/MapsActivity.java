@@ -1,16 +1,24 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -21,59 +29,87 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.zip.Inflater;
 
-public class MapsActivity extends Activity implements OnMapReadyCallback {
+public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Long userId;
+    private String address;
+    private ProgressBar progressBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.activity_maps, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        //setHasOptionsMenu(true);
 
-        setActionBar((Toolbar) findViewById(R.id.mapToolBar));
-        getActionBar().setDisplayShowTitleEnabled(false);
+        Bundle args = getArguments();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+//         Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        MapFragment mapFragment = (MapFragment) getFragmentManager()
+//                .findFragmentById(R.id.map);
+
+        MapFragment mapFragment = (MapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        progressBar = (ProgressBar) view.findViewById(R.id.mapsProgressBar);
+        userId = args.getLong("userId");
+        address = args.getString("address");
+
+        return view;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
 
-        return true;
-        //return super.onCreateOptionsMenu(menu);
-    }
-
-        @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-            int id = item.getItemId();
-
-            Intent intent = null;
-
-            if (id == R.id.searchDW) {
-                 intent = new Intent(this, SearchActivity.class);
-            } else if (id == R.id.dogsList) {
-                 intent = new Intent(this, DogsListActivity.class);
-            } else if (id == R.id.tripsReport) {
-                 intent = new Intent(this, TripsReportActivity.class);
-            } else if (id == R.id.messages) {
-                 intent = new Intent(this, MessagesActivity.class);
-            } else if (id == R.id.myProfile) {
-                 intent = new Intent(this, MyProfileActivity.class);
-
-            }
-
-            intent.putExtra("isOwner", true);
-            intent.putExtra("userId", getIntent().getLongExtra("userId",0));
-            startActivity(intent);
-
-            return super.onOptionsItemSelected(item);
-        }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_maps);
+//
+//        setActionBar((Toolbar) findViewById(R.id.mapToolBar));
+//        getActionBar().setDisplayShowTitleEnabled(false);
+//        progressBar = (ProgressBar) findViewById(R.id.mapsProgressBar);
+//
+//        userId = getIntent().getLongExtra("userId",0);
+//
+//        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        MapFragment mapFragment = (MapFragment) getFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
+//    }
+//
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+//    {
+//        inflater.inflate(R.menu.menu_prime_dog_owner, menu);
+//    }
+//
+//        @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//            int id = item.getItemId();
+//
+//            Intent intent = null;
+//
+//            if (id == R.id.searchDW) {
+//                 intent = new Intent(this, SearchActivity.class);
+//            } else if (id == R.id.dogsList) {
+//                 intent = new Intent(this, DogsListActivity.class);
+//            } else if (id == R.id.tripsReport) {
+//                 intent = new Intent(this, TripsReportActivity.class);
+//            } else if (id == R.id.messages) {
+//                 intent = new Intent(this, Messa gesActivity.class);
+//            } else if (id == R.id.myProfile) {
+//                 intent = new Intent(this, MyProfileActivity.class);
+//
+//            }
+//
+//            intent.putExtra("isOwner", true);
+//            intent.putExtra("userId", userId);
+//            startActivity(intent);
+//
+//            return super.onOptionsItemSelected(item);
+//        }
 
     /**
      * Manipulates the map once available.
@@ -85,27 +121,34 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng karkom = new LatLng(31.907013, 35.01363900000001);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(karkom));
+        LatLng center = Utilities.getLocationFromAddress(address,getActivity().getApplicationContext());
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         // add all of the dog walkers markers by their address
         Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
             @Override
             public void onResult(List<DogWalker> allDogWalkers) {
-                for (DogWalker currentDogWalker : allDogWalkers) {
+                for (DogWalker currentDogWalker : allDogWalkers)
+                {
                     String finalAddress = currentDogWalker.getAddress() + "," + currentDogWalker.getCity();
-                    LatLng location = getLocationFromAddress(finalAddress);
+                    //LatLng location = getLocationFromAddress(finalAddress);
 
-                    //mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
-                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.manwithdog)));
+                    if(getActivity() != null) {
+                        LatLng location = Utilities.getLocationFromAddress(finalAddress, getActivity().getApplicationContext());
 
-                    mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId())));
-                          //  .icon(BitmapDescriptorFactory.fromPath("/drawable/manwithdog.png")));
+                        //mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
+                        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.manwithdog)));
+
+                        mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId())));
+                        //  .icon(BitmapDescriptorFactory.fromPath("/drawable/manwithdog.png")));
+                    }
+                    progressBar.setVisibility(View.GONE);
+
                 }
             }
         });
@@ -113,8 +156,9 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                Intent intent = new Intent(getApplicationContext(), DogWalkerDetails.class);
-                intent.putExtra("id", marker.getTitle());
+                Intent intent = new Intent(getActivity().getApplicationContext(), DogWalkerDetails.class);
+                intent.putExtra("walkerId", marker.getTitle());
+                intent.putExtra("ownerId", userId);
                 startActivity(intent);
 
                 return true;
@@ -126,24 +170,24 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
         // when marker is pressed, open details activity
     }
 
-    public LatLng getLocationFromAddress(String address)
-    {
-        Geocoder coder = new Geocoder(this);
-        List<Address> addresses = null;
-
-        try
-        {
-            addresses = coder.getFromLocationName(address, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (addresses == null)
-        {
-            return null;
-        }
-
-        return new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-
-    }
+//    public LatLng getLocationFromAddress(String address)
+//    {
+//        Geocoder coder = new Geocoder(this);
+//        List<Address> addresses = null;
+//
+//        try
+//        {
+//            addresses = coder.getFromLocationName(address, 1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (addresses == null)
+//        {
+//            return null;
+//        }
+//
+//        return new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+//
+//    }
 }

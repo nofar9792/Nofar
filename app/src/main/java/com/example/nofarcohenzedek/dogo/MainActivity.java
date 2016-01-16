@@ -29,13 +29,62 @@ public class MainActivity extends Activity {
 
         Model.getInstance().init(getApplicationContext());
 
-//
-//        Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
+        //2
+//        Model.getInstance().getOwnersConnectToWalker(2, new Model.GetDogOwnersListener() {
 //            @Override
-//            public void onResult(List<DogWalker> dogWalkers) {
-//                String s = dogWalkers.get(0).getCity();
+//            public void onResult(List<DogOwner> dogOwners) {
+//                Model.getInstance().getOwnersConnectToWalker(2, new Model.GetDogOwnersListener() {
+//                    @Override
+//                    public void onResult(List<DogOwner> dogOwners) {
+//                        String s = dogOwners.get(0).getCity();
+//
+//                    }
+//                });
+//
+//
 //            }
 //        });
+
+        //2
+//        Model.getInstance().getWalkersConnectToOwner(4, new Model.GetDogWalkersListener() {
+//            @Override
+//            public void onResult(List<DogWalker> dogWalkers) {
+//                Model.getInstance().getWalkersConnectToOwner(4, new Model.GetDogWalkersListener() {
+//                    @Override
+//                    public void onResult(List<DogWalker> dogWalkers) {
+//                        String s = dogWalkers.get(0).getCity();
+//
+//                    }
+//                });
+//
+//            }
+//        });
+
+        //3
+//        Model.getInstance().getRequestForDogWalker(3, new Model.GetDogOwnersListener() {
+//            @Override
+//            public void onResult(List<DogOwner> dogOwners) {
+//                Model.getInstance().getRequestForDogWalker(3, new Model.GetDogOwnersListener() {
+//                    @Override
+//                    public void onResult(List<DogOwner> dogOwners) {
+//                        String s = dogOwners.get(0).getCity();
+//                    }
+//                });
+//            }
+//        });
+
+//        //2
+        Model.getInstance().getRequestOfDogOwner(9, new Model.GetDogWalkersListener() {
+            @Override
+            public void onResult(List<DogWalker> dogWalkers) {
+                Model.getInstance().getRequestOfDogOwner(9, new Model.GetDogWalkersListener() {
+                    @Override
+                    public void onResult(List<DogWalker> dogWalkers) {
+                        String s = dogWalkers.get(0).getCity();
+                    }
+                });
+            }
+        });
 
         ImageButton signUp = (ImageButton) findViewById(R.id.sign_up_button);
     }

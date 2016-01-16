@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.nofarcohenzedek.dogo.Model.Common.WalkerConsts;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,6 +24,10 @@ public class LastUpdateSql {
                 LAST_UPDATE_DATE + " TEXT);");
     }
 
+    public static void drop(SQLiteDatabase db) {
+        db.execSQL("drop table IF EXISTS " +  LAST_UPDATE_TABLE + ";");
+    }
+
     public static String getLastUpdateDate(SQLiteDatabase db, String tableName) {
         String where = TABLE_NAME + " = ?";
         String[] args = {tableName};
@@ -35,13 +41,19 @@ public class LastUpdateSql {
     }
 
     public static void setLastUpdateDate(SQLiteDatabase db, String tableName, Date newDate) {
+        String where = TABLE_NAME + " = ?";
+        String[] args = {tableName};
+
         ContentValues values = new ContentValues();
         values.put(TABLE_NAME, tableName);
         values.put(LAST_UPDATE_DATE, convertToParseFormat(newDate));
 
-        if (db.insert(LAST_UPDATE_TABLE, null, values) == -1) {
-            if (db.replace(LAST_UPDATE_TABLE, null, values) == -1) {
-                Log.e("LastUpdateDate", "Fail to write to sql");
+        long updateResult = db.update(LAST_UPDATE_TABLE, values, where, args);
+
+        // Check in the update didnt succeed(-1) or didnt do nothing(0)
+        if (updateResult == -1 || updateResult == 0) {
+            if (db.insert(LAST_UPDATE_TABLE, null, values) == -1) {
+                Log.e("UserSql", "Fail to write to sql");
             }
         }
     }

@@ -69,7 +69,6 @@ public class DogWalkerParse {
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
-
                 if (e == null) {
                     long userId = parseObject.getLong(WalkerConsts.USER_ID);
                     int age = parseObject.getInt(WalkerConsts.AGE);
