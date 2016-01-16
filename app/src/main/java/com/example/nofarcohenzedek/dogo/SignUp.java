@@ -41,7 +41,7 @@ public class SignUp extends Activity {
     private String address;
     private String dogName;
     private String dogAge;
-    private String dogPic;
+    private String picRef;
     private RadioButton isSmall;
     private RadioButton isMedium;
     private RadioButton isBig;
@@ -52,13 +52,12 @@ public class SignUp extends Activity {
     private CheckBox isComfortableOnEvening;
     private static final int SELECT_PHOTO = 100;
     private String errorMessage;
+    private  Bitmap dogPic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
-        dogPic = "";
     }
 
     /**
@@ -93,25 +92,26 @@ public class SignUp extends Activity {
      * This method save the new user
      * @param view
      */
-    public void saveBTN(View view)
-    {
+    public void saveBTN(View view) {
         // Get all current details
         initAllDetails();
 
         // Check if all details are validate
-        if(isValid())
-        {
+        if (isValid()) {
             // Check the type of user, and save this user on db
             if (isOwner.isChecked()) {
 
                 // Create the dog object
                 Dog dog = new Dog(dogName,
                         (isSmall.isChecked() ? DogSize.Small : (isMedium.isChecked() ? DogSize.Medium : DogSize.Large)),
-                        Long.parseLong(dogAge), dogPic);
+                        Long.parseLong(dogAge), picRef);
 
                 // Save the owner on DB
                 try {
                     Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
+                    if (picRef != null) {
+                        Model.getInstance().saveImage(picRef, dogPic);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     // TODO tell the user that something went wrong (username is already taken)
@@ -131,8 +131,7 @@ public class SignUp extends Activity {
             // Connect to dogo with the new username and password
             Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
                 @Override
-                public void onResult(User user)
-                {
+                public void onResult(User user) {
                     if (user != null) {
                         if (user instanceof DogOwner) {
                             Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
@@ -145,10 +144,8 @@ public class SignUp extends Activity {
                             intent.putExtra("userId", user.getId());
                             startActivity(intent);
                         }
-                    }
-                    else
-                    {
-                        TextView error = (TextView)findViewById(R.id.error);
+                    } else {
+                        TextView error = (TextView) findViewById(R.id.error);
                         error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
                     }
                 }
@@ -189,7 +186,7 @@ public class SignUp extends Activity {
         }
         else if (isOwner.isChecked())
         {
-            if (dogName.isEmpty() || dogAge.isEmpty() || dogPic.isEmpty() ||
+            if (dogName.isEmpty() || dogAge.isEmpty() ||
                     (!isBig.isChecked() && !isMedium.isChecked() && !isSmall.isChecked()))
             {
                 errorMessage = "אנא מלא את פרטי הכלב.";
@@ -259,10 +256,10 @@ public class SignUp extends Activity {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    Bitmap yourSelectedImage = BitmapFactory.decodeStream(imageStream);
+                    dogPic = BitmapFactory.decodeStream(imageStream);
 
-                    dogPic = selectedImage.getPath();
-                    ((ImageView)findViewById(R.id.dogPic)).setImageBitmap(yourSelectedImage);
+                    picRef = selectedImage.getPath();
+                    ((ImageView)findViewById(R.id.dogPic)).setImageBitmap(dogPic);
                 }
         }
     }

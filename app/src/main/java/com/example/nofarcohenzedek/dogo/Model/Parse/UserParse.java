@@ -67,15 +67,6 @@ public class UserParse {
         });
     }
 
-    // todo: maybe should be async
-    public static User getCurrentUser() {
-        ParseUser parseUser = ParseUser.getCurrentUser();
-        if (parseUser != null) {
-            return convertFromParseUserToUser(parseUser);
-        }
-        return null;
-    }
-
     public static void logOut(){
         ParseUser.logOut();
     }

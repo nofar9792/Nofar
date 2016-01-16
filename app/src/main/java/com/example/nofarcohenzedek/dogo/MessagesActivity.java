@@ -33,9 +33,8 @@ public class MessagesActivity extends Fragment
     private User currentUser;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.activity_messages, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.activity_messages, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
 
         Bundle args = getArguments();
@@ -46,40 +45,36 @@ public class MessagesActivity extends Fragment
         list = (ListView) view.findViewById(R.id.messagesList);
         final MessagesAdapter adapter = new MessagesAdapter();
 
-        Model.getInstance().getCurrentUser(new Model.GetUserListener()
-        {
+        Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
             @Override
-            public void onResult(User user)
-            {
+            public void onResult(User user) {
                 currentUser = user;
 
-                if (user instanceof DogWalker)
-                {
-                    Model.getInstance().getRequestForDogWalker(user.getId(), new Model.GetDogOwnersListener()
-                    {
+                if (user instanceof DogWalker) {
+                    Model.getInstance().getRequestForDogWalker(user.getId(), new Model.GetDogOwnersListener() {
                         @Override
-                        public void onResult(List<DogOwner> dogOwners)
-                        {
-                            for (DogOwner dogOwner : dogOwners)
-                            {
-                                data.add(dogOwner);
-                                list.setAdapter(adapter);
+                        public void onResult(List<DogOwner> dogOwners) {
+                            if (!dogOwners.isEmpty()) {
+                                for (DogOwner dogOwner : dogOwners) {
+                                    data.add(dogOwner);
+                                    list.setAdapter(adapter);
+                                }
+                            } else {
+                                ((TextView) view.findViewById(R.id.errorInMessagesList)).setText("אין הודעות להצגה");
                             }
                             progressBar.setVisibility(View.GONE);
                         }
                     });
-                }
-                else
-                {
-                    Model.getInstance().getRequestOfDogOwner(user.getId(), new Model.GetDogWalkersListener()
-                    {
+                } else {
+                    Model.getInstance().getRequestOfDogOwner(user.getId(), new Model.GetDogWalkersListener() {
                         @Override
-                        public void onResult(List<DogWalker> dogWalkers)
-                        {
-                            for (DogWalker dogWalker : dogWalkers)
-                            {
+                        public void onResult(List<DogWalker> dogWalkers) {
+                            if (!dogWalkers.isEmpty()) {
+                            for (DogWalker dogWalker : dogWalkers) {
                                 data.add(dogWalker);
                                 list.setAdapter(adapter);
+                            }}else {
+                                ((TextView) view.findViewById(R.id.errorInMessagesList)).setText("אין הודעות להצגה");
                             }
                             progressBar.setVisibility(View.GONE);
                         }
@@ -90,52 +85,6 @@ public class MessagesActivity extends Fragment
 
         return view;
     }
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_messages);
-//        setActionBar((Toolbar) findViewById(R.id.messagesToolBar));
-//        //getActionBar().setDisplayShowTitleEnabled(false);
-//
-//        isOwner = getIntent().getBooleanExtra("isOwner", false);
-//        progressBar = (ProgressBar) findViewById(R.id.messagesProgressBar);
-//        data = new LinkedList<>();
-//        progressBar.setVisibility(View.VISIBLE);
-//        list = (ListView) findViewById(R.id.messagesList);
-//        final MessagesAdapter adapter = new MessagesAdapter();
-//
-//        Model.getInstance().getCurrentUser(new Model.GetUserListener() {
-//            @Override
-//            public void onResult(User user) {
-//                currentUser = user;
-//
-//                if (user instanceof DogWalker) {
-//                    Model.getInstance().getRequestForDogWalker(user.getId(), new Model.GetDogOwnersListener() {
-//                        @Override
-//                        public void onResult(List<DogOwner> dogOwners) {
-//                            for (DogOwner dogOwner : dogOwners) {
-//                                data.add(dogOwner);
-//                                list.setAdapter(adapter);
-//                            }
-//                            progressBar.setVisibility(View.GONE);
-//                        }
-//                    });
-//                } else {
-//                    Model.getInstance().getRequestOfDogOwner(user.getId(), new Model.GetDogWalkersListener() {
-//                        @Override
-//                        public void onResult(List<DogWalker> dogWalkers) {
-//                            for (DogWalker dogWalker : dogWalkers) {
-//                                data.add(dogWalker);
-//                                list.setAdapter(adapter);
-//                            }
-//                            progressBar.setVisibility(View.GONE);
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//    }
 
     class MessagesAdapter extends BaseAdapter {
 

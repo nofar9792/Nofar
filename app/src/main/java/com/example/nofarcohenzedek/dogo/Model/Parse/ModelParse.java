@@ -1,11 +1,10 @@
 package com.example.nofarcohenzedek.dogo.Model.Parse;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
-import com.example.nofarcohenzedek.dogo.Model.Comment;
 import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
-import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Request;
@@ -33,59 +32,29 @@ public class ModelParse {
             @Override
             public void onResult(User user) {
                 if (user != null) {
-                    addDetailsByInstance(user, new Model.GetUserListener() {
-                        @Override
-                        public void onResult(User user) {
-                            listener.onResult(user);
-                        }
-                    });
+                    addDetailsByInstance(user);
                 }
                 listener.onResult(user);
             }
         });
     }
 
-    public void getCurrentUser(final Model.GetUserListener listener){
-        User user = UserParse.getCurrentUser();
-        addDetailsByInstance(user, new Model.GetUserListener() {
+    public void getUserById(long userId, final Model.GetUserListener listener) {
+        UserParse.getUserById(userId, new Model.GetUserListener() {
             @Override
-            public void onResult(User user) {
+            public void onResult(final User user) {
+                addDetailsByInstance(user);
                 listener.onResult(user);
             }
         });
     }
 
-    public void addDetailsByInstance(final User user,final Model.GetUserListener listener) {
+    private void addDetailsByInstance(final User user) {
         if (user instanceof DogWalker) {
-            DogWalkerParse.getDogWalkerDetailsById(user.getId(), new GetDogWalkerDetailsListener() {
-                @Override
-                public void onResult(long userId, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
-                    final DogWalker dogWalker = (DogWalker) user;
-                    dogWalker.setAge(age);
-                    dogWalker.setPriceForHour(priceForHour);
-                    dogWalker.setIsComfortableOnMorning(isComfortableOnMorning);
-                    dogWalker.setIsComfortableOnAfternoon(isComfortableOnAfternoon);
-                    dogWalker.setIsComfortableOnEvening(isComfortableOnEvening);
-
-                    getCommentsOfDogWalker(userId, new Model.GetCommentsListener() {
-                        @Override
-                        public void onResult(List<Comment> comments) {
-                            dogWalker.setComments(comments);
-                            listener.onResult(dogWalker);
-                        }
-                    });
-                }
-            });
+            DogWalkerParse.addDogWalkerDetails((DogWalker) user);
+            CommentParse.addCommentsToDogWalker((DogWalker) user);
         } else {
-            getDogByUserId(user.getId(), new Model.GetDogListener() {
-                @Override
-                public void onResult(Dog dog) {
-                    final DogOwner dogOwner = (DogOwner) user;
-                    ((DogOwner) user).setDog(dog);
-
-                    listener.onResult(dogOwner);
-                }
-            });
+            ((DogOwner) user).setDog(DogParse.getDogByUserIdSync(user.getId()));
         }
     }
 
@@ -95,52 +64,13 @@ public class ModelParse {
 
     //endregion
 
-    //region Dog Methods
-//    public void getDogById(long id, final Model.GetDogListener listener) {
-//        DogParse.getDogById(id, listener);
-//    }
-
     public void getDogByUserId(long userId, final Model.GetDogListener listener) {
         DogParse.getDogByUserId(userId, listener);
-    }
-
-    public void addDog(long userId, Dog dog) {
-        DogParse.addToDogsTable(userId, dog);
-    }
-
-    public void addDog(long userId, String name, DogSize size, long age, String picRef) {
-        DogParse.addToDogsTable(userId, name, size, age, picRef);
     }
 
     //endregion
 
     //region Dog Walker Methods
-    public void getDogWalkerById(final long userId, final Model.GetDogWalkerListener listener) {
-        UserParse.getUserById(userId, new Model.GetUserListener() {
-            @Override
-            public void onResult(final User user) {
-                DogWalkerParse.getDogWalkerDetailsById(userId, new GetDogWalkerDetailsListener() {
-                    @Override
-                    public void onResult(long userId, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
-                        final DogWalker dogWalker = (DogWalker) user;
-                        dogWalker.setAge(age);
-                        dogWalker.setPriceForHour(priceForHour);
-                        dogWalker.setIsComfortableOnMorning(isComfortableOnMorning);
-                        dogWalker.setIsComfortableOnAfternoon(isComfortableOnAfternoon);
-                        dogWalker.setIsComfortableOnEvening(isComfortableOnEvening);
-
-                        getCommentsOfDogWalker(userId, new Model.GetCommentsListener() {
-                            @Override
-                            public void onResult(List<Comment> comments) {
-                                dogWalker.setComments(comments);
-                                listener.onResult(dogWalker);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
 
     public DogWalker getDogWalkerByIdSync(long userId) {
         User user = UserParse.getUserByIdSync(userId);
@@ -179,22 +109,6 @@ public class ModelParse {
     //endregion
 
     //region Dog Owner Methods
-    public void getDogOwnerById(long userId, final Model.GetDogOwnerListener listener) {
-        UserParse.getUserById(userId, new Model.GetUserListener() {
-            @Override
-            public void onResult(final User user) {
-                DogParse.getDogByUserId(user.getId(), new Model.GetDogListener() {
-                    @Override
-                    public void onResult(Dog dog) {
-                        DogOwner dogOwner = (DogOwner) user;
-                        ((DogOwner) user).setDog(dog);
-
-                        listener.onResult(dogOwner);
-                    }
-                });
-            }
-        });
-    }
 
     public DogOwner getDogOwnerByIdSync(long userId) {
         final User user = UserParse.getUserByIdSync(userId);
@@ -208,7 +122,7 @@ public class ModelParse {
     public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
                             String address, String city, Dog dog) throws Exception {
         long newUserId = UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, false);
-        addDog(newUserId, dog);
+        DogParse.addToDogsTable(newUserId, dog);
 
         return newUserId;
     }
@@ -256,10 +170,6 @@ public class ModelParse {
             }
         });
     }
-
-//    public void addTrip(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
-//        TripParse.addToTripsTable(dogOwnerId, dogId, dogWalkerId, startOfWalking, endOfWalking, isPaid);
-//    }
 
     public long startTrip(long dogOwnerId, long dogWalkerId) {
         return TripParse.startTrip(dogOwnerId, dogWalkerId);
@@ -362,6 +272,9 @@ public class ModelParse {
         });
     }
 
+    /*
+     * get all status requests of dog owner
+     */
     public void getRequestByDogOwner(long dogOwnerId, String fromDate, final Model.GetRequestsListener listener) {
         RequestParse.getRequestByDogOwner(dogOwnerId, fromDate, new Model.GetRequestsListener() {
             @Override
@@ -376,11 +289,19 @@ public class ModelParse {
 
     //endregion
 
-    //region Interfaces
-    public interface GetUsersListener {
-        void onResult(List<User> users);
+    //region Image Methods
+
+    public void saveImage(String imageName, Bitmap picture){
+        ImageParse.addToImagesTable(imageName,picture);
     }
 
+    public void getImage(String imageName, Model.GetBitmapListener listener){
+        ImageParse.getImage(imageName, listener);
+    }
+
+    //endregion
+
+    //region Interfaces
     public interface GetIdsListener {
         void onResult(List<Long> ids);
     }

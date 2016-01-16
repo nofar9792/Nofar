@@ -16,6 +16,7 @@ import android.widget.Toolbar;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.User;
 
 import java.util.List;
 
@@ -46,9 +47,10 @@ public class DogWalkerDetails extends Activity
         final CheckBox noon = (CheckBox) findViewById(R.id.afternoonInDetails);
         final CheckBox evening = (CheckBox) findViewById(R.id.eveningInDetails);
 
-        Model.getInstance().getDogWalkerById(walkerId, new Model.GetDogWalkerListener() {
+        Model.getInstance().getUserById(walkerId, new Model.GetUserListener() {
             @Override
-            public void onResult(DogWalker dogWalker) {
+            public void onResult(User user) {
+                DogWalker dogWalker = (DogWalker)user;
                 firstName.setText(dogWalker.getFirstName());
                 lastName.setText(dogWalker.getLastName());
                 city.setText(dogWalker.getCity());

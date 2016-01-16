@@ -27,6 +27,7 @@ import android.widget.Toolbar;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.User;
 import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -181,15 +182,13 @@ public class SearchActivity extends Fragment
             if (!radius.equals(""))
             {
                 if (owner == null) {
-                    Model.getInstance().getDogOwnerById(args.getLong("userId"), new Model.GetDogOwnerListener()
-                    {
-                        @Override
-                        public void onResult(DogOwner dogOwner)
-                        {
-                            owner = dogOwner;
-                            searchByDistance(Long.valueOf(radius));
-                        }
-                    });
+                    Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
+                                @Override
+                                public void onResult(User user) {
+                                    owner = (DogOwner)user;
+                                    searchByDistance(Long.valueOf(radius));
+                                }
+                            });
                 }
                 else
                 {

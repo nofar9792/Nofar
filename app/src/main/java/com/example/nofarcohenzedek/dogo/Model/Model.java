@@ -1,6 +1,8 @@
 package com.example.nofarcohenzedek.dogo.Model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
@@ -41,20 +43,17 @@ public class Model {
         modelParse.logIn(userName, password, listener);
     }
 
-    public void getCurrentUser(GetUserListener listener) {
-        modelParse.getCurrentUser(listener);
-    }
-
     public void logOut() {
         modelParse.logOut();
+    }
+
+    public void getUserById(long userId, final Model.GetUserListener listener) {
+        modelParse.getUserById(userId, listener);
     }
 
     //endregion
 
     //region Dog Walker Methods
-    public void getDogWalkerById(long userId, GetDogWalkerListener listener) {
-        modelParse.getDogWalkerById(userId, listener);
-    }
 
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
         final List<DogWalker> dogWalkersResult = modelSql.getAllDogWalkers();
@@ -89,9 +88,6 @@ public class Model {
     //endregion
 
     //region Dog Owner Methods
-    public void getDogOwnerById(long userId, GetDogOwnerListener listener) {
-        modelParse.getDogOwnerById(userId, listener);
-    }
 
     public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
                             String address, String city, Dog dog) throws Exception {
@@ -238,6 +234,18 @@ public class Model {
     }
     //endregion
 
+    //region Image Methods
+
+    public void saveImage(String imageName, Bitmap picture){
+        modelParse.saveImage(imageName, picture);
+    }
+
+    public void getImage(String imageName, Model.GetBitmapListener listener){
+        modelParse.getImage(imageName, listener);
+    }
+
+    //endregion
+
     //region Interfaces
     public interface GetUserListener {
         void onResult(User user);
@@ -246,21 +254,8 @@ public class Model {
     public interface GetDogListener {
         void onResult(Dog dog);
     }
-
-//    public interface GetDogsListener {
-//        void onResult(List<Dog> dogs);
-//    }
-
-    public interface GetDogWalkerListener {
-        void onResult(DogWalker dogWalker);
-    }
-
     public interface GetDogWalkersListener {
         void onResult(List<DogWalker> dogWalkers);
-    }
-
-    public interface GetDogOwnerListener {
-        void onResult(DogOwner dogOwner);
     }
 
     public interface GetDogOwnersListener {
@@ -277,6 +272,10 @@ public class Model {
 
     public interface GetRequestsListener {
         void onResult(List<Request> requests);
+    }
+
+    public interface GetBitmapListener {
+        void onResult(Bitmap picture);
     }
     //endregion
 }

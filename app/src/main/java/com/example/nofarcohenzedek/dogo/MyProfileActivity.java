@@ -87,8 +87,8 @@ public class MyProfileActivity extends Fragment {
             view.findViewById(R.id.dogOwnerSectionInMyProfile).setVisibility(View.VISIBLE);
         }
 
-        Model.getInstance().getCurrentUser(new Model.GetUserListener() {
-            @Override
+        Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
+              @Override
             public void onResult(User user) {
                 id = user.getId();
                 userName = user.getUserName();
@@ -135,17 +135,16 @@ public class MyProfileActivity extends Fragment {
                 progressBar.setVisibility(View.GONE);
             }
         });
-
         // listeners
 
-        ((Button)view.findViewById(R.id.saveChangesMyProfile)).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.saveChangesMyProfile).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveChangesClick(v);
             }
         });
 
-        ((Button)view.findViewById(R.id.btn_openGallery)).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.btn_openGallery).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openGalleryBTN(v);
@@ -334,7 +333,8 @@ public class MyProfileActivity extends Fragment {
         }
         else if (isOwner)
         {
-            if (dogName.getText().toString().isEmpty() || dogAge.getText().toString().isEmpty() || dogPic.isEmpty() ||
+            // todo: i remove "dogPic.isEmpty() ||" maybe picture is not must
+            if (dogName.getText().toString().isEmpty() || dogAge.getText().toString().isEmpty() ||
                     (!isBig.isChecked() && !isMedium.isChecked() && !isSmall.isChecked()))
             {
                 errorMessage = "אנא מלא את פרטי הכלב.";

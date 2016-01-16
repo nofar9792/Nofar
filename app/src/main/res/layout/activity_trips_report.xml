@@ -27,8 +27,6 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="com.example.nofarcohenzedek.dogo.TripsReportActivity"
-        android:background="@color/colorBackground"
         android:layoutDirection="rtl">
 
         <LinearLayout

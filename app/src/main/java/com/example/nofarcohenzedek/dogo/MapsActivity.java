@@ -137,14 +137,16 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
                 {
                     String finalAddress = currentDogWalker.getAddress() + "," + currentDogWalker.getCity();
                     //LatLng location = getLocationFromAddress(finalAddress);
-                    LatLng location = Utilities.getLocationFromAddress(finalAddress, getActivity().getApplicationContext());
 
-                    //mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
-                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.manwithdog)));
+                    if(getActivity() != null) {
+                        LatLng location = Utilities.getLocationFromAddress(finalAddress, getActivity().getApplicationContext());
 
-                    mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId())));
-                          //  .icon(BitmapDescriptorFactory.fromPath("/drawable/manwithdog.png")));
+                        //mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
+                        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.manwithdog)));
 
+                        mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId())));
+                        //  .icon(BitmapDescriptorFactory.fromPath("/drawable/manwithdog.png")));
+                    }
                     progressBar.setVisibility(View.GONE);
 
                 }
