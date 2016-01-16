@@ -81,7 +81,9 @@
             android:name=".TripsReportActivity"
             android:label="TripsReportActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".DogOwnerDetails"
+            android:label="@string/title_activity_dog_owner_details"></activity>
     </application>
 
 </manifest>
