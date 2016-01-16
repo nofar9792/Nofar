@@ -53,6 +53,7 @@ public class SignUp extends Activity {
     private static final int SELECT_PHOTO = 100;
     private String errorMessage;
     private  Bitmap dogPic;
+    private boolean isSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,9 @@ public class SignUp extends Activity {
      * @param view
      */
     public void saveBTN(View view) {
+        TextView error = (TextView) findViewById(R.id.error);
+        isSaved = true;
+
         // Get all current details
         initAllDetails();
 
@@ -113,8 +117,14 @@ public class SignUp extends Activity {
                         Model.getInstance().saveImage(picRef, dogPic);
                     }
                 } catch (Exception e) {
+                    // Check if this userName exist
+                    if (e.getMessage().equals("user already exist"))
+                    {
+                        error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
+                    }
+
+                    isSaved = false;
                     e.printStackTrace();
-                    // TODO tell the user that something went wrong (username is already taken)
                 }
             } else {
                 // Save the walker on DB
@@ -123,33 +133,45 @@ public class SignUp extends Activity {
                             Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
                             isComfortableOnEvening.isChecked());
                 } catch (Exception e) {
+                    // Check if this userName exist
+                    if (e.getMessage().equals("user already exist"))
+                    {
+                        error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
+                    }
+
+                    isSaved = false;
                     e.printStackTrace();
-                    // TODO tell the user that something went wrong (username is already taken)
                 }
             }
 
-            // Connect to dogo with the new username and password
-            Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
-                @Override
-                public void onResult(User user) {
-                    if (user != null) {
-                        if (user instanceof DogOwner) {
-                            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                            intent.putExtra("isOwner", true);
+            // Connect to dogo with the new username and password - only if user succeed to sign.
+            if (isSaved) {
+                Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
+                    @Override
+                    public void onResult(User user) {
+                        if (user != null)
+                        {
+                            Intent intent = new Intent(getApplicationContext(),ActionBarActivity.class);
                             intent.putExtra("userId", user.getId());
+
+                            if (user instanceof DogOwner)
+                            {
+                                intent.putExtra("isOwner", true);
+                                intent.putExtra("address", user.getAddress() + ", " + user.getCity());
+                            }
+                            else
+                            {
+                                intent.putExtra("isOwner", false);
+                            }
+
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(getApplicationContext(), DogsListActivity.class);
-                            intent.putExtra("isOwner", false);
-                            intent.putExtra("userId", user.getId());
-                            startActivity(intent);
+                            TextView error = (TextView) findViewById(R.id.error);
+                            error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
                         }
-                    } else {
-                        TextView error = (TextView) findViewById(R.id.error);
-                        error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
                     }
-                }
-            });
+                });
+            }
         }
     }
 
@@ -258,6 +280,7 @@ public class SignUp extends Activity {
                     }
                     dogPic = BitmapFactory.decodeStream(imageStream);
 
+                    // Save selected image, and path
                     picRef = selectedImage.getPath();
                     ((ImageView)findViewById(R.id.dogPic)).setImageBitmap(dogPic);
                 }

@@ -30,7 +30,7 @@ public class DogOwnerDetails extends Activity {
         setContentView(R.layout.activity_dog_owner_details);
 
         Intent intent = getIntent();
-        final String dogOwnerId = intent.getStringExtra("id");
+        final String dogOwnerId = intent.getStringExtra("dogOwnerId");
 
         final TextView firstName = (TextView) findViewById(R.id.firstNameInDetails);
         final TextView lastName = (TextView) findViewById(R.id.lastNameInDetails);
@@ -43,6 +43,7 @@ public class DogOwnerDetails extends Activity {
         final RadioButton isSmall = (RadioButton) findViewById(R.id.isSmallForDetais);
         final ImageView dogPic = (ImageView) findViewById(R.id.dogPicForDetais);
 
+        // Get the dog owner
         Model.getInstance().getUserById(Long.parseLong(dogOwnerId), new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
@@ -55,18 +56,14 @@ public class DogOwnerDetails extends Activity {
                     dogName.setText(dog.getName());
                     dogAge.setText(String.valueOf(dog.getAge()));
 
-                    // Create ImageView
-                    // // TODO: 16/01/2016 load the image of dog
-                    //                InputStream imageStream = null;
-                    //                try {
-                    //                    Uri selectedImage = Uri.parse("content://com.google.android.apps.photos.contentprovider/0/1/content%3A%2F%2Fmedia%2Fexternal%2Fimages%2Fmedia%2F32317/NO_TRANSFORM/66117322");
-                    //                    imageStream = getContentResolver().openInputStream(selectedImage);
-                    //                } catch (FileNotFoundException e) {
-                    //                    e.printStackTrace();
-                    //                }
-                    //                dogPic.setImageBitmap(BitmapFactory.decodeStream(imageStream));
-                    //
-                    //                dogPic.setImageURI(Uri.fromFile(new File(dog.getPicRef())));
+                    // Load the picture of dog
+                    String picRef = (((DogOwner) user).getDog().getPicRef());
+                    Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
+                        @Override
+                        public void onResult(Bitmap picture) {
+                            dogPic.setImageBitmap(picture);
+                        }
+                    });
 
                     // Check which size the dog is.
                     if (dog.getSize().name().equals(DogSize.Large.name())) {

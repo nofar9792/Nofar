@@ -26,6 +26,13 @@ public class ImageParse {
         byte[] picBytes = stream.toByteArray();
 
         ParseFile imageParse = new ParseFile(picBytes, imageName);
+
+        try {
+            imageParse.save();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         ParseObject parseObject = new ParseObject(IMAGES_TABLE);
         parseObject.put(IMAGE_NAME, imageName);
         parseObject.put(FILE, imageParse);
@@ -40,14 +47,22 @@ public class ImageParse {
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject parseObject, ParseException e) {
-                ParseFile imageParse = parseObject.getParseFile(FILE);
-                try {
-                    byte[] picBytes = imageParse.getData();
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(picBytes, 0, picBytes.length);
+                // Check if this picture exist on DB
+                if (parseObject != null) {
+                    try {
+                        ParseFile imageParse = parseObject.getParseFile(FILE);
+                        byte[] picBytes = imageParse.getData();
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(picBytes, 0, picBytes.length);
 
-                    listener.onResult(bitmap);
-                } catch (ParseException ex) {
-                    ex.printStackTrace();
+                        listener.onResult(bitmap);
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                        listener.onResult(null);
+                    }
+                }
+                else
+                {
+                    listener.onResult(null);
                 }
             }
         });

@@ -129,7 +129,15 @@ public class MyProfileActivity extends Fragment {
                     isSmall.setChecked((size == DogSize.Small ? true : false));
                     dogAge.setText(Long.toString(((DogOwner) user).getDog().getAge()));
 
-                    // TODO : DOG PIC IS EMPTY! LOAD PIC!
+                    // Load the picture of dog
+                    dogPic = (((DogOwner) user).getDog().getPicRef());
+
+                    Model.getInstance().getImage(dogPic, new Model.GetBitmapListener() {
+                        @Override
+                        public void onResult(Bitmap picture) {
+                            ((ImageView) currentView.findViewById(R.id.dogPicMP)).setImageBitmap(picture);
+                        }
+                    });
                 }
 
                 progressBar.setVisibility(View.GONE);
