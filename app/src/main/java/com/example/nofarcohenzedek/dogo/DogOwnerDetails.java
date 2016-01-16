@@ -16,6 +16,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.User;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,51 +43,47 @@ public class DogOwnerDetails extends Activity {
         final RadioButton isSmall = (RadioButton) findViewById(R.id.isSmallForDetais);
         final ImageView dogPic = (ImageView) findViewById(R.id.dogPicForDetais);
 
-        Model.getInstance().getDogOwnerById(Long.parseLong(dogOwnerId), new Model.GetDogOwnerListener() {
+        Model.getInstance().getUserById(Long.parseLong(dogOwnerId), new Model.GetUserListener() {
             @Override
-            public void onResult(DogOwner dogOwner) {
-                firstName.setText(dogOwner.getFirstName());
-                lastName.setText(dogOwner.getLastName());
-                city.setText(dogOwner.getCity());
-                address.setText(dogOwner.getAddress());
-                Dog dog = dogOwner.getDog();
-                dogName.setText(dog.getName());
-                dogAge.setText(String.valueOf(dog.getAge()));
+            public void onResult(User user) {
+                if (user instanceof DogOwner) {
+                    firstName.setText(user.getFirstName());
+                    lastName.setText(user.getLastName());
+                    city.setText(user.getCity());
+                    address.setText(user.getAddress());
+                    Dog dog = ((DogOwner) user).getDog();
+                    dogName.setText(dog.getName());
+                    dogAge.setText(String.valueOf(dog.getAge()));
 
-                // Create ImageView
-                // // TODO: 16/01/2016 load the image of dog 
-//                InputStream imageStream = null;
-//                try {
-//                    Uri selectedImage = Uri.parse("content://com.google.android.apps.photos.contentprovider/0/1/content%3A%2F%2Fmedia%2Fexternal%2Fimages%2Fmedia%2F32317/NO_TRANSFORM/66117322");
-//                    imageStream = getContentResolver().openInputStream(selectedImage);
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//                dogPic.setImageBitmap(BitmapFactory.decodeStream(imageStream));
-//
-//                dogPic.setImageURI(Uri.fromFile(new File(dog.getPicRef())));
+                    // Create ImageView
+                    // // TODO: 16/01/2016 load the image of dog
+                    //                InputStream imageStream = null;
+                    //                try {
+                    //                    Uri selectedImage = Uri.parse("content://com.google.android.apps.photos.contentprovider/0/1/content%3A%2F%2Fmedia%2Fexternal%2Fimages%2Fmedia%2F32317/NO_TRANSFORM/66117322");
+                    //                    imageStream = getContentResolver().openInputStream(selectedImage);
+                    //                } catch (FileNotFoundException e) {
+                    //                    e.printStackTrace();
+                    //                }
+                    //                dogPic.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+                    //
+                    //                dogPic.setImageURI(Uri.fromFile(new File(dog.getPicRef())));
 
-                // Check which size the dog is.
-                if (dog.getSize().name().equals(DogSize.Large.name()))
-                {
-                    isBig.setChecked(true);
-                    isMedium.setChecked(false);
-                    isSmall.setChecked(false);
-                }
-                else if (dog.getSize().name().equals(DogSize.Medium.name()))
-                {
-                    isBig.setChecked(false);
-                    isMedium.setChecked(true);
-                    isSmall.setChecked(false);
-                }
-                else if (dog.getSize().name().equals(DogSize.Small.name()))
-                {
-                    isBig.setChecked(false);
-                    isMedium.setChecked(false);
-                    isSmall.setChecked(true);
+                    // Check which size the dog is.
+                    if (dog.getSize().name().equals(DogSize.Large.name())) {
+                        isBig.setChecked(true);
+                        isMedium.setChecked(false);
+                        isSmall.setChecked(false);
+                    } else if (dog.getSize().name().equals(DogSize.Medium.name())) {
+                        isBig.setChecked(false);
+                        isMedium.setChecked(true);
+                        isSmall.setChecked(false);
+                    } else if (dog.getSize().name().equals(DogSize.Small.name())) {
+                        isBig.setChecked(false);
+                        isMedium.setChecked(false);
+                        isSmall.setChecked(true);
+                    }
                 }
             }
         });
     }
-
 }
