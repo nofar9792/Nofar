@@ -28,6 +28,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
+import com.example.nofarcohenzedek.dogo.Model.Utilities;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -132,14 +133,22 @@ public class MyProfileActivity extends Fragment {
                     // Load the picture of dog
                     dogPic = (((DogOwner) user).getDog().getPicRef());
 
-                    Model.getInstance().getImage(dogPic, new Model.GetBitmapListener() {
-                        @Override
-                        public void onResult(Bitmap picture) {
-                            ((ImageView) currentView.findViewById(R.id.dogPicMP)).setImageBitmap(picture);
-                        }
-                    });
-                }
+                    // if possible - take from device
+                    if (Utilities.isFileExistInDevice(dogPic))
+                    {
+                        ((ImageView) currentView.findViewById(R.id.dogPicMP)).setImageBitmap(Utilities.loadImageFromDevice(dogPic));
+                    }
+                    else {
+                        Model.getInstance().getImage(dogPic, new Model.GetBitmapListener() {
+                            @Override
+                            public void onResult(Bitmap picture) {
+                                ((ImageView) currentView.findViewById(R.id.dogPicMP)).setImageBitmap(picture);
 
+                                Utilities.saveImageOnDevice(dogPic, picture);
+                            }
+                        });
+                    }
+                }
                 progressBar.setVisibility(View.GONE);
             }
         });

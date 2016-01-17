@@ -17,6 +17,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
+import com.example.nofarcohenzedek.dogo.Model.Utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,13 +58,21 @@ public class DogOwnerDetails extends Activity {
                     dogAge.setText(String.valueOf(dog.getAge()));
 
                     // Load the picture of dog
-                    String picRef = (((DogOwner) user).getDog().getPicRef());
-                    Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
-                        @Override
-                        public void onResult(Bitmap picture) {
-                            dogPic.setImageBitmap(picture);
-                        }
-                    });
+                    final String picRef = (((DogOwner) user).getDog().getPicRef());
+
+                    if (Utilities.isFileExistInDevice(picRef))
+                    {
+                        dogPic.setImageBitmap(Utilities.loadImageFromDevice(picRef));
+                    }
+                    else {
+                        Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
+                            @Override
+                            public void onResult(Bitmap picture) {
+                                dogPic.setImageBitmap(picture);
+                                Utilities.saveImageOnDevice(picRef, picture);
+                            }
+                        });
+                    }
 
                     // Check which size the dog is.
                     if (dog.getSize().name().equals(DogSize.Large.name())) {
