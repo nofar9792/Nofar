@@ -52,7 +52,6 @@ public class ModelParse {
     private void addDetailsByInstance(final User user) {
         if (user instanceof DogWalker) {
             DogWalkerParse.addDogWalkerDetails((DogWalker) user);
-            CommentParse.addCommentsToDogWalker((DogWalker) user);
         } else {
             ((DogOwner) user).setDog(DogParse.getDogByUserIdSync(user.getId()));
         }
@@ -76,7 +75,6 @@ public class ModelParse {
         User user = UserParse.getUserByIdSync(userId);
         if(user != null){
             DogWalkerParse.addDogWalkerDetails((DogWalker) user);
-            CommentParse.addCommentsToDogWalker((DogWalker) user);
             return (DogWalker)user;
         }
         return null;
@@ -88,7 +86,6 @@ public class ModelParse {
             public void onResult(List<DogWalker> dogWalkers) {
                 for (final DogWalker dogWalker : dogWalkers) {
                     DogWalkerParse.addDogWalkerDetails(dogWalker);
-                    CommentParse.addCommentsToDogWalker(dogWalker);
                 }
                 listener.onResult(dogWalkers);
             }
@@ -134,14 +131,6 @@ public class ModelParse {
 
     //endregion
 
-    //region Comment Methods
-    private void getCommentsOfDogWalker(long userId, Model.GetCommentsListener listener) {
-        CommentParse.getCommentsOfDogWalker(userId, listener);
-    }
-
-    public void addCommentToDogWalker(long userId, String text, long rating) {
-        CommentParse.addToCommentsTable(userId, text, rating);
-    }
     //endregion
 
     //region Trip Methods
@@ -304,10 +293,6 @@ public class ModelParse {
     //region Interfaces
     public interface GetIdsListener {
         void onResult(List<Long> ids);
-    }
-
-    public interface GetDogWalkerDetailsListener {
-        void onResult(long userId, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening);
     }
 
     public interface GetTripsDetailsListener {

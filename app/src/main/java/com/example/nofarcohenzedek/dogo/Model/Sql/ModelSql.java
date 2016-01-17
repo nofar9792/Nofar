@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.nofarcohenzedek.dogo.Model.Comment;
 import com.example.nofarcohenzedek.dogo.Model.Common.RequestConsts;
 import com.example.nofarcohenzedek.dogo.Model.Common.WalkerConsts;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
@@ -38,7 +37,6 @@ public class ModelSql
 
         if(user != null){
             DogWalkerSql.addDogWalkerDetails(db, (DogWalker)user);
-            CommentSql.addCommentsToDogWalker(db, (DogWalker)user);
 
             return (DogWalker)user;
         }
@@ -49,7 +47,6 @@ public class ModelSql
         List<DogWalker> dogWalkers = UserSql.getDogWalkerUsers(db);
         for(DogWalker dogWalker : dogWalkers){
             DogWalkerSql.addDogWalkerDetails(db, dogWalker);
-            CommentSql.addCommentsToDogWalker(db, dogWalker);
         }
         return dogWalkers;
     }
@@ -57,10 +54,6 @@ public class ModelSql
     public void addDogWalker(DogWalker dogWalker) {
         UserSql.addToUsersTable(db, dogWalker);
         DogWalkerSql.addToDogWalkersTable(db, dogWalker);
-
-        for(Comment comment : dogWalker.getComments()){
-            CommentSql.addToCommentsTable(db, dogWalker.getId(), comment);
-        }
     }
     //endregion
 
@@ -158,7 +151,6 @@ public class ModelSql
             LastUpdateSql.create(db);
             UserSql.create(db);
             DogWalkerSql.create(db);
-            CommentSql.create(db);
             DogSql.create(db);
             RequestSql.create(db);
         }
@@ -168,7 +160,6 @@ public class ModelSql
             LastUpdateSql.drop(db);
             UserSql.drop(db);
             DogWalkerSql.drop(db);
-            CommentSql.drop(db);
             DogSql.drop(db);
             RequestSql.drop(db);
 

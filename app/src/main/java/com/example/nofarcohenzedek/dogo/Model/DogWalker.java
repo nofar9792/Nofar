@@ -8,8 +8,6 @@ import java.util.List;
 public class DogWalker extends User{
     private long age;
     private int priceForHour;
-    private double averageRating;
-    private List<Comment> comments;
     private boolean isComfortableOnMorning;
     private boolean isComfortableOnAfternoon;
     private boolean isComfortableOnEvening;
@@ -43,28 +41,6 @@ public class DogWalker extends User{
 
     public void setPriceForHour(int priceForHour) {
         this.priceForHour = priceForHour;
-    }
-
-    public double getAverageRating() {
-        return averageRating;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-
-        int sum = 0;
-        for (Comment comment : this.comments) {
-            sum += comment.getRating();
-        }
-
-        if(this.comments.size() != 0)
-        {
-            this.averageRating = (double)sum / this.comments.size();
-        }
     }
 
     public boolean isComfortableOnMorning() {

@@ -61,27 +61,4 @@ public class DogWalkerParse {
             }
         });
     }
-
-    // TODO: think if to delte this func
-    public static void getDogWalkerDetailsById(long id, final ModelParse.GetDogWalkerDetailsListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<>(WalkerConsts.DOG_WALKERS_TABLE);
-        query.whereEqualTo(WalkerConsts.USER_ID, id);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if (e == null) {
-                    long userId = parseObject.getLong(WalkerConsts.USER_ID);
-                    int age = parseObject.getInt(WalkerConsts.AGE);
-                    int priceForHour = parseObject.getInt(WalkerConsts.PRICE_FOR_HOUR);
-                    Boolean isComfortableOnMorning = parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_MORNING);
-                    Boolean isComfortableOnAfternoon = parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON);
-                    Boolean isComfortableOnEvening = parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_EVENING);
-
-                    listener.onResult(userId, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 }

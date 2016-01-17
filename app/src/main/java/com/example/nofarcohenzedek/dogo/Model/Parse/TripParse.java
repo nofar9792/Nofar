@@ -25,23 +25,6 @@ public class TripParse {
     final static String END_OF_WALKING = "endOfWalking";
     final static String IS_PAID = "isPaid";
 
-//    public static long addToTripsTable(long dogOwnerId, long dogId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid) {
-//        long newTripId = getNextId();
-//        ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
-//
-//        newTripParseObject.put(TRIP_ID, 1);
-//        newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
-//        newTripParseObject.put(DOG_ID, dogId);
-//        newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
-//        newTripParseObject.put(START_OF_WALKING, startOfWalking);
-//        newTripParseObject.put(END_OF_WALKING, endOfWalking);
-//        newTripParseObject.put(IS_PAID, isPaid);
-//
-//        newTripParseObject.saveInBackground();
-//
-//        return newTripId;
-//    }
-
     public static long startTrip(long dogOwnerId, long dogWalkerId) {
         long newTripId = getNextId();
         ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);

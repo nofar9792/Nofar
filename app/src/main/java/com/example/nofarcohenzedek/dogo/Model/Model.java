@@ -2,7 +2,6 @@ package com.example.nofarcohenzedek.dogo.Model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
@@ -96,12 +95,6 @@ public class Model {
 
     public void updateDogOwner(DogOwner dogOwner){
         modelParse.updateDogOwner(dogOwner);
-    }
-    //endregion
-
-    //region Comment Methods
-    public void addCommentToDogWalker(long userId, String text, long rating) {
-        modelParse.addCommentToDogWalker(userId, text, rating);
     }
     //endregion
 
@@ -260,10 +253,6 @@ public class Model {
 
     public interface GetDogOwnersListener {
         void onResult(List<DogOwner> dogOwners);
-    }
-
-    public interface GetCommentsListener {
-        void onResult(List<Comment> comments);
     }
 
     public interface GetTripsListener {
