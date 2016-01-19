@@ -1,11 +1,13 @@
 package com.example.nofarcohenzedek.dogo.Model.Parse;
 
+import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,8 +27,8 @@ public class TripParse {
     final static String END_OF_WALKING = "endOfWalking";
     final static String IS_PAID = "isPaid";
 
-    public static long startTrip(long dogOwnerId, long dogWalkerId) {
-        long newTripId = getNextId();
+    public static void startTrip(long dogOwnerId, long dogWalkerId, final Model.GetIdListener listener) {
+        final long newTripId = getNextId();
         ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
 
         newTripParseObject.put(TRIP_ID, newTripId);
@@ -35,12 +37,20 @@ public class TripParse {
         newTripParseObject.put(START_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")).getTime());
         newTripParseObject.put(IS_PAID, false);
 
-        newTripParseObject.saveInBackground();
-
-        return newTripId;
+        newTripParseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    listener.onResult(newTripId, true);
+                }else {
+                    e.printStackTrace();
+                    listener.onResult(-1, false);
+                }
+            }
+        });
     }
 
-    public static void endTrip(long tripId) {
+    public static void endTrip(long tripId, final Model.IsSucceedListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
         query.whereEqualTo(TRIP_ID, tripId);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -49,15 +59,26 @@ public class TripParse {
                 if (e == null) {
                     parseObject.put(END_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")).getTime());
 
-                    parseObject.saveInBackground();
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null){
+                                listener.onResult(true);
+                            }else {
+                                e.printStackTrace();
+                                listener.onResult(false);
+                            }
+                        }
+                    });
                 } else {
                     e.printStackTrace();
+                    listener.onResult(false);
                 }
             }
         });
     }
 
-    public static void changeTripToPaid(long tripId) {
+    public static void changeTripToPaid(long tripId, final Model.IsSucceedListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
         query.whereEqualTo(TRIP_ID, tripId);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -66,9 +87,21 @@ public class TripParse {
                 if (e == null) {
                     parseObject.put(IS_PAID, true);
 
-                    parseObject.saveInBackground();
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null){
+                                listener.onResult(true);
+                            }
+                            else {
+                                e.printStackTrace();
+                                listener.onResult(false);
+                            }
+                        }
+                    });
                 } else {
                     e.printStackTrace();
+                    listener.onResult(false);
                 }
             }
         });
@@ -130,7 +163,7 @@ public class TripParse {
 
     private static long getNextId(){
         ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
-        ParseObject parseObject = null;
+        ParseObject parseObject;
 
         try {
             parseObject = query.addDescendingOrder(TRIP_ID).getFirst();

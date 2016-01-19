@@ -8,12 +8,13 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class DogParse {
-    public static void addToDogsTable(long userId, Dog dog) {
+    public static void addToDogsTable(long userId, Dog dog, final Model.IsSucceedListener listener) {
         ParseObject newDogParseObject = new ParseObject(DogConsts.DOGS_TABLE);
 
         newDogParseObject.put(DogConsts.USER_ID, userId);
@@ -24,27 +25,15 @@ public class DogParse {
         if(dog.getPicRef() != null) {
             newDogParseObject.put(DogConsts.PIC_REF, dog.getPicRef());
         }
-        newDogParseObject.saveInBackground();
-    }
-
-    public static void getDogByUserId(long userId, final Model.GetDogListener listener) {
-        ParseQuery<ParseObject> query = new ParseQuery<>(DogConsts.DOGS_TABLE);
-
-        query.whereEqualTo(DogConsts.USER_ID, userId);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
+        newDogParseObject.saveInBackground(new SaveCallback() {
             @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                Dog dog = null;
-                if (e == null) {
-                    String name = parseObject.getString(DogConsts.NAME);
-                    DogSize dogSize = DogSize.valueOf(parseObject.getString(DogConsts.SIZE));
-                    long age = parseObject.getLong(DogConsts.AGE);
-                    String picRef = parseObject.getString(DogConsts.PIC_REF);
-                    dog = new Dog(name, dogSize, age, picRef);
-                } else {
+            public void done(ParseException e) {
+                if(e == null){
+                    listener.onResult(true);
+                }else {
                     e.printStackTrace();
+                    listener.onResult(false);
                 }
-                listener.onResult(dog);
             }
         });
     }
@@ -67,7 +56,7 @@ public class DogParse {
         return dog;
     }
 
-    public static void updateDog(long userId, final Dog dog) {
+    public static void updateDog(long userId, final Dog dog, final Model.IsSucceedListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<>(DogConsts.DOGS_TABLE);
         query.whereEqualTo(DogConsts.USER_ID, userId);
 
@@ -83,9 +72,20 @@ public class DogParse {
                         parseObject.put(DogConsts.PIC_REF, dog.getPicRef());
                     }
 
-                    parseObject.saveInBackground();
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if( e == null){
+                                listener.onResult(true);
+                            }else {
+                                e.printStackTrace();
+                                listener.onResult(false);
+                            }
+                        }
+                    });
                 } else {
                     e.printStackTrace();
+                    listener.onResult(false);
                 }
             }
         });

@@ -1,12 +1,9 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Fragment;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,7 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
@@ -31,9 +28,11 @@ public class MessagesActivity extends Fragment
     private Boolean isOwner;
     private ProgressBar progressBar;
     private User currentUser;
+    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        context = container.getContext();
         final View view = inflater.inflate(R.layout.activity_messages, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -114,7 +113,16 @@ public class MessagesActivity extends Fragment
                     acceptButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Model.getInstance().acceptRequest(data.get(position).getId(), currentUser.getId());
+                            Model.getInstance().acceptRequest(data.get(position).getId(), currentUser.getId(), new Model.IsSucceedListener() {
+                                @Override
+                                public void onResult(boolean isSucceed) {
+                                    if(isSucceed){
+                                        Toast.makeText(context, "ההודעה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(context, "אירעה שגיאה אנה נזה שנית", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                             data.remove(position);
                             notifyDataSetChanged();
                         }
@@ -123,7 +131,16 @@ public class MessagesActivity extends Fragment
                     declineButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Model.getInstance().declineRequest(data.get(position).getId(), currentUser.getId());
+                            Model.getInstance().declineRequest(data.get(position).getId(), currentUser.getId(), new Model.IsSucceedListener() {
+                                @Override
+                                public void onResult(boolean isSucceed) {
+                                    if(isSucceed){
+                                        Toast.makeText(context, "ההודעה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(context, "אירעה שגיאה אנה נזה שנית", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                             data.remove(position);
                             notifyDataSetChanged();
                         }

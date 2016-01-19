@@ -9,9 +9,9 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.util.LinkedList;
@@ -21,13 +21,13 @@ import java.util.List;
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class UserParse {
-    public static long addToUsersTable(String userName, String password, String firstName, String lastName, String phoneNumber,
-                                       String address, String city, Boolean isDogWalker) throws Exception {
+    public static void addToUsersTable(String userName, String password, String firstName, String lastName, String phoneNumber,
+                                       String address, String city, Boolean isDogWalker, final Model.GetIdListener listener) throws Exception {
         if(isUserNameAlreadyExist(userName)){
             throw new Exception("user already exist");
         }
 
-        long newUserId = getNextId();
+        final long newUserId = getNextId();
         ParseUser user = new ParseUser();
 
         user.setUsername(userName);
@@ -43,13 +43,13 @@ public class UserParse {
         user.signUpInBackground(new SignUpCallback() {
             public void done(ParseException e) {
                 if (e == null) {
-                    // Hooray! Let them use the app now.
+                    listener.onResult(newUserId, true);
                 } else {
                     e.printStackTrace();
+                  listener.onResult(-1 , false);
                 }
             }
         });
-        return newUserId;
     }
 
     public static void logIn(String userName, String password, final Model.GetUserListener listener){
@@ -116,11 +116,11 @@ public class UserParse {
             public void done(List<ParseUser> list, ParseException e) {
                 List<DogWalker> dogWalkers = new LinkedList<>();
                 if (e == null) {
-                    for (ParseUser parseUser : list) {;
-                        dogWalkers.add((DogWalker)convertFromParseUserToUser(parseUser));
+                    for (ParseUser parseUser : list) {
+                        dogWalkers.add((DogWalker) convertFromParseUserToUser(parseUser));
                     }
                     listener.onResult(dogWalkers);
-                } else {
+                }else {
                     e.printStackTrace();
                 }
             }
@@ -128,7 +128,7 @@ public class UserParse {
 
     }
 
-    public static void updateUser(final User user) {
+    public static void updateUser(final User user, final Model.IsSucceedListener listener) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(UserConsts.USER_ID, user.getId());
         query.getFirstInBackground(new GetCallback<ParseUser>() {
@@ -141,9 +141,20 @@ public class UserParse {
                     parseUser.put(UserConsts.ADDRESS, user.getAddress());
                     parseUser.put(UserConsts.CITY, user.getCity());
 
-                    parseUser.saveInBackground();
+                    parseUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null){
+                                listener.onResult(true);
+                            }else {
+                                e.printStackTrace();
+                                listener.onResult(false);
+                            }
+                        }
+                    });
                 } else {
                     e.printStackTrace();
+                    listener.onResult(false);
                 }
             }
         });

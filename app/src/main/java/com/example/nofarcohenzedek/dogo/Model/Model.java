@@ -49,11 +49,9 @@ public class Model {
     public void getUserById(long userId, final Model.GetUserListener listener) {
         modelParse.getUserById(userId, listener);
     }
-
     //endregion
 
     //region Dog Walker Methods
-
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
         final List<DogWalker> dogWalkersResult = modelSql.getAllDogWalkers();
         String lastUpdateDate = modelSql.getDogWalkersLastUpdateDate();
@@ -75,86 +73,60 @@ public class Model {
         });
     }
 
-    public long addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) throws Exception {
-        return modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
+    public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
+                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening, GetIdListener listener) throws Exception {
+        modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening, listener);
     }
 
-    public void updateDogWalker(DogWalker dogWalker){
-        modelParse.updateDogWalker(dogWalker);
+    public void updateDogWalker(DogWalker dogWalker, IsSucceedListener listener){
+        modelParse.updateDogWalker(dogWalker, listener);
     }
-
     //endregion
 
     //region Dog Owner Methods
-
-    public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
-                            String address, String city, Dog dog) throws Exception {
-        return modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
+    public void addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
+                            String address, String city, Dog dog, GetIdListener listener) throws Exception {
+        modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog, listener);
     }
 
-    public void updateDogOwner(DogOwner dogOwner){
-        modelParse.updateDogOwner(dogOwner);
+    public void updateDogOwner(DogOwner dogOwner, IsSucceedListener listener){
+        modelParse.updateDogOwner(dogOwner, listener);
     }
     //endregion
 
     //region Trip Methods
-    public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener) {
+    public void getTripsByDogOwnerId(long dogOwnerId, final GetTripsListener listener) {
         modelParse.getTripsByDogOwnerId(dogOwnerId, listener);
     }
 
-    public void getTripsByDogWalkerId(long dogWalkerId, final Model.GetTripsListener listener) {
+    public void getTripsByDogWalkerId(long dogWalkerId, final GetTripsListener listener) {
         modelParse.getTripsByDogWalkerId(dogWalkerId, listener);
     }
 
-    public long startTrip(long dogOwnerId, long dogWalkerId) {
-        return modelParse.startTrip(dogOwnerId, dogWalkerId);
+    public void startTrip(long dogOwnerId, long dogWalkerId, GetIdListener listener) {
+        modelParse.startTrip(dogOwnerId, dogWalkerId, listener);
     }
 
-    public void endTrip(long tripId) {
-        modelParse.endTrip(tripId);
+    public void endTrip(long tripId, IsSucceedListener listener) {
+        modelParse.endTrip(tripId, listener);
     }
 
-    public void payTrip(long tripId) {
-        modelParse.payTrip(tripId);
+    public void payTrip(long tripId, IsSucceedListener listener) {
+        modelParse.payTrip(tripId, listener);
     }
-
     //endregion
 
     //region Request Methods
-    public void addRequest(long dogOwnerId, long dogWalkerId) {
-        modelParse.addRequest(dogOwnerId, dogWalkerId);
+    public void addRequest(long dogOwnerId, long dogWalkerId, IsSucceedListener listener) {
+        modelParse.addRequest(dogOwnerId, dogWalkerId, listener);
     }
 
-    public void acceptRequest(long dogOwnerId, long dogWalkerId) {
-        modelParse.acceptRequest(dogOwnerId, dogWalkerId);
+    public void acceptRequest(long dogOwnerId, long dogWalkerId, IsSucceedListener listener) {
+        modelParse.acceptRequest(dogOwnerId, dogWalkerId, listener);
     }
 
-    public void declineRequest(long dogOwnerId, long dogWalkerId) {
-        modelParse.declineRequest(dogOwnerId, dogWalkerId);
-    }
-
-    // Connections between owner to some walkers
-    public void getWalkersConnectToOwner(final long dogOwnerId, final GetDogWalkersListener listener) {
-        final List<DogWalker> dogWalkersResult = modelSql.getWalkersConnectToOwner(dogOwnerId);
-        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
-
-        modelParse.getRequestByDogOwner(dogOwnerId, lastUpdateDate, new GetRequestsListener() {
-            @Override
-            public void onResult(List<Request> requests) {
-                if (requests.size() > 0) {
-                    for (Request request : requests) {
-                        modelSql.addDogWalker(request.getDogWalker());
-                        modelSql.addRequest(request);
-                    }
-
-                    dogWalkersResult.removeAll(dogWalkersResult);
-                    dogWalkersResult.addAll(modelSql.getWalkersConnectToOwner(dogOwnerId));
-                }
-                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
-                listener.onResult(dogWalkersResult);
-            }
-        });
+    public void declineRequest(long dogOwnerId, long dogWalkerId, IsSucceedListener listener) {
+        modelParse.declineRequest(dogOwnerId, dogWalkerId, listener);
     }
 
     // Connections between walker to some owners
@@ -185,7 +157,7 @@ public class Model {
         final List<DogOwner> dogOwnersResult = modelSql.getRequestForDogWalker(dogWalkerId);
         final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
 
-        modelParse.getRequestByDogWalker(dogWalkerId, lastUpdateDate, new GetRequestsListener() {
+        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
             @Override
             public void onResult(List<Request> requests) {
                 if (requests.size() > 0) {
@@ -208,7 +180,7 @@ public class Model {
         final List<DogWalker> dogWalkersResult = modelSql.getRequestForDogOwner(dogOwnerId);
         final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
 
-        modelParse.getRequestByDogOwner(dogOwnerId, lastUpdateDate, new GetRequestsListener() {
+        modelParse.getRequestByDogOwner(dogOwnerId, null, new GetRequestsListener() {
             @Override
             public void onResult(List<Request> requests) {
                 if (requests.size() > 0) {
@@ -228,15 +200,13 @@ public class Model {
     //endregion
 
     //region Image Methods
-
-    public void saveImage(String imageName, Bitmap picture){
-        modelParse.saveImage(imageName, picture);
+    public void saveImage(String imageName, Bitmap picture, IsSucceedListener listener){
+        modelParse.saveImage(imageName, picture, listener);
     }
 
     public void getImage(String imageName, Model.GetBitmapListener listener){
         modelParse.getImage(imageName, listener);
     }
-
     //endregion
 
     //region Interfaces
@@ -266,6 +236,15 @@ public class Model {
     public interface GetBitmapListener {
         void onResult(Bitmap picture);
     }
+
+    public interface IsSucceedListener {
+        void onResult(boolean isSucceed);
+    }
+
+    public interface GetIdListener {
+        void onResult(long id, boolean isSucceed);
+    }
+
     //endregion
 }
 

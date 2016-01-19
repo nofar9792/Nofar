@@ -9,6 +9,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 
@@ -20,7 +21,7 @@ public class ImageParse {
     final static String IMAGE_NAME = "imageName";
     final static String FILE = "file";
 
-    public static void addToImagesTable(String imageName, Bitmap picture) {
+    public static void addToImagesTable(String imageName, Bitmap picture, final Model.IsSucceedListener listener) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         picture.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] picBytes = stream.toByteArray();
@@ -37,7 +38,18 @@ public class ImageParse {
         parseObject.put(IMAGE_NAME, imageName);
         parseObject.put(FILE, imageParse);
 
-        parseObject.saveInBackground();
+        parseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+                    listener.onResult(true);
+                }
+                else {
+                    e.printStackTrace();
+                    listener.onResult(false);
+                }
+            }
+        });
     }
 
     public static void getImage(String imageName, final Model.GetBitmapListener listener) {
@@ -55,13 +67,12 @@ public class ImageParse {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(picBytes, 0, picBytes.length);
 
                         listener.onResult(bitmap);
-                    } catch (ParseException ex) {
+                    }catch (ParseException ex) {
                         ex.printStackTrace();
                         listener.onResult(null);
                     }
                 }
-                else
-                {
+                else {
                     listener.onResult(null);
                 }
             }

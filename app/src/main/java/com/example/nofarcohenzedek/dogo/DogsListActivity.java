@@ -1,28 +1,21 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Fragment;
-import android.content.Intent;
-import android.graphics.AvoidXfermode;
+import android.content.Context;
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +26,12 @@ public class DogsListActivity extends Fragment
     private List<DogOwner> list;
     private Map<Long, Long> tripsByOwnerId;
     private ProgressBar progressBar;
+    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        context = container.getContext();
         final View view = inflater.inflate(R.layout.activity_dogs_list, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -100,7 +95,7 @@ public class DogsListActivity extends Fragment
 //        });
 //    }
 
-    public void onItemClickListener(View view, Long ownerId)
+    public void onItemClickListener(View view, final Long ownerId)
     {
         if (view.getTag().equals("startTripTag"))
         {
@@ -109,9 +104,18 @@ public class DogsListActivity extends Fragment
             currentListItem.findViewById(R.id.endTripBtn).setEnabled(true);
             currentListItem.findViewById(R.id.startTripBtn).setEnabled(false);
 
-            Long tripId = Model.getInstance().startTrip(ownerId, userId);
-            tripsByOwnerId.put(ownerId,tripId);
-
+            Model.getInstance().startTrip(ownerId, userId, new Model.GetIdListener() {
+                @Override
+                public void onResult(long tripId, boolean isSucceed) {
+                    if(isSucceed){
+                        tripsByOwnerId.put(ownerId, tripId);
+                        Toast.makeText(context, "טיול התחיל בהצלחה", Toast.LENGTH_SHORT).show();
+                    }
+                   else{
+                        Toast.makeText(context, "אירעה שגיאה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
         else if (view.getTag().equals("endTripTag"))
         {
@@ -120,7 +124,17 @@ public class DogsListActivity extends Fragment
             currentListItem.findViewById(R.id.endTripBtn).setEnabled(false);
             currentListItem.findViewById(R.id.startTripBtn).setEnabled(true);
 
-            Model.getInstance().endTrip(tripsByOwnerId.get(ownerId));
+            Model.getInstance().endTrip(tripsByOwnerId.get(ownerId), new Model.IsSucceedListener() {
+                @Override
+                public void onResult(boolean isSucceed) {
+                    if(isSucceed){
+                        Toast.makeText(context, "טיול הסתיים בהצלחה", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(context, "אירעה שגיאה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             tripsByOwnerId.remove(ownerId);
         }
     }

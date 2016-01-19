@@ -1,33 +1,22 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
-import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
-import com.example.nofarcohenzedek.dogo.Model.User;
 
-import java.nio.DoubleBuffer;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class TripsReportActivity extends Fragment {
@@ -36,10 +25,12 @@ public class TripsReportActivity extends Fragment {
     private Long userId;
     private List<Trip> allTrips;
     private ProgressBar progressBar;
+    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        context = container.getContext();
         final View view = inflater.inflate(R.layout.activity_trips_report, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -158,7 +149,17 @@ public class TripsReportActivity extends Fragment {
         // pay for this trip - only if the user is walker and the trip wasn't paid.
         if (isPaid.isChecked() && !isOwner)
         {
-            Model.getInstance().payTrip(((Long) isPaid.getTag()));
+            Model.getInstance().payTrip(((Long) isPaid.getTag()), new Model.IsSucceedListener() {
+                @Override
+                public void onResult(boolean isSucceed) {
+                    if(isSucceed){
+                        Toast.makeText(context, "הטיול עודכן בהצלחה", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(context, "אירעה שגיאה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             isPaid.setEnabled(false);
         }
     }

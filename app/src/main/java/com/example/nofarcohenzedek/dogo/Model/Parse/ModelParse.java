@@ -63,12 +63,6 @@ public class ModelParse {
 
     //endregion
 
-    public void getDogByUserId(long userId, final Model.GetDogListener listener) {
-        DogParse.getDogByUserId(userId, listener);
-    }
-
-    //endregion
-
     //region Dog Walker Methods
 
     public DogWalker getDogWalkerByIdSync(long userId) {
@@ -92,16 +86,40 @@ public class ModelParse {
         });
     }
 
-    public long addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) throws Exception {
-        long newUserId = UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, true);
-        DogWalkerParse.addToDogWalkersTable(newUserId, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening);
-        return newUserId;
+    public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
+                             String address, String city, final long age, final int priceForHour, final boolean isComfortableOnMorning, final boolean isComfortableOnAfternoon, final boolean isComfortableOnEvening, final Model.GetIdListener listener) throws Exception {
+        UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, true, new Model.GetIdListener() {
+            @Override
+            public void onResult(final long id, boolean isSucceed) {
+                if (isSucceed) {
+                    DogWalkerParse.addToDogWalkersTable(id, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening, new Model.IsSucceedListener() {
+                        @Override
+                        public void onResult(boolean isSucceed) {
+                            if (isSucceed) {
+                                listener.onResult(id, true);
+                            }else{
+                                listener.onResult(-1, false);
+                            }
+                        }
+                    });
+                }else{
+                    listener.onResult(-1, false);
+                }
+            }
+        });
     }
 
-    public void updateDogWalker(DogWalker dogWalker){
-        UserParse.updateUser(dogWalker);
-        DogWalkerParse.updateDogWalker(dogWalker);
+    public void updateDogWalker(final DogWalker dogWalker, final Model.IsSucceedListener listener){
+        UserParse.updateUser(dogWalker, new Model.IsSucceedListener() {
+            @Override
+            public void onResult(boolean isSucceed) {
+                if(isSucceed){
+                    DogWalkerParse.updateDogWalker(dogWalker, listener);
+                }else{
+                    listener.onResult(false);
+                }
+            }
+        });
     }
     //endregion
 
@@ -116,17 +134,40 @@ public class ModelParse {
         return null;
     }
 
-    public long addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
-                            String address, String city, Dog dog) throws Exception {
-        long newUserId = UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, false);
-        DogParse.addToDogsTable(newUserId, dog);
-
-        return newUserId;
+    public void addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
+                            String address, String city, final Dog dog, final Model.GetIdListener listener) throws Exception {
+        UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, false, new Model.GetIdListener() {
+            @Override
+            public void onResult(final long id, boolean isSucceed) {
+                if (isSucceed) {
+                    DogParse.addToDogsTable(id, dog, new Model.IsSucceedListener() {
+                        @Override
+                        public void onResult(boolean isSucceed) {
+                            if(isSucceed) {
+                                listener.onResult(id, true);
+                            }else {
+                                listener.onResult(-1 , false);
+                            }
+                        }
+                    });
+                }else{
+                    listener.onResult(-1, false);
+                }
+            }
+        });
     }
 
-    public void updateDogOwner(DogOwner dogOwner){
-        UserParse.updateUser(dogOwner);
-        DogParse.updateDog(dogOwner.getId(), dogOwner.getDog());
+    public void updateDogOwner(final DogOwner dogOwner , final Model.IsSucceedListener listener){
+        UserParse.updateUser(dogOwner, new Model.IsSucceedListener() {
+            @Override
+            public void onResult(boolean isSucceed) {
+                if (isSucceed) {
+                    DogParse.updateDog(dogOwner.getId(), dogOwner.getDog(), listener);
+                }else{
+                    listener.onResult(false);
+                }
+            }
+        });
     }
 
     //endregion
@@ -160,45 +201,31 @@ public class ModelParse {
         });
     }
 
-    public long startTrip(long dogOwnerId, long dogWalkerId) {
-        return TripParse.startTrip(dogOwnerId, dogWalkerId);
+    public void startTrip(long dogOwnerId, long dogWalkerId, Model.GetIdListener listener) {
+        TripParse.startTrip(dogOwnerId, dogWalkerId, listener);
     }
 
-    public void endTrip(long tripId) {
-        TripParse.endTrip(tripId);
+    public void endTrip(long tripId, Model.IsSucceedListener listener) {
+        TripParse.endTrip(tripId, listener);
     }
 
-    public void payTrip(long tripId) {
-        TripParse.changeTripToPaid(tripId);
+    public void payTrip(long tripId, Model.IsSucceedListener listener) {
+        TripParse.changeTripToPaid(tripId, listener);
     }
 
     // endregion
 
     //region Request Methods
-    public void addRequest(long dogOwnerId, long dogWalkerId) {
-        RequestParse.addToRequestTable(dogOwnerId, dogWalkerId, RequestStatus.Waiting);
+    public void addRequest(long dogOwnerId, long dogWalkerId, Model.IsSucceedListener listener) {
+        RequestParse.addToRequestTable(dogOwnerId, dogWalkerId, RequestStatus.Waiting, listener);
     }
 
-    public void acceptRequest(long dogOwnerId, long dogWalkerId) {
-        RequestParse.updateRequest(dogOwnerId, dogWalkerId, RequestStatus.Accepted);
+    public void acceptRequest(long dogOwnerId, long dogWalkerId, Model.IsSucceedListener listener) {
+        RequestParse.updateRequest(dogOwnerId, dogWalkerId, RequestStatus.Accepted, listener);
     }
 
-    public void declineRequest(long dogOwnerId, long dogWalkerId) {
-        RequestParse.updateRequest(dogOwnerId, dogWalkerId, RequestStatus.Declined);
-    }
-
-    // todo: im not sure we need this func
-    public void getWalkersConnectToOwner(long dogOwnerId, final Model.GetDogWalkersListener listener) {
-        RequestParse.getWalkersIdsConnectedToOwner(dogOwnerId, new GetIdsListener() {
-            @Override
-            public void onResult(List<Long> ids) {
-                final List<DogWalker> dogWalkers = new LinkedList<>();
-                for (long dogWalkerId : ids) {
-                    dogWalkers.add(getDogWalkerByIdSync(dogWalkerId));
-                }
-                listener.onResult(dogWalkers);
-            }
-        });
+    public void declineRequest(long dogOwnerId, long dogWalkerId, Model.IsSucceedListener listener) {
+        RequestParse.updateRequest(dogOwnerId, dogWalkerId, RequestStatus.Declined, listener);
     }
 
     public void getOwnersConnectToWalker(long dogWalkerId, final Model.GetDogOwnersListener listener) {
@@ -280,8 +307,8 @@ public class ModelParse {
 
     //region Image Methods
 
-    public void saveImage(String imageName, Bitmap picture){
-        ImageParse.addToImagesTable(imageName,picture);
+    public void saveImage(String imageName, Bitmap picture, Model.IsSucceedListener listener){
+        ImageParse.addToImagesTable(imageName, picture, listener);
     }
 
     public void getImage(String imageName, Model.GetBitmapListener listener){

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
@@ -13,6 +14,7 @@ import com.example.nofarcohenzedek.dogo.Model.User;
 
 public class LoginActivity extends Activity {
     private String errorMessage;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,8 @@ public class LoginActivity extends Activity {
         EditText password = (EditText) findViewById(R.id.passwordLogin);
 
         if (isValid(userName.getText().toString(), password.getText().toString())) {
+            progressBar = (ProgressBar) findViewById(R.id.loginProgressBarr);
+            progressBar.setVisibility(View.VISIBLE);
             Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new Model.GetUserListener()
             {
                 @Override
@@ -45,7 +49,7 @@ public class LoginActivity extends Activity {
                         {
                             intent.putExtra("isOwner", false);
                         }
-
+                        progressBar.setVisibility(View.GONE);
                         startActivity(intent);
                     }
                     else

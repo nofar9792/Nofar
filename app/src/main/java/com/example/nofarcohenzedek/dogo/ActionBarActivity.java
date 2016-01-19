@@ -44,21 +44,21 @@ public class ActionBarActivity extends Activity
         dogsListFragment = new DogsListActivity();
         tripsReportActivity = new TripsReportActivity();
 
-        myProfileFragment.setListener(new MyProfileActivity.Listener() {
-            @Override
-            public void onFinish()
-            {
-                FragmentTransaction trans = manager.beginTransaction();
-                trans.remove(myProfileFragment);
-
-                if (isOwner) {
-                    trans.add(R.id.LayoutContainer, mapsFragment, "maps");
-                } else {
-                    trans.add(R.id.LayoutContainer, dogsListFragment, "dogsList");
-                }
-                trans.commit();
-            }
-        });
+//        myProfileFragment.setListener(new MyProfileActivity.Listener() {
+//            @Override
+//            public void onFinish()
+//            {
+//                FragmentTransaction trans = manager.beginTransaction();
+//                trans.remove(myProfileFragment);
+//
+//                if (isOwner) {
+//                    trans.add(R.id.LayoutContainer, mapsFragment, "maps");
+//                } else {
+//                    trans.add(R.id.LayoutContainer, dogsListFragment, "dogsList");
+//                }
+//                trans.commit();
+//            }
+//        });
 
         Bundle args = new Bundle();
         args.putLong("userId", userId);

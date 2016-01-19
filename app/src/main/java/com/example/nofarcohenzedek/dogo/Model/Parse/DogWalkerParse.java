@@ -2,16 +2,18 @@ package com.example.nofarcohenzedek.dogo.Model.Parse;
 
 import com.example.nofarcohenzedek.dogo.Model.Common.WalkerConsts;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
+import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class DogWalkerParse {
-    public static void addToDogWalkersTable(long userId, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
+    public static void addToDogWalkersTable(long userId, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening,  final Model.IsSucceedListener listener) {
         ParseObject newDogWalkerParseObject = new ParseObject(WalkerConsts.DOG_WALKERS_TABLE);
 
         newDogWalkerParseObject.put(WalkerConsts.USER_ID, userId);
@@ -21,7 +23,16 @@ public class DogWalkerParse {
         newDogWalkerParseObject.put(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON, isComfortableOnAfternoon);
         newDogWalkerParseObject.put(WalkerConsts.IS_COMFORTABLE_ON_EVENING, isComfortableOnEvening);
 
-        newDogWalkerParseObject.saveInBackground();
+        newDogWalkerParseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+                    listener.onResult(true);
+                }else {
+                    listener.onResult(false);
+                }
+            }
+        });
     }
 
     public static void addDogWalkerDetails(DogWalker dogWalker) {
@@ -40,7 +51,7 @@ public class DogWalkerParse {
         }
     }
 
-    public static void updateDogWalker(final DogWalker dogWalker) {
+    public static void updateDogWalker(final DogWalker dogWalker, final Model.IsSucceedListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<>(WalkerConsts.DOG_WALKERS_TABLE);
         query.whereEqualTo(WalkerConsts.USER_ID, dogWalker.getId());
 
@@ -54,9 +65,20 @@ public class DogWalkerParse {
                     parseObject.put(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON, dogWalker.isComfortableOnAfternoon());
                     parseObject.put(WalkerConsts.IS_COMFORTABLE_ON_EVENING, dogWalker.isComfortableOnEvening());
 
-                    parseObject.saveInBackground();
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null){
+                                listener.onResult(true);
+                            }else {
+                                e.printStackTrace();
+                                listener.onResult(false);
+                            }
+                        }
+                    });
                 } else {
                     e.printStackTrace();
+                    listener.onResult(false);
                 }
             }
         });

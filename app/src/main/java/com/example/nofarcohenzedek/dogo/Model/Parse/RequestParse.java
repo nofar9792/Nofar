@@ -9,6 +9,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,31 +18,21 @@ import java.util.List;
  * Created by Nofar Cohen Zedek on 07-Jan-16.
  */
 public class RequestParse {
-    public static void addToRequestTable(long dogOwnerId, long dogWalkerId, RequestStatus requestStatus){
+    public static void addToRequestTable(long dogOwnerId, long dogWalkerId, RequestStatus requestStatus, final Model.IsSucceedListener listener){
         ParseObject newDogOwnerConnectDogWalkerParseObject = new ParseObject(RequestConsts.REQUESTS_TABLE);
 
         newDogOwnerConnectDogWalkerParseObject.put(RequestConsts.DOG_OWNER_ID, dogOwnerId);
         newDogOwnerConnectDogWalkerParseObject.put(RequestConsts.DOG_WALKER_ID, dogWalkerId);
         newDogOwnerConnectDogWalkerParseObject.put(RequestConsts.REQUEST_STATUS, requestStatus.name());
 
-        newDogOwnerConnectDogWalkerParseObject.saveInBackground();
-    }
-
-    public static void getWalkersIdsConnectedToOwner(long dogOwnerId, final ModelParse.GetIdsListener listener){
-        ParseQuery<ParseObject> query = new ParseQuery<>(RequestConsts.REQUESTS_TABLE);
-        query.whereEqualTo(RequestConsts.DOG_OWNER_ID, dogOwnerId).whereEqualTo(RequestConsts.REQUEST_STATUS, RequestStatus.Accepted.name());
-
-        query.findInBackground(new FindCallback<ParseObject>() {
+        newDogOwnerConnectDogWalkerParseObject.saveInBackground(new SaveCallback() {
             @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                if (e == null) {
-                    List<Long> dogWalkersIds = new LinkedList<>();
-                    for (ParseObject po : list) {
-                        dogWalkersIds.add(po.getLong(RequestConsts.DOG_WALKER_ID));
-                    }
-                    listener.onResult(dogWalkersIds);
-                } else {
+            public void done(ParseException e) {
+                if(e == null){
+                    listener.onResult(true);
+                }else {
                     e.printStackTrace();
+                    listener.onResult(false);
                 }
             }
         });
@@ -162,7 +153,7 @@ public class RequestParse {
         });
     }
 
-    public static void updateRequest(long dogOwnerId, long dogWalkerId,final RequestStatus requestStatus) {
+    public static void updateRequest(long dogOwnerId, long dogWalkerId,final RequestStatus requestStatus, final Model.IsSucceedListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(RequestConsts.REQUESTS_TABLE);
         query.whereEqualTo(RequestConsts.DOG_OWNER_ID, dogOwnerId).whereEqualTo(RequestConsts.DOG_WALKER_ID,dogWalkerId);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -171,9 +162,20 @@ public class RequestParse {
                 if (e == null) {
                     parseObject.put(RequestConsts.REQUEST_STATUS, requestStatus.name());
 
-                    parseObject.saveInBackground();
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null){
+                                listener.onResult(true);
+                            }else {
+                                e.printStackTrace();
+                                listener.onResult(false);
+                            }
+                        }
+                    });
                 } else {
                     e.printStackTrace();
+                    listener.onResult(false);
                 }
             }
         });

@@ -1,17 +1,13 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
@@ -85,7 +81,16 @@ public class DogWalkerDetails extends Activity
 
     public void askNumberClick(View view)
     {
-        Model.getInstance().addRequest(ownerId,walkerId);
-        finish();
+        Model.getInstance().addRequest(ownerId, walkerId, new Model.IsSucceedListener() {
+            @Override
+            public void onResult(boolean isSucceed) {
+                if (isSucceed) {
+                    Toast.makeText(getApplicationContext(), "בקשה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext().getApplicationContext(), "אירעה שגיאה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

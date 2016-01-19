@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.Menu;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,18 +13,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
-import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SignUp extends Activity {
 
@@ -112,14 +108,30 @@ public class SignUp extends Activity {
 
                 // Save the owner on DB
                 try {
-                    Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog);
-                    if (picRef != null) {
-                        Model.getInstance().saveImage(picRef, dogPic);
-                    }
+                    Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog, new Model.GetIdListener() {
+                        @Override
+                        public void onResult(long id, boolean isSucceed) {
+                            if(isSucceed) {
+                                if (picRef != null) {
+                                    Model.getInstance().saveImage(picRef, dogPic, new Model.IsSucceedListener() {
+                                        @Override
+                                        public void onResult(boolean isSucceed) {
+                                            if(isSucceed){
+                                                Toast.makeText(getApplicationContext(),"שמירה בוצעה בהצלחה" , Toast.LENGTH_SHORT).show();
+                                            }else {
+                                                Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }else {
+                                Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 } catch (Exception e) {
                     // Check if this userName exist
-                    if (e.getMessage().equals("user already exist"))
-                    {
+                    if (e.getMessage().equals("user already exist")){
                         error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
                     }
 
@@ -131,7 +143,16 @@ public class SignUp extends Activity {
                 try {
                     Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
                             Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
-                            isComfortableOnEvening.isChecked());
+                            isComfortableOnEvening.isChecked(), new Model.GetIdListener() {
+                                @Override
+                                public void onResult(long id, boolean isSucceed) {
+                                    if(isSucceed){
+                                        Toast.makeText(getApplicationContext(),"שמירה בוצעה בהצלחה" , Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 } catch (Exception e) {
                     // Check if this userName exist
                     if (e.getMessage().equals("user already exist"))

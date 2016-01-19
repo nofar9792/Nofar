@@ -1,26 +1,22 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.GpsStatus;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
@@ -56,20 +52,22 @@ public class MyProfileActivity extends Fragment {
     private String errorMessage;
     private static final int SELECT_PHOTO = 100;
     private ProgressBar progressBar;
+    private Context context;
     View currentView;
 
-    public interface Listener
-    {
-        void onFinish();
-    }
+//    public interface Listener
+//    {
+//        void onFinish();
+//    }
 
-    Listener listener;
-
-    public void setListener (Listener listener){this.listener = listener;}
+//    Listener listener;
+//
+//    public void setListener (Listener listener){this.listener = listener;}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        context = container.getContext();
         View view = inflater.inflate(R.layout.activity_my_profile, container, false);
         currentView = view;
         super.onCreateView(inflater, container, savedInstanceState);
@@ -125,9 +123,9 @@ public class MyProfileActivity extends Fragment {
                 } else {
                     dogName.setText(((DogOwner) user).getDog().getName());
                     DogSize size = ((DogOwner) user).getDog().getSize();
-                    isBig.setChecked((size == DogSize.Large ? true : false));
-                    isMedium.setChecked((size == DogSize.Medium ? true : false));
-                    isSmall.setChecked((size == DogSize.Small ? true : false));
+                    isBig.setChecked((size == DogSize.Large));
+                    isMedium.setChecked((size == DogSize.Medium));
+                    isSmall.setChecked((size == DogSize.Small));
                     dogAge.setText(Long.toString(((DogOwner) user).getDog().getAge()));
 
                     // Load the picture of dog
@@ -260,8 +258,19 @@ public class MyProfileActivity extends Fragment {
                 Long dogAgeVal = Long.valueOf(dogAge.getText().toString());
                 DogSize sizeVal = (isSmall.isChecked() ? DogSize.Small : (isMedium.isChecked() ? DogSize.Medium : DogSize.Large));
 
+                progressBar.setVisibility(View.VISIBLE);
                 Model.getInstance().updateDogOwner(new DogOwner(id, userName, firstNameVal, lastNameVal, phoneVal, addressVal, cityVal,
-                        new Dog(dogNameVal, sizeVal, dogAgeVal, dogPic)));
+                        new Dog(dogNameVal, sizeVal, dogAgeVal, dogPic)), new Model.IsSucceedListener() {
+                    @Override
+                    public void onResult(boolean isSucceed) {
+                        if(isSucceed){
+                            Toast.makeText(context, "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(context, "אירעה שגיאה בתהליך השמירה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
+                        }
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
             }
             else
             {
@@ -271,11 +280,21 @@ public class MyProfileActivity extends Fragment {
                 Boolean noonVal = afternoon.isChecked();
                 Boolean eveningVal = evening.isChecked();
 
+                progressBar.setVisibility(View.VISIBLE);
                 Model.getInstance().updateDogWalker(new DogWalker(id, userName, firstNameVal, lastNameVal, phoneVal, addressVal, cityVal,
-                        ageVal, priceVal, morningVal, noonVal, eveningVal));
+                        ageVal, priceVal, morningVal, noonVal, eveningVal), new Model.IsSucceedListener() {
+                    @Override
+                    public void onResult(boolean isSucceed) {
+                        progressBar.setVisibility(View.GONE);
+                        if(isSucceed){
+                            Toast.makeText(context, "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
+                            //   listener.onFinish();
+                        }else {
+                            Toast.makeText(context, "אירעה שגיאה בתהליך השמירה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
-
-            listener.onFinish();
         }
     }
 
