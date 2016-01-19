@@ -4,17 +4,16 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:weightSum="2"
+    android:weightSum="5"
     android:layoutDirection="rtl">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="3">
 
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -32,11 +31,10 @@
                 android:text="name"
                 android:id="@+id/dogName"
                 android:layout_marginRight="10dp"
-                android:textSize="20dp"/>
+                android:textSize="18dp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -55,10 +53,9 @@
                 android:text="name"
                 android:id="@+id/ownerName"
                 android:layout_marginRight="10dp"
-                android:textSize="20dp"/>
+                android:textSize="18dp"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -77,11 +74,10 @@
                 android:text="name"
                 android:id="@+id/walkerName"
                 android:layout_marginRight="10dp"
-                android:textSize="20dp"/>
+                android:textSize="18dp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -105,10 +101,9 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="2">
 
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -127,11 +122,10 @@
                 android:text="name"
                 android:id="@+id/date"
                 android:layout_marginRight="10dp"
-                android:textSize="20dp"/>
+                android:textSize="18dp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -150,11 +144,10 @@
                 android:text="name"
                 android:id="@+id/startTime"
                 android:layout_marginRight="10dp"
-                android:textSize="15dp"/>
+                android:textSize="18dp"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -173,10 +166,9 @@
                 android:text="name"
                 android:id="@+id/endTime"
                 android:layout_marginRight="10dp"
-                android:textSize="15dp"/>
+                android:textSize="18dp"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -195,7 +187,7 @@
                 android:text="name"
                 android:id="@+id/priceForTrip"
                 android:layout_marginRight="10dp"
-                android:textSize="20dp"/>
+                android:textSize="18dp"/>
         </LinearLayout>
     </LinearLayout>
 

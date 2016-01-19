@@ -2,12 +2,14 @@ package com.example.nofarcohenzedek.dogo;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -104,14 +106,17 @@ public class DogsListActivity extends Fragment
             currentListItem.findViewById(R.id.endTripBtn).setEnabled(true);
             currentListItem.findViewById(R.id.startTripBtn).setEnabled(false);
 
+            // Replace the imageButton to disabled
+            ((ImageButton)currentListItem.findViewById(R.id.endTripBtn)).setImageResource(R.drawable.finish_trip_button);
+            ((ImageButton)currentListItem.findViewById(R.id.startTripBtn)).setImageResource(R.drawable.start_trip_disable_button);
+
             Model.getInstance().startTrip(ownerId, userId, new Model.GetIdListener() {
                 @Override
                 public void onResult(long tripId, boolean isSucceed) {
-                    if(isSucceed){
+                    if (isSucceed) {
                         tripsByOwnerId.put(ownerId, tripId);
                         Toast.makeText(context, "טיול התחיל בהצלחה", Toast.LENGTH_SHORT).show();
-                    }
-                   else{
+                    } else {
                         Toast.makeText(context, "אירעה שגיאה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -124,13 +129,16 @@ public class DogsListActivity extends Fragment
             currentListItem.findViewById(R.id.endTripBtn).setEnabled(false);
             currentListItem.findViewById(R.id.startTripBtn).setEnabled(true);
 
+            // Replace the imageButton to disabled
+            ((ImageButton)currentListItem.findViewById(R.id.endTripBtn)).setImageResource(R.drawable.finish_trip_disable_button);
+            ((ImageButton)currentListItem.findViewById(R.id.startTripBtn)).setImageResource(R.drawable.start_trip_button);
+
             Model.getInstance().endTrip(tripsByOwnerId.get(ownerId), new Model.IsSucceedListener() {
                 @Override
                 public void onResult(boolean isSucceed) {
-                    if(isSucceed){
+                    if (isSucceed) {
                         Toast.makeText(context, "טיול הסתיים בהצלחה", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
+                    } else {
                         Toast.makeText(context, "אירעה שגיאה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -176,8 +184,10 @@ public class DogsListActivity extends Fragment
             phone.setText(owner.getPhoneNumber());
 
             // work around
-            Button startTrip = (Button) convertView.findViewById(R.id.startTripBtn);
-            Button endTrip = (Button) convertView.findViewById(R.id.endTripBtn);
+            ImageButton startTrip = (ImageButton) convertView.findViewById(R.id.startTripBtn);
+            ImageButton endTrip = (ImageButton) convertView.findViewById(R.id.endTripBtn);
+
+            endTrip.setEnabled(false);
 
             startTrip.setOnClickListener(new View.OnClickListener() {
                 @Override

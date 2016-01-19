@@ -83,60 +83,6 @@ public class TripsReportActivity extends Fragment {
 
         return view;
     }
-//        @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_trips_report);
-//
-//        setActionBar((Toolbar) findViewById(R.id.tripsReportToolBar));
-//        getActionBar().setDisplayShowTitleEnabled(false);
-//        progressBar = (ProgressBar) findViewById(R.id.tripsReportProgressBar);
-//
-//        isOwner = getIntent().getBooleanExtra("isOwner", false);
-//        userId = getIntent().getLongExtra("userId",0);
-//
-//        // Get all trips that connected to current user
-//        if(isOwner)
-//        {
-//            Model.getInstance().getTripsByDogOwnerId(userId, new Model.GetTripsListener() {
-//                @Override
-//                public void onResult(List<Trip> trips) {
-//                    allTrips = trips;
-//
-//                    if (allTrips != null && !allTrips.isEmpty()) {
-//                        CustomAdapter adapter = new CustomAdapter();
-//                        ListView listView = (ListView) findViewById(R.id.tripsList);
-//                        listView.setAdapter(adapter);
-//                    }
-//                    else
-//                    {
-//                        ((TextView)findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
-//                    }
-//                    progressBar.setVisibility(View.GONE);
-//                }
-//            });
-//        }
-//        else
-//        {
-//            Model.getInstance().getTripsByDogWalkerId(userId, new Model.GetTripsListener() {
-//                @Override
-//                public void onResult(List<Trip> trips) {
-//                    allTrips = trips;
-//
-//                    if (allTrips != null && !allTrips.isEmpty()) {
-//                        CustomAdapter adapter = new CustomAdapter();
-//                        ListView listView = (ListView) findViewById(R.id.tripsList);
-//                        listView.setAdapter(adapter);
-//                    }
-//                    else
-//                    {
-//                        ((TextView)findViewById(R.id.errorInTripsList)).setText("אין טיולים להצגה");
-//                    }
-//                    progressBar.setVisibility(View.GONE);
-//                }
-//            });
-//        }
-//    }
 
     /**
      * pay for trip - on select 'isPaid' checkBox
@@ -210,8 +156,8 @@ public class TripsReportActivity extends Fragment {
             ownerName.setText(trip.getDogOwner().getFirstName());
             walkerName.setText(trip.getDogWalker().getFirstName());
             date.setText(new SimpleDateFormat("dd/MM/yyyy").format(trip.getStartOfWalking()));
-            startTime.setText(new SimpleDateFormat("hh:mm a").format(trip.getStartOfWalking()));
-            endTime.setText(new SimpleDateFormat("hh:mm a").format(trip.getEndOfWalking()));
+            startTime.setText(new SimpleDateFormat("HH:mm").format(trip.getStartOfWalking()));
+            endTime.setText(new SimpleDateFormat("HH:mm").format(trip.getEndOfWalking()));
             isPaid.setChecked(trip.getIsPaid());
 
             // Calculate the price for this trip

@@ -159,12 +159,13 @@ public class MyProfileActivity extends Fragment {
             }
         });
 
-        view.findViewById(R.id.btn_openGallery).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGalleryBTN(v);
-            }
-        });
+        // This on comment because i dont know if we want to edit picture or not
+//        view.findViewById(R.id.btn_openGallery).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openGalleryBTN(v);
+//            }
+//        });
 
         return view;
     }

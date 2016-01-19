@@ -372,20 +372,22 @@
                         android:layout_margin="10dp" />
 
                 </LinearLayout>
-
+<!--
                 <Button
                     android:id="@+id/btn_openGallery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/choosePic" />
-
+-->
             </LinearLayout>
 
-            <Button
+            <ImageButton
                 android:id="@+id/saveChangesMyProfile"
-                android:layout_width="wrap_content"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:text="שמור" />
+                android:src="@drawable/save_button"
+                android:scaleType="fitCenter"
+                android:background="@color/colorBackground"/>
 
         </LinearLayout>
     </ScrollView>

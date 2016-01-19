@@ -16,46 +16,63 @@
         android:layoutDirection="rtl">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                            android:orientation="horizontal"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layoutDirection="rtl">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/dogOwnerName"
-                android:text="בעל כלב"
-                android:textIsSelectable="true" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=" מעוניין שתוציא את כלבו "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/dogName"
-                android:text="כלב"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text=" לטיול "/>
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl">
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                android:orientation="horizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layoutDirection="rtl">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/dogOwnerName"
+                    android:text="בעל כלב"
+                    android:textIsSelectable="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=" מעוניין שתוציא את כלבו "/>
+            </LinearLayout>
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/dogName"
+                    android:text="כלב"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text=" לטיול "/>
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layoutDirection="rtl">
-        <Button
+
+        <ImageButton
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="אשר"
+            android:src="@drawable/ok_button"
+            android:scaleType="fitCenter"
+            android:background="@color/colorBackground"
             android:id="@+id/acceptButton"/>
-        <Button
+        <ImageButton
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="דחה"
+            android:src="@drawable/cancel_button"
+            android:scaleType="fitCenter"
+            android:background="@color/colorBackground"
             android:id="@+id/declineButton"/>
 
         </LinearLayout>

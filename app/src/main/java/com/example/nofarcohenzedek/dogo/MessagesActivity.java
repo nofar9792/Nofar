@@ -2,12 +2,17 @@ package com.example.nofarcohenzedek.dogo;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,6 +47,7 @@ public class MessagesActivity extends Fragment
         data = new LinkedList<>();
         progressBar.setVisibility(View.VISIBLE);
         list = (ListView) view.findViewById(R.id.messagesList);
+
         final MessagesAdapter adapter = new MessagesAdapter();
 
         Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
@@ -69,10 +75,11 @@ public class MessagesActivity extends Fragment
                         @Override
                         public void onResult(List<DogWalker> dogWalkers) {
                             if (!dogWalkers.isEmpty()) {
-                            for (DogWalker dogWalker : dogWalkers) {
-                                data.add(dogWalker);
-                                list.setAdapter(adapter);
-                            }}else {
+                                for (DogWalker dogWalker : dogWalkers) {
+                                    data.add(dogWalker);
+                                    list.setAdapter(adapter);
+                                }
+                            } else {
                                 ((TextView) view.findViewById(R.id.errorInMessagesList)).setText("אין הודעות להצגה");
                             }
                             progressBar.setVisibility(View.GONE);
@@ -108,8 +115,8 @@ public class MessagesActivity extends Fragment
                 if (convertView == null) {
                     LayoutInflater inflater = getActivity().getLayoutInflater();
                     convertView = inflater.inflate(R.layout.walker_requests_row_layout, null);
-                    Button acceptButton = (Button) convertView.findViewById(R.id.acceptButton);
-                    Button declineButton = (Button) convertView.findViewById(R.id.declineButton);
+                    ImageButton acceptButton = (ImageButton) convertView.findViewById(R.id.acceptButton);
+                    ImageButton declineButton = (ImageButton) convertView.findViewById(R.id.declineButton);
                     acceptButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -149,10 +156,21 @@ public class MessagesActivity extends Fragment
 
                 TextView dogOwnerNameTV = (TextView) convertView.findViewById(R.id.dogOwnerName);
                 TextView dogNameTV = (TextView) convertView.findViewById(R.id.dogName);
+                ImageView dogPic = (ImageView)convertView.findViewById(R.id.csrlImage);
 
-                DogOwner dogOwner = (DogOwner) data.get(position);
+                final DogOwner dogOwner = (DogOwner) data.get(position);
                 dogOwnerNameTV.setText(dogOwner.getFirstName() + " " + dogOwner.getLastName());
                 dogNameTV.setText(dogOwner.getDog().getName());
+
+                // on click - open the dog owner details
+                dogPic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetails.class);
+                        intent.putExtra("dogOwnerId", Long.toString(dogOwner.getId()));
+                        startActivity(intent);
+                }
+                });
             }
             else{
                 if (convertView == null) {

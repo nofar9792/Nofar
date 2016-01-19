@@ -48,45 +48,45 @@ public class DogOwnerDetails extends Activity {
         Model.getInstance().getUserById(Long.parseLong(dogOwnerId), new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
-                if (user instanceof DogOwner) {
-                    firstName.setText(user.getFirstName());
-                    lastName.setText(user.getLastName());
-                    city.setText(user.getCity());
-                    address.setText(user.getAddress());
-                    Dog dog = ((DogOwner) user).getDog();
-                    dogName.setText(dog.getName());
-                    dogAge.setText(String.valueOf(dog.getAge()));
+                if(user != null) {
+                    if (user instanceof DogOwner) {
+                        firstName.setText(user.getFirstName());
+                        lastName.setText(user.getLastName());
+                        city.setText(user.getCity());
+                        address.setText(user.getAddress());
+                        Dog dog = ((DogOwner) user).getDog();
+                        dogName.setText(dog.getName());
+                        dogAge.setText(String.valueOf(dog.getAge()));
 
-                    // Load the picture of dog
-                    final String picRef = (((DogOwner) user).getDog().getPicRef());
+                        // Load the picture of dog
+                        final String picRef = (((DogOwner) user).getDog().getPicRef());
 
-                    if (Utilities.isFileExistInDevice(picRef))
-                    {
-                        dogPic.setImageBitmap(Utilities.loadImageFromDevice(picRef));
-                    }
-                    else {
-                        Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
-                            @Override
-                            public void onResult(Bitmap picture) {
-                                dogPic.setImageBitmap(picture);
-                                Utilities.saveImageOnDevice(picRef, picture);
-                            }
-                        });
-                    }
+                        if (Utilities.isFileExistInDevice(picRef)) {
+                            dogPic.setImageBitmap(Utilities.loadImageFromDevice(picRef));
+                        } else {
+                            Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
+                                @Override
+                                public void onResult(Bitmap picture) {
+                                    dogPic.setImageBitmap(picture);
+                                    Utilities.saveImageOnDevice(picRef, picture);
+                                }
+                            });
+                        }
 
-                    // Check which size the dog is.
-                    if (dog.getSize().name().equals(DogSize.Large.name())) {
-                        isBig.setChecked(true);
-                        isMedium.setChecked(false);
-                        isSmall.setChecked(false);
-                    } else if (dog.getSize().name().equals(DogSize.Medium.name())) {
-                        isBig.setChecked(false);
-                        isMedium.setChecked(true);
-                        isSmall.setChecked(false);
-                    } else if (dog.getSize().name().equals(DogSize.Small.name())) {
-                        isBig.setChecked(false);
-                        isMedium.setChecked(false);
-                        isSmall.setChecked(true);
+                        // Check which size the dog is.
+                        if (dog.getSize().name().equals(DogSize.Large.name())) {
+                            isBig.setChecked(true);
+                            isMedium.setChecked(false);
+                            isSmall.setChecked(false);
+                        } else if (dog.getSize().name().equals(DogSize.Medium.name())) {
+                            isBig.setChecked(false);
+                            isMedium.setChecked(true);
+                            isSmall.setChecked(false);
+                        } else if (dog.getSize().name().equals(DogSize.Small.name())) {
+                            isBig.setChecked(false);
+                            isMedium.setChecked(false);
+                            isSmall.setChecked(true);
+                        }
                     }
                 }
             }

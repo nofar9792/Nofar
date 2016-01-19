@@ -98,19 +98,23 @@
         android:focusable="false"
         android:focusableInTouchMode="false">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="התחל טיול"
+        <ImageButton
+            android:layout_width="130dp"
+            android:layout_height="80dp"
             android:id="@+id/startTripBtn"
             android:tag="startTripTag"
             android:focusable="false"
+            android:scaleType="fitCenter"
+            android:background="@color/colorBackground"
+            android:src="@drawable/start_trip_button"
             android:focusableInTouchMode="false"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="סיים טיול"
+        <ImageButton
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:scaleType="fitCenter"
+            android:background="@color/colorBackground"
+            android:src="@drawable/finish_trip_disable_button"
             android:id="@+id/endTripBtn"
             android:tag="endTripTag"
             android:enabled="false"

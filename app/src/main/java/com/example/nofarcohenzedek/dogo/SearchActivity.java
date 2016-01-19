@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -78,7 +79,7 @@ public class SearchActivity extends Fragment
             }
         });
 
-        ((Button)view.findViewById(R.id.searchBTN)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton)view.findViewById(R.id.searchBTN)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchBTNClick(v);
@@ -163,7 +164,7 @@ public class SearchActivity extends Fragment
             layoutDistance.setVisibility(View.GONE);
         }
 
-        Button searchBTN = (Button) currentView.findViewById(R.id.searchBTN);
+        ImageButton searchBTN = (ImageButton) currentView.findViewById(R.id.searchBTN);
         searchBTN.setEnabled(true);
     }
 

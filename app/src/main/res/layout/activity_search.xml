@@ -188,12 +188,14 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/searchBTN"
-            android:layout_width="wrap_content"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="חפש" />
+            android:src="@drawable/search_button"
+            android:scaleType="fitCenter"
+            android:background="@color/colorBackground"/>
 
         <ListView
             android:id="@+id/searchResultList"
