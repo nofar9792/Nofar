@@ -137,6 +137,7 @@ public class TripParse {
     public static void getTripsDetailsByDogWalkerId(final long dogWalkerId, final ModelParse.GetTripsDetailsListener listener){
         ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
         query.whereEqualTo(DOG_WALKER_ID, dogWalkerId);
+        query.whereExists(END_OF_WALKING);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {

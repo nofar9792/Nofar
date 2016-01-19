@@ -265,7 +265,7 @@ public class MyProfileActivity extends Fragment {
                     @Override
                     public void onResult(boolean isSucceed) {
                         if(isSucceed){
-                            Toast.makeText(context, "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context , "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(context, "אירעה שגיאה בתהליך השמירה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
                         }

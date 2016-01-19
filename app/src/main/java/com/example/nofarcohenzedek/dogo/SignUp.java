@@ -302,7 +302,7 @@ public class SignUp extends Activity {
                     dogPic = BitmapFactory.decodeStream(imageStream);
 
                     // Save selected image, and path
-                    picRef = selectedImage.getPath();
+                    picRef = String.valueOf(selectedImage.getPath().hashCode());
                     ((ImageView)findViewById(R.id.dogPic)).setImageBitmap(dogPic);
                 }
         }
