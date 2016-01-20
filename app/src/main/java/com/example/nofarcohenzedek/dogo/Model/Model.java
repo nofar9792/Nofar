@@ -56,7 +56,7 @@ public class Model {
         final List<DogWalker> dogWalkersResult = modelSql.getAllDogWalkers();
         String lastUpdateDate = modelSql.getDogWalkersLastUpdateDate();
 
-        modelParse.getAllDogWalkers(lastUpdateDate, new GetDogWalkersListener() {
+        modelParse.getAllDogWalkers(null, new GetDogWalkersListener() {
             @Override
             public void onResult(List<DogWalker> dogWalkers) {
                 if (dogWalkers.size() > 0) {
@@ -137,7 +137,7 @@ public class Model {
         final List<DogOwner> dogOwnersResult = modelSql.getOwnersConnectToWalker(dogWalkerId);
         final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
 
-        modelParse.getRequestByDogWalker(dogWalkerId, lastUpdateDate, new GetRequestsListener() {
+        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
             @Override
             public void onResult(List<Request> requests) {
                 if (requests.size() > 0) {
@@ -160,7 +160,7 @@ public class Model {
         final List<DogOwner> dogOwnersResult = modelSql.getRequestForDogWalker(dogWalkerId);
         final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
 
-        modelParse.getRequestByDogWalker(dogWalkerId, lastUpdateDate, new GetRequestsListener() {
+        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
             @Override
             public void onResult(List<Request> requests) {
                 if (requests.size() > 0) {
@@ -183,7 +183,7 @@ public class Model {
         final List<DogWalker> dogWalkersResult = modelSql.getRequestForDogOwner(dogOwnerId);
         final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
 
-        modelParse.getRequestByDogOwner(dogOwnerId, lastUpdateDate, new GetRequestsListener() {
+        modelParse.getRequestByDogOwner(dogOwnerId, null, new GetRequestsListener() {
             @Override
             public void onResult(List<Request> requests) {
                 if (requests.size() > 0) {

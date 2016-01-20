@@ -142,17 +142,6 @@ public class SearchActivity extends Fragment
 
             searchByParameters(age, price, morning, noon, evening);
         }
-
-        if (list != null)
-        {
-            CustomAdapter adapter = new CustomAdapter();
-            ListView listView = (ListView) currentView.findViewById(R.id.searchResultList);
-            listView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-
-        }
-
-        progressBar.setVisibility(View.GONE);
     }
 
     private void searchByDistance(final Long radiusInMeters)
@@ -190,6 +179,14 @@ public class SearchActivity extends Fragment
                 }
 
                 list = temp;
+
+                CustomAdapter adapter = new CustomAdapter();
+                ListView listView = (ListView) currentView.findViewById(R.id.searchResultList);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+                progressBar.setVisibility(View.GONE);
+
             }
         });
     }
@@ -230,6 +227,13 @@ public class SearchActivity extends Fragment
                 }
 
                 list = temp;
+
+                CustomAdapter adapter = new CustomAdapter();
+                ListView listView = (ListView) currentView.findViewById(R.id.searchResultList);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
