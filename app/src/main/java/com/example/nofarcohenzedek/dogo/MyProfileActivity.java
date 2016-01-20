@@ -122,20 +122,21 @@ public class MyProfileActivity extends Fragment {
                     // Load the picture of dog
                     dogPic = (((DogOwner) user).getDog().getPicRef());
 
-                    // if possible - take from device
-                    if (Utilities.isFileExistInDevice(dogPic))
-                    {
-                        ((ImageView) currentView.findViewById(R.id.dogPicMP)).setImageBitmap(Utilities.loadImageFromDevice(dogPic));
-                    }
-                    else {
-                        Model.getInstance().getImage(dogPic, new Model.GetBitmapListener() {
-                            @Override
-                            public void onResult(Bitmap picture) {
-                                ((ImageView) currentView.findViewById(R.id.dogPicMP)).setImageBitmap(picture);
+                    // Check if there is a picture to this dog
+                    if (dogPic != null) {
+                        // if possible - take from device
+                        if (Utilities.isFileExistInDevice(dogPic)) {
+                            ((ImageView) currentView.findViewById(R.id.dogPicMP)).setImageBitmap(Utilities.loadImageFromDevice(dogPic));
+                        } else {
+                            Model.getInstance().getImage(dogPic, new Model.GetBitmapListener() {
+                                @Override
+                                public void onResult(Bitmap picture) {
+                                    ((ImageView) currentView.findViewById(R.id.dogPicMP)).setImageBitmap(picture);
 
-                                Utilities.saveImageOnDevice(dogPic, picture);
-                            }
-                        });
+                                    Utilities.saveImageOnDevice(dogPic, picture);
+                                }
+                            });
+                        }
                     }
                 }
                 progressBar.setVisibility(View.GONE);

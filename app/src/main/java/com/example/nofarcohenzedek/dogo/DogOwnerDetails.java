@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -25,10 +27,15 @@ import java.io.InputStream;
 
 public class DogOwnerDetails extends Activity {
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_owner_details);
+
+        progressBar = (ProgressBar)findViewById(R.id.dogOwnerProgressBar);
 
         Intent intent = getIntent();
         final String dogOwnerId = intent.getStringExtra("dogOwnerId");
@@ -61,16 +68,18 @@ public class DogOwnerDetails extends Activity {
                         // Load the picture of dog
                         final String picRef = (((DogOwner) user).getDog().getPicRef());
 
-                        if (Utilities.isFileExistInDevice(picRef)) {
-                            dogPic.setImageBitmap(Utilities.loadImageFromDevice(picRef));
-                        } else {
-                            Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
-                                @Override
-                                public void onResult(Bitmap picture) {
-                                    dogPic.setImageBitmap(picture);
-                                    Utilities.saveImageOnDevice(picRef, picture);
-                                }
-                            });
+                        if (picRef != null) {
+                            if (Utilities.isFileExistInDevice(picRef)) {
+                                dogPic.setImageBitmap(Utilities.loadImageFromDevice(picRef));
+                            } else {
+                                Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
+                                    @Override
+                                    public void onResult(Bitmap picture) {
+                                        dogPic.setImageBitmap(picture);
+                                        Utilities.saveImageOnDevice(picRef, picture);
+                                    }
+                                });
+                            }
                         }
 
                         // Check which size the dog is.
@@ -89,7 +98,18 @@ public class DogOwnerDetails extends Activity {
                         }
                     }
                 }
+
+                progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public void setProgressBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
     }
 }

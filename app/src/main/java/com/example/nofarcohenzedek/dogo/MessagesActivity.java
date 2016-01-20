@@ -3,6 +3,7 @@ package com.example.nofarcohenzedek.dogo;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
+import com.example.nofarcohenzedek.dogo.Model.Utilities;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -156,11 +158,33 @@ public class MessagesActivity extends Fragment
 
                 TextView dogOwnerNameTV = (TextView) convertView.findViewById(R.id.dogOwnerName);
                 TextView dogNameTV = (TextView) convertView.findViewById(R.id.dogName);
-                ImageView dogPic = (ImageView)convertView.findViewById(R.id.csrlImage);
+                final ImageView dogPic = (ImageView)convertView.findViewById(R.id.csrlImage);
 
                 final DogOwner dogOwner = (DogOwner) data.get(position);
                 dogOwnerNameTV.setText(dogOwner.getFirstName() + " " + dogOwner.getLastName());
                 dogNameTV.setText(dogOwner.getDog().getName());
+                final String picRef = dogOwner.getDog().getPicRef();
+
+                // Get the dog image
+                if (picRef != null) {
+                    if (Utilities.isFileExistInDevice(picRef)) {
+                        Bitmap picture = Utilities.loadImageFromDevice(picRef);
+
+                        if (picture != null) {
+                            dogPic.setImageBitmap(picture);
+                        }
+                    } else {
+                        Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
+                            @Override
+                            public void onResult(Bitmap picture) {
+                                if (picture != null) {
+                                    dogPic.setImageBitmap(picture);
+                                    Utilities.saveImageOnDevice(picRef, picture);
+                                }
+                            }
+                        });
+                    }
+                }
 
                 // on click - open the dog owner details
                 dogPic.setOnClickListener(new View.OnClickListener() {
