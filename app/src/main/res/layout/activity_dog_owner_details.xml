@@ -164,7 +164,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/isBig"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:enabled="false"/>
 
             <RadioButton
                 android:id="@+id/isMediumForDetais"
@@ -172,7 +173,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:text="@string/isMedium"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:enabled="false"/>
 
             <RadioButton
                 android:id="@+id/isSmallForDetais"
@@ -180,7 +182,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:text="@string/isSmall"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:enabled="false"/>
         </RadioGroup>
 
     </LinearLayout>

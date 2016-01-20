@@ -32,10 +32,10 @@
     <string name="typeOfUser">סוג המשתמש:</string>
     <string name="dogName">שם הכלב:</string>
     <string name="dogSize">גודל הכלב:</string>
-    <string name="isBig">גדול:</string>
-    <string name="isMedium">בינוני:</string>
-    <string name="isSmall">קטן:</string>
-    <string name="dogAge">גיל של הכלב:</string>
+    <string name="isBig">גדול</string>
+    <string name="isMedium">בינוני</string>
+    <string name="isSmall">קטן</string>
+    <string name="dogAge">גיל הכלב:</string>
     <string name="dogPic">תמונה של הכלב:</string>
     <string name="choosePic">עיון</string>
 
