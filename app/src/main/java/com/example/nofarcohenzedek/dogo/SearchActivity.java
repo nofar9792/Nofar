@@ -2,19 +2,13 @@ package com.example.nofarcohenzedek.dogo;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.app.Activity;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,7 +17,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
@@ -37,7 +30,6 @@ import java.util.List;
 
 public class SearchActivity extends Fragment
 {
-
     private List<DogWalker> list;
     private ProgressBar progressBar;
     private DogOwner owner;
@@ -86,65 +78,8 @@ public class SearchActivity extends Fragment
             }
         });
 
-
-
         return view;
     }
-
-
-//        @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_search);
-//        progressBar = (ProgressBar) findViewById(R.id.searchProgressBar);
-//
-//        setActionBar((Toolbar) findViewById(R.id.searchToolBar));
-//        getActionBar().setDisplayShowTitleEnabled(false);
-//
-//        ((ListView)findViewById(R.id.searchResultList)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(getApplicationContext(), DogWalkerDetails.class);
-//                intent.putExtra("walkerId", Long.toString(id));
-//                intent.putExtra("ownerId", getIntent().getLongExtra("userId", 0));
-//                startActivity(intent);
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_prime_dog_owner, menu);
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        Intent intent = null;
-//
-//        if (id == R.id.dogsList) {
-//            intent = new Intent(this, DogsListActivity.class);
-//        } else if (id == R.id.map) {
-//            intent = new Intent(this, MapsActivity.class);
-//        } else if (id == R.id.tripsReport) {
-//            intent = new Intent(this, TripsReportActivity.class);
-//        } else if (id == R.id.messages) {
-//            intent = new Intent(this, MessagesActivity.class);
-//        } else if (id == R.id.myProfile) {
-//            intent = new Intent(this, MyProfileActivity.class);
-//
-//        }
-//
-//        intent.putExtra("isOwner", true);
-//        intent.putExtra("userId", getIntent().getLongExtra("userId",0));
-//        startActivity(intent);
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     public void radioButtonSearchDWBy(View view)
     {

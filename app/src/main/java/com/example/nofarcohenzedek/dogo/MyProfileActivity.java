@@ -141,7 +141,6 @@ public class MyProfileActivity extends Fragment {
                 progressBar.setVisibility(View.GONE);
             }
         });
-        // listeners
 
         view.findViewById(R.id.saveChangesMyProfile).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,79 +151,6 @@ public class MyProfileActivity extends Fragment {
 
         return view;
     }
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_my_profile);
-//
-//        setActionBar((Toolbar) findViewById(R.id.myProfileToolBar));
-//        getActionBar().setDisplayShowTitleEnabled(false);
-//        progressBar = (ProgressBar) findViewById(R.id.myProfileProgressBar);
-//
-//        isOwner = getIntent().getBooleanExtra("isOwner", false);
-//
-//        if (!isOwner){
-//            findViewById(R.id.dogWalkerSectionInMyProfile).setVisibility(View.VISIBLE);
-//        }
-//        else
-//        {
-//            findViewById(R.id.dogOwnerSectionInMyProfile).setVisibility(View.VISIBLE);
-//        }
-//
-//        Model.getInstance().getCurrentUser(new Model.GetUserListener() {
-//            @Override
-//            public void onResult(User user)
-//            {
-//                id = user.getId();
-//                userName = user.getUserName();
-//
-//                firstName = (EditText) findViewById(R.id.firstNameMP);
-//                lastName = (EditText) findViewById(R.id.lastNameMP);
-//                phone = (EditText) findViewById(R.id.phoneNumberMP);
-//                address = (EditText) findViewById(R.id.addressMP);
-//                city = (EditText) findViewById(R.id.cityMP);
-//                age = (EditText) findViewById(R.id.ageMP);
-//                price = (EditText) findViewById(R.id.priceForHourMP);
-//                morning = (CheckBox) findViewById(R.id.cbx_isComfortableOnMorningMP);
-//                afternoon = (CheckBox) findViewById(R.id.cbx_isComfortableOnAfternoonMP);
-//                evening = (CheckBox) findViewById(R.id.cbx_isComfortableOnEveningMP);
-//                dogName = (EditText) findViewById(R.id.dogNameMP);
-//                isBig = (RadioButton) findViewById(R.id.isBigMP);
-//                isMedium = (RadioButton) findViewById(R.id.isMediumMP);
-//                isSmall = (RadioButton) findViewById(R.id.isSmallMP);
-//                dogAge = (EditText) findViewById(R.id.dogAgeMP);
-//
-//                firstName.setText(user.getFirstName());
-//                lastName.setText(user.getLastName());
-//                phone.setText(user.getPhoneNumber());
-//                address.setText(user.getAddress());
-//                city.setText(user.getCity());
-//
-//                if (!isOwner){
-//                    age.setText(Long.toString(((DogWalker)user).getAge()));
-//                    price.setText(Long.toString(((DogWalker)user).getPriceForHour()));
-//                    morning.setChecked(((DogWalker) user).isComfortableOnMorning());
-//                    afternoon.setChecked(((DogWalker)user).isComfortableOnAfternoon());
-//                    evening.setChecked(((DogWalker)user).isComfortableOnEvening());
-//                }
-//                else
-//                {
-//                    dogName.setText(((DogOwner) user).getDog().getName());
-//                    DogSize size = ((DogOwner)user).getDog().getSize();
-//                    isBig.setChecked((size == DogSize.Large ? true : false));
-//                    isMedium.setChecked((size == DogSize.Medium ? true : false));
-//                    isSmall.setChecked((size == DogSize.Small ? true : false));
-//                    dogAge.setText(Long.toString(((DogOwner) user).getDog().getAge()));
-//
-//                    // TODO : DOG PIC IS EMPTY! LOAD PIC!
-//                }
-//
-//                progressBar.setVisibility(View.GONE);
-//            }
-//        });
-//    }
-
 
     public void saveChangesClick(View view)
     {
@@ -281,38 +207,6 @@ public class MyProfileActivity extends Fragment {
         }
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        Intent intent = null;
-//
-//        if (id == R.id.searchDW) {
-//            intent = new Intent(this, SearchActivity.class);
-//        } else if (id == R.id.map) {
-//            intent = new Intent(this, MapsActivity.class);
-//        } else if (id == R.id.tripsReport) {
-//            intent = new Intent(this, TripsReportActivity.class);
-//        } else if (id == R.id.messages) {
-//            intent = new Intent(this, MessagesActivity.class);
-//        } else if (id == R.id.dogsList) {
-//            intent = new Intent(this, DogsListActivity.class);
-//
-//        }
-//
-//        intent.putExtra("isOwner", isOwner);
-//        intent.putExtra("userId", getIntent().getLongExtra("userId",0));
-//        startActivity(intent);
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-    public void openGalleryBTN(View view)
-    {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);

@@ -90,7 +90,7 @@ public class ActionBarActivity extends Activity
 
         if (id == R.id.searchDW)
         {
-            if (manager.findFragmentByTag("search") == null)
+            if (manager.findFragmentByTag("search") == null && !searchFragment.isVisible())
             {
                 args.putString("address", address);
                 removeAllFragments();
@@ -100,7 +100,7 @@ public class ActionBarActivity extends Activity
         }
         else if (id == R.id.showMap)
         {
-            if (manager.findFragmentByTag("maps") == null)
+            if (manager.findFragmentByTag("maps") == null && !mapsFragment.isVisible())
             {
                 args.putString("address", address);
                 removeAllFragments();
@@ -111,7 +111,7 @@ public class ActionBarActivity extends Activity
 
         else if (id == R.id.tripsReport)
         {
-            if (manager.findFragmentByTag("trips") == null)
+            if (manager.findFragmentByTag("trips") == null && !tripsReportActivity.isVisible())
             {
                 removeAllFragments();
                 tripsReportActivity.setArguments(args);
@@ -120,7 +120,7 @@ public class ActionBarActivity extends Activity
         }
         else if (id == R.id.messages)
         {
-            if (manager.findFragmentByTag("messages") == null)
+            if (manager.findFragmentByTag("messages") == null && !messagesFragment.isVisible())
             {
                 removeAllFragments();
                 messagesFragment.setArguments(args);
@@ -129,7 +129,7 @@ public class ActionBarActivity extends Activity
         }
         else if (id == R.id.myProfile)
         {
-            if (manager.findFragmentByTag("myProfile") == null)
+            if (manager.findFragmentByTag("myProfile") == null && !myProfileFragment.isVisible())
             {
                 removeAllFragments();
                 myProfileFragment.setArguments(args);
@@ -138,7 +138,7 @@ public class ActionBarActivity extends Activity
         }
         else if (id == R.id.dogsList)
         {
-            if (manager.findFragmentByTag("dogsList") == null)
+            if (manager.findFragmentByTag("dogsList") == null && !dogsListFragment.isVisible())
             {
                 removeAllFragments();
                 dogsListFragment.setArguments(args);

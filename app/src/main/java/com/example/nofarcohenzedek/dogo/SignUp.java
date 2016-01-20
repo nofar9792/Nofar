@@ -91,7 +91,7 @@ public class SignUp extends Activity {
      */
     public void saveBTN(View view) {
         final TextView error = (TextView) findViewById(R.id.error);
-        isSaved = true;
+        isSaved = false;
 
         // Get all current details
         initAllDetails();
@@ -116,6 +116,7 @@ public class SignUp extends Activity {
                                     @Override
                                     public void onResult(boolean isSucceed) {
                                         if (isSucceed) {
+                                            isSaved = true;
                                             Toast.makeText(getApplicationContext(), "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
                                         } else {
                                             Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
@@ -133,8 +134,6 @@ public class SignUp extends Activity {
                         if (message.equals("user already exist")) {
                             error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
                         }
-
-                        isSaved = false;
                     }
                 });
 
@@ -146,6 +145,7 @@ public class SignUp extends Activity {
                             @Override
                             public void onResult(long id, boolean isSucceed) {
                                 if (isSucceed) {
+                                    isSaved = true;
                                     Toast.makeText(getApplicationContext(), "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
@@ -157,8 +157,6 @@ public class SignUp extends Activity {
                                 if (message.equals("user already exist")) {
                                     error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
                                 }
-
-                                isSaved = false;
                             }
                         });
             }

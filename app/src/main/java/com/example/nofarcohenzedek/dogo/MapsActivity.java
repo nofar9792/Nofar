@@ -83,8 +83,9 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
                 {
                     String finalAddress = currentDogWalker.getAddress() + "," + currentDogWalker.getCity();
 
-                    if(getActivity() != null) {
-                        LatLng location = Utilities.getLocationFromAddress(finalAddress, getActivity().getApplicationContext());
+                    Activity currentActivity = getActivity();
+                    if(currentActivity != null) {
+                        LatLng location = Utilities.getLocationFromAddress(finalAddress, currentActivity.getApplicationContext());
 
                         mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId())));
                     }
