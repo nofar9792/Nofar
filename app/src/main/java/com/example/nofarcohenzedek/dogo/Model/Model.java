@@ -160,7 +160,7 @@ public class Model {
         final List<DogOwner> dogOwnersResult = modelSql.getRequestForDogWalker(dogWalkerId);
         final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
 
-        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
+        modelParse.getRequestByDogWalker(dogWalkerId, lastUpdateDate, new GetRequestsListener() {
             @Override
             public void onResult(List<Request> requests) {
                 if (requests.size() > 0) {
@@ -183,7 +183,7 @@ public class Model {
         final List<DogWalker> dogWalkersResult = modelSql.getRequestForDogOwner(dogOwnerId);
         final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
 
-        modelParse.getRequestByDogOwner(dogOwnerId, null, new GetRequestsListener() {
+        modelParse.getRequestByDogOwner(dogOwnerId, lastUpdateDate, new GetRequestsListener() {
             @Override
             public void onResult(List<Request> requests) {
                 if (requests.size() > 0) {
