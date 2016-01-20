@@ -43,13 +43,9 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
     {
         View view = inflater.inflate(R.layout.activity_maps, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
-        //setHasOptionsMenu(true);
 
         Bundle args = getArguments();
 
-//         Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//        MapFragment mapFragment = (MapFragment) getFragmentManager()
-//                .findFragmentById(R.id.map);
 
         MapFragment mapFragment = (MapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -60,56 +56,6 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
         return view;
     }
-
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_maps);
-//
-//        setActionBar((Toolbar) findViewById(R.id.mapToolBar));
-//        getActionBar().setDisplayShowTitleEnabled(false);
-//        progressBar = (ProgressBar) findViewById(R.id.mapsProgressBar);
-//
-//        userId = getIntent().getLongExtra("userId",0);
-//
-//        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//        MapFragment mapFragment = (MapFragment) getFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-//    }
-//
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-//    {
-//        inflater.inflate(R.menu.menu_prime_dog_owner, menu);
-//    }
-//
-//        @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//            int id = item.getItemId();
-//
-//            Intent intent = null;
-//
-//            if (id == R.id.searchDW) {
-//                 intent = new Intent(this, SearchActivity.class);
-//            } else if (id == R.id.dogsList) {
-//                 intent = new Intent(this, DogsListActivity.class);
-//            } else if (id == R.id.tripsReport) {
-//                 intent = new Intent(this, TripsReportActivity.class);
-//            } else if (id == R.id.messages) {
-//                 intent = new Intent(this, Messa gesActivity.class);
-//            } else if (id == R.id.myProfile) {
-//                 intent = new Intent(this, MyProfileActivity.class);
-//
-//            }
-//
-//            intent.putExtra("isOwner", true);
-//            intent.putExtra("userId", userId);
-//            startActivity(intent);
-//
-//            return super.onOptionsItemSelected(item);
-//        }
 
     /**
      * Manipulates the map once available.
@@ -136,16 +82,11 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
                 for (DogWalker currentDogWalker : allDogWalkers)
                 {
                     String finalAddress = currentDogWalker.getAddress() + "," + currentDogWalker.getCity();
-                    //LatLng location = getLocationFromAddress(finalAddress);
 
                     if(getActivity() != null) {
                         LatLng location = Utilities.getLocationFromAddress(finalAddress, getActivity().getApplicationContext());
 
-                        //mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId()))
-                        //.icon(BitmapDescriptorFactory.fromResource(R.drawable.manwithdog)));
-
                         mMap.addMarker(new MarkerOptions().position(location).title(String.valueOf(currentDogWalker.getId())));
-                        //  .icon(BitmapDescriptorFactory.fromPath("/drawable/manwithdog.png")));
                     }
                     progressBar.setVisibility(View.GONE);
 
@@ -164,30 +105,5 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
                 return true;
             }
         });
-
-        // set every one of them a listener and check how can i see which one is pressed
-
-        // when marker is pressed, open details activity
     }
-
-//    public LatLng getLocationFromAddress(String address)
-//    {
-//        Geocoder coder = new Geocoder(this);
-//        List<Address> addresses = null;
-//
-//        try
-//        {
-//            addresses = coder.getFromLocationName(address, 1);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (addresses == null)
-//        {
-//            return null;
-//        }
-//
-//        return new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-//
-//    }
 }

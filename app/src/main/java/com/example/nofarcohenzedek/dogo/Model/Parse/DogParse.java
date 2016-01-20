@@ -28,9 +28,9 @@ public class DogParse {
         newDogParseObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if(e == null){
+                if (e == null) {
                     listener.onResult(true);
-                }else {
+                } else {
                     e.printStackTrace();
                     listener.onResult(false);
                 }
@@ -38,22 +38,25 @@ public class DogParse {
         });
     }
 
-    public static Dog getDogByUserIdSync(long userId) {
-        Dog dog = null;
+    public static void getDogByUserId(long userId, final Model.GetDogListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<>(DogConsts.DOGS_TABLE);
 
         query.whereEqualTo(DogConsts.USER_ID, userId);
-        try {
-            ParseObject parseObject = query.getFirst();
-            String name = parseObject.getString(DogConsts.NAME);
-            DogSize dogSize = DogSize.valueOf(parseObject.getString(DogConsts.SIZE));
-            long age = parseObject.getLong(DogConsts.AGE);
-            String picRef = parseObject.getString(DogConsts.PIC_REF);
-            dog = new Dog(name, dogSize, age, picRef);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return dog;
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if(e == null){
+                    String name = parseObject.getString(DogConsts.NAME);
+                    DogSize dogSize = DogSize.valueOf(parseObject.getString(DogConsts.SIZE));
+                    long age = parseObject.getLong(DogConsts.AGE);
+                    String picRef = parseObject.getString(DogConsts.PIC_REF);
+                    listener.onResult(new Dog(name, dogSize, age, picRef));
+                }else {
+                    listener.onResult(null);
+                }
+            }
+        });
     }
 
     public static void updateDog(long userId, final Dog dog, final Model.IsSucceedListener listener) {

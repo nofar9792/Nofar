@@ -74,8 +74,11 @@ public class Model {
     }
 
     public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
-                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening, GetIdListener listener) throws Exception {
-        modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour, isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening, listener);
+                             String address, String city, long age, int priceForHour, boolean isComfortableOnMorning,
+                             boolean isComfortableOnAfternoon, boolean isComfortableOnEvening,
+                             GetIdListener listener,  ExceptionListener exceptionListener) {
+        modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour,
+                isComfortableOnMorning, isComfortableOnAfternoon, isComfortableOnEvening, listener, exceptionListener);
     }
 
     public void updateDogWalker(DogWalker dogWalker, IsSucceedListener listener){
@@ -85,8 +88,8 @@ public class Model {
 
     //region Dog Owner Methods
     public void addDogOwner(String userName, String password, String firstName, String lastName, String phoneNumber,
-                            String address, String city, Dog dog, GetIdListener listener) throws Exception {
-        modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog, listener);
+                            String address, String city, Dog dog, GetIdListener listener, ExceptionListener exceptionListener) {
+        modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog, listener, exceptionListener);
     }
 
     public void updateDogOwner(DogOwner dogOwner, IsSucceedListener listener){
@@ -243,6 +246,10 @@ public class Model {
 
     public interface GetIdListener {
         void onResult(long id, boolean isSucceed);
+    }
+
+    public interface ExceptionListener {
+        void onResult(String message);
     }
 
     //endregion

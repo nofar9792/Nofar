@@ -21,32 +21,41 @@ import java.util.List;
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class UserParse {
-    public static void addToUsersTable(String userName, String password, String firstName, String lastName, String phoneNumber,
-                                       String address, String city, Boolean isDogWalker, final Model.GetIdListener listener) throws Exception {
-        if(isUserNameAlreadyExist(userName)){
-            throw new Exception("user already exist");
-        }
+    public static void addToUsersTable(final String userName, final String password, final String firstName, final String lastName, final String phoneNumber,
+                                       final String address, final String city, final Boolean isDogWalker, final Model.GetIdListener listener, final Model.ExceptionListener exceptionListener) {
+        isUserNameAlreadyExist(userName, new Model.IsSucceedListener() {
+            @Override
+            public void onResult(boolean isExist) {
+                if(isExist){
+                    exceptionListener.onResult("user already exist");
+                }else {
+                    getNextId(new Model.GetIdListener() {
+                        @Override
+                        public void onResult(final long newUserId, boolean isSucceed) {
+                            ParseUser user = new ParseUser();
 
-        final long newUserId = getNextId();
-        ParseUser user = new ParseUser();
+                            user.setUsername(userName);
+                            user.setPassword(password);
+                            user.put(UserConsts.USER_ID, newUserId);
+                            user.put(UserConsts.FIRST_NAME, firstName);
+                            user.put(UserConsts.LAST_NAME, lastName);
+                            user.put(UserConsts.PHONE_NUMBER, phoneNumber);
+                            user.put(UserConsts.ADDRESS, address);
+                            user.put(UserConsts.CITY, city);
+                            user.put(UserConsts.IS_DOG_WALKER, isDogWalker);
 
-        user.setUsername(userName);
-        user.setPassword(password);
-        user.put(UserConsts.USER_ID, newUserId);
-        user.put(UserConsts.FIRST_NAME, firstName);
-        user.put(UserConsts.LAST_NAME, lastName);
-        user.put(UserConsts.PHONE_NUMBER, phoneNumber);
-        user.put(UserConsts.ADDRESS, address);
-        user.put(UserConsts.CITY, city);
-        user.put(UserConsts.IS_DOG_WALKER, isDogWalker);
-
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    listener.onResult(newUserId, true);
-                } else {
-                    e.printStackTrace();
-                  listener.onResult(-1 , false);
+                            user.signUpInBackground(new SignUpCallback() {
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        listener.onResult(newUserId, true);
+                                    } else {
+                                        e.printStackTrace();
+                                        listener.onResult(-1, false);
+                                    }
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
@@ -68,7 +77,7 @@ public class UserParse {
     }
 
     public static void logOut(){
-        ParseUser.logOut();
+        ParseUser.logOutInBackground();
     }
 
     public static void getUserById(long id, final Model.GetUserListener listener) {
@@ -89,26 +98,12 @@ public class UserParse {
         });
     }
 
-    public static User getUserByIdSync(long id) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo(UserConsts.USER_ID, id);
-
-        try{
-            ParseUser parseUser = query.getFirst();
-           return convertFromParseUserToUser(parseUser);
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public static void getDogWalkerUsers(String fromDate, final Model.GetDogWalkersListener listener) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(UserConsts.IS_DOG_WALKER, true);
 
         if (fromDate != null) {
-             query.whereGreaterThanOrEqualTo("updatedAt", fromDate);
+            query.whereGreaterThanOrEqualTo("updatedAt", fromDate);
         }
 
         query.findInBackground(new FindCallback<ParseUser>() {
@@ -119,10 +114,10 @@ public class UserParse {
                     for (ParseUser parseUser : list) {
                         dogWalkers.add((DogWalker) convertFromParseUserToUser(parseUser));
                     }
-                    listener.onResult(dogWalkers);
-                }else {
+                } else {
                     e.printStackTrace();
                 }
+                listener.onResult(dogWalkers);
             }
         });
 
@@ -161,34 +156,37 @@ public class UserParse {
     }
 
     //region Private Methods
-    private static long getNextId(){
+    private static void getNextId(final Model.GetIdListener listener){
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        ParseUser parseObject = null;
 
-        try {
-            parseObject = query.addDescendingOrder(UserConsts.USER_ID).getFirst();
-            return (parseObject.getLong(UserConsts.USER_ID) + 1);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return 1;
+        query.addDescendingOrder(UserConsts.USER_ID).getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if(e == null){
+                    listener.onResult(parseUser.getLong(UserConsts.USER_ID) + 1, true);
+                }else {
+                    listener.onResult(1, true);
+                }
+            }
+        });
     }
 
-    private static boolean isUserNameAlreadyExist(String username) {
+    private static void isUserNameAlreadyExist(String username, final Model.IsSucceedListener listener) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(UserConsts.USERNAME, username);
 
-        try {
-            query.getFirst();
-            return true;
-
-        } catch (ParseException e) {
-        }
-
-        return false;
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if(e == null) {
+                    listener.onResult(true);
+                }else {
+                    listener.onResult(false);
+                }
+            }
+        });
     }
+
     private static User convertFromParseUserToUser(ParseUser parseUser){
         User user;
 

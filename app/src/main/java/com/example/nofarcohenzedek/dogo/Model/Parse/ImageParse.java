@@ -21,30 +21,34 @@ public class ImageParse {
     final static String IMAGE_NAME = "imageName";
     final static String FILE = "file";
 
-    public static void addToImagesTable(String imageName, Bitmap picture, final Model.IsSucceedListener listener) {
+    public static void addToImagesTable(final String imageName, Bitmap picture, final Model.IsSucceedListener listener) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         picture.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] picBytes = stream.toByteArray();
 
-        ParseFile imageParse = new ParseFile(picBytes, imageName);
+        final ParseFile imageParse = new ParseFile(picBytes, imageName);
 
-        try {
-            imageParse.save();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        ParseObject parseObject = new ParseObject(IMAGES_TABLE);
-        parseObject.put(IMAGE_NAME, imageName);
-        parseObject.put(FILE, imageParse);
-
-        parseObject.saveInBackground(new SaveCallback() {
+        imageParse.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if(e == null){
-                    listener.onResult(true);
-                }
-                else {
+                    ParseObject parseObject = new ParseObject(IMAGES_TABLE);
+                    parseObject.put(IMAGE_NAME, imageName);
+                    parseObject.put(FILE, imageParse);
+
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null){
+                                listener.onResult(true);
+                            }
+                            else {
+                                e.printStackTrace();
+                                listener.onResult(false);
+                            }
+                        }
+                    });
+                }else {
                     e.printStackTrace();
                     listener.onResult(false);
                 }

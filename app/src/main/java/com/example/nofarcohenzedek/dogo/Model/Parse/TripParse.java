@@ -27,25 +27,29 @@ public class TripParse {
     final static String END_OF_WALKING = "endOfWalking";
     final static String IS_PAID = "isPaid";
 
-    public static void startTrip(long dogOwnerId, long dogWalkerId, final Model.GetIdListener listener) {
-        final long newTripId = getNextId();
-        ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
-
-        newTripParseObject.put(TRIP_ID, newTripId);
-        newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
-        newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
-        newTripParseObject.put(START_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")).getTime());
-        newTripParseObject.put(IS_PAID, false);
-
-        newTripParseObject.saveInBackground(new SaveCallback() {
+    public static void startTrip(final long dogOwnerId, final long dogWalkerId, final Model.GetIdListener listener) {
+        getNextId(new Model.GetIdListener() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    listener.onResult(newTripId, true);
-                }else {
-                    e.printStackTrace();
-                    listener.onResult(-1, false);
-                }
+            public void onResult(final long newTripId, boolean isSucceed) {
+                ParseObject newTripParseObject = new ParseObject(TRIPS_TABLE);
+
+                newTripParseObject.put(TRIP_ID, newTripId);
+                newTripParseObject.put(DOG_OWNER_ID, dogOwnerId);
+                newTripParseObject.put(DOG_WALKER_ID, dogWalkerId);
+                newTripParseObject.put(START_OF_WALKING, Calendar.getInstance(TimeZone.getTimeZone("GTM+2")).getTime());
+                newTripParseObject.put(IS_PAID, false);
+
+                newTripParseObject.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            listener.onResult(newTripId, true);
+                        } else {
+                            e.printStackTrace();
+                            listener.onResult(-1, false);
+                        }
+                    }
+                });
             }
         });
     }
@@ -162,18 +166,18 @@ public class TripParse {
         });
     }
 
-    private static long getNextId(){
+    private static void getNextId(final Model.GetIdListener listener){
         ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
-        ParseObject parseObject;
 
-        try {
-            parseObject = query.addDescendingOrder(TRIP_ID).getFirst();
-            return (parseObject.getLong(TRIP_ID) + 1);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return 1;
+        query.addDescendingOrder(TRIP_ID).getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    listener.onResult(parseObject.getLong(TRIP_ID) + 1, true);
+                } else {
+                    listener.onResult(1, true);
+                }
+            }
+        });
     }
 }

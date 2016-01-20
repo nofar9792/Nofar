@@ -65,38 +65,6 @@ public class DogsListActivity extends Fragment
         return view;
     }
 
-//        @Override
-//    protected void onCreate(Bundle savedInstanceState)
-//    {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_dogs_list);
-//
-//        setActionBar((Toolbar) findViewById(R.id.dogsListToolBar));
-//        getActionBar().setDisplayShowTitleEnabled(false);
-//        progressBar = (ProgressBar) findViewById(R.id.dogsListProgressBar);
-//
-//        userId = getIntent().getLongExtra("userId", 0);
-//
-//        tripsByOwnerId = new HashMap<Long, Long>();
-//
-//        Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
-//            @Override
-//            public void onResult(List<DogOwner> allDogWalkers) {
-//                list = allDogWalkers;
-//
-//                if (list != null && list.size() != 0) {
-//                    CustomAdapter adapter = new CustomAdapter();
-//                    ListView listView = (ListView) findViewById(R.id.dogsOfDogWalker);
-//                    listView.setAdapter(adapter);
-//                } else {
-//                    ((TextView) findViewById(R.id.errorInDogsList)).setText("אין כלבים להצגה");
-//                }
-//
-//                progressBar.setVisibility(View.GONE);
-//            }
-//        });
-//    }
-
     public void onItemClickListener(View view, final Long ownerId)
     {
         if (view.getTag().equals("startTripTag"))

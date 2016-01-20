@@ -26,29 +26,35 @@ public class DogWalkerParse {
         newDogWalkerParseObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if(e == null){
+                if (e == null) {
                     listener.onResult(true);
-                }else {
+                } else {
                     listener.onResult(false);
                 }
             }
         });
     }
 
-    public static void addDogWalkerDetails(DogWalker dogWalker) {
+    public static void addDogWalkerDetails(final DogWalker dogWalker, final Model.GetUserListener listener) {
         ParseQuery<ParseObject> query = new ParseQuery<>(WalkerConsts.DOG_WALKERS_TABLE);
         query.whereEqualTo(WalkerConsts.USER_ID, dogWalker.getId());
 
-        try {
-            ParseObject parseObject = query.getFirst();
-            dogWalker.setAge(parseObject.getInt(WalkerConsts.AGE));
-            dogWalker.setPriceForHour(parseObject.getInt(WalkerConsts.PRICE_FOR_HOUR));
-            dogWalker.setIsComfortableOnMorning(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_MORNING));
-            dogWalker.setIsComfortableOnAfternoon(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON));
-            dogWalker.setIsComfortableOnEvening(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_EVENING));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    dogWalker.setAge(parseObject.getInt(WalkerConsts.AGE));
+                    dogWalker.setPriceForHour(parseObject.getInt(WalkerConsts.PRICE_FOR_HOUR));
+                    dogWalker.setIsComfortableOnMorning(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_MORNING));
+                    dogWalker.setIsComfortableOnAfternoon(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON));
+                    dogWalker.setIsComfortableOnEvening(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_EVENING));
+
+                    listener.onResult(dogWalker);
+                }else{
+                    listener.onResult(null);
+                }
+            }
+        });
     }
 
     public static void updateDogWalker(final DogWalker dogWalker, final Model.IsSucceedListener listener) {

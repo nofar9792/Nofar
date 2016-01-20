@@ -55,15 +55,6 @@ public class MyProfileActivity extends Fragment {
     private Context context;
     View currentView;
 
-//    public interface Listener
-//    {
-//        void onFinish();
-//    }
-
-//    Listener listener;
-//
-//    public void setListener (Listener listener){this.listener = listener;}
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -158,14 +149,6 @@ public class MyProfileActivity extends Fragment {
                 saveChangesClick(v);
             }
         });
-
-        // This on comment because i dont know if we want to edit picture or not
-//        view.findViewById(R.id.btn_openGallery).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openGalleryBTN(v);
-//            }
-//        });
 
         return view;
     }
@@ -289,7 +272,6 @@ public class MyProfileActivity extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         if(isSucceed){
                             Toast.makeText(context, "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
-                            //   listener.onFinish();
                         }else {
                             Toast.makeText(context, "אירעה שגיאה בתהליך השמירה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
                         }

@@ -20,7 +20,6 @@ import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
-import com.example.nofarcohenzedek.dogo.Model.Utilities;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -91,7 +90,7 @@ public class SignUp extends Activity {
      * @param view
      */
     public void saveBTN(View view) {
-        TextView error = (TextView) findViewById(R.id.error);
+        final TextView error = (TextView) findViewById(R.id.error);
         isSaved = true;
 
         // Get all current details
@@ -108,65 +107,61 @@ public class SignUp extends Activity {
                         Long.parseLong(dogAge), picRef);
 
                 // Save the owner on DB
-                try {
-                    Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog, new Model.GetIdListener() {
-                        @Override
-                        public void onResult(long id, boolean isSucceed) {
-                            if(isSucceed) {
-                                if (picRef != null) {
-                                    Model.getInstance().saveImage(picRef, dogPic, new Model.IsSucceedListener() {
-                                        @Override
-                                        public void onResult(boolean isSucceed) {
-                                            if(isSucceed){
-                                                Toast.makeText(getApplicationContext(),"שמירה בוצעה בהצלחה" , Toast.LENGTH_SHORT).show();
-                                                Utilities.saveImageOnDevice(picRef, dogPic);
-                                            }else {
-                                                Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
-                                            }
+                Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog, new Model.GetIdListener() {
+                    @Override
+                    public void onResult(long id, boolean isSucceed) {
+                        if (isSucceed) {
+                            if (picRef != null) {
+                                Model.getInstance().saveImage(picRef, dogPic, new Model.IsSucceedListener() {
+                                    @Override
+                                    public void onResult(boolean isSucceed) {
+                                        if (isSucceed) {
+                                            Toast.makeText(getApplicationContext(), "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
                                         }
-                                    });
-                                }
-                            }else {
-                                Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                } catch (Exception e) {
-                    // Check if this userName exist
-                    if (e.getMessage().equals("user already exist")){
-                        error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
                     }
+                }, new Model.ExceptionListener() {
+                    @Override
+                    public void onResult(String message) {
+                        if (message.equals("user already exist")) {
+                            error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
+                        }
 
-                    isSaved = false;
-                    e.printStackTrace();
-                }
+                        isSaved = false;
+                    }
+                });
+
             } else {
                 // Save the walker on DB
-                try {
-                    Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
-                            Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
-                            isComfortableOnEvening.isChecked(), new Model.GetIdListener() {
-                                @Override
-                                public void onResult(long id, boolean isSucceed) {
-                                    if(isSucceed){
-                                        Toast.makeText(getApplicationContext(),"שמירה בוצעה בהצלחה" , Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
-                                    }
+                Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
+                        Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
+                        isComfortableOnEvening.isChecked(), new Model.GetIdListener() {
+                            @Override
+                            public void onResult(long id, boolean isSucceed) {
+                                if (isSucceed) {
+                                    Toast.makeText(getApplicationContext(), "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
                                 }
-                            });
-                } catch (Exception e) {
-                    // Check if this userName exist
-                    if (e.getMessage().equals("user already exist"))
-                    {
-                        error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
-                    }
+                            }
+                        }, new Model.ExceptionListener() {
+                            @Override
+                            public void onResult(String message) {
+                                if (message.equals("user already exist")) {
+                                    error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
+                                }
 
-                    isSaved = false;
-                    e.printStackTrace();
-                }
+                                isSaved = false;
+                            }
+                        });
             }
-
             // Connect to dogo with the new username and password - only if user succeed to sign.
             if (isSaved) {
                 Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
