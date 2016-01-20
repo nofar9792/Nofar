@@ -20,6 +20,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
+import com.example.nofarcohenzedek.dogo.Model.Utilities;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -118,6 +119,7 @@ public class SignUp extends Activity {
                                         public void onResult(boolean isSucceed) {
                                             if(isSucceed){
                                                 Toast.makeText(getApplicationContext(),"שמירה בוצעה בהצלחה" , Toast.LENGTH_SHORT).show();
+                                                Utilities.saveImageOnDevice(picRef, dogPic);
                                             }else {
                                                 Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
                                             }

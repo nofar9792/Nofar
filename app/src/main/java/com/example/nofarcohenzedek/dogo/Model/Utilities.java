@@ -63,15 +63,16 @@ public class Utilities
     }
 
     public static Bitmap loadImageFromDevice(String imageName) {
+        Bitmap returnPicture = null;
+
         if (!imageName.equals("")) {
             File myDir = new File(root + "/saved_images");
             File file = new File(myDir, imageName);
 
-            return BitmapFactory.decodeFile(file.getPath());
+            returnPicture = BitmapFactory.decodeFile(file.getPath());
         }
-        else {
-            return null;
-        }
+
+        return returnPicture;
     }
 
     public static boolean isFileExistInDevice(String imageName)
