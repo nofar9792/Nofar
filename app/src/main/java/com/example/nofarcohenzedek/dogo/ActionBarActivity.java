@@ -10,12 +10,12 @@ import android.widget.Toolbar;
 
 public class ActionBarActivity extends Activity
 {
-    MapsActivity mapsFragment;
-    MyProfileActivity myProfileFragment;
-    SearchActivity searchFragment;
-    MessagesActivity messagesFragment;
-    DogsListActivity dogsListFragment;
-    TripsReportActivity tripsReportActivity;
+    MapsFragment mapsFragment;
+    MyProfileFragment myProfileFragment;
+    SearchFragment searchFragment;
+    MessagesFragment messagesFragment;
+    DogsListFragment dogsListFragment;
+    TripsReportFragment tripsReportFragment;
     FragmentManager manager;
     Long userId;
     boolean isOwner;
@@ -37,12 +37,12 @@ public class ActionBarActivity extends Activity
         manager = getFragmentManager();
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
 
-        mapsFragment = new MapsActivity();
-        myProfileFragment = new MyProfileActivity();
-        searchFragment = new SearchActivity();
-        messagesFragment = new MessagesActivity();
-        dogsListFragment = new DogsListActivity();
-        tripsReportActivity = new TripsReportActivity();
+        mapsFragment = new MapsFragment();
+        myProfileFragment = new MyProfileFragment();
+        searchFragment = new SearchFragment();
+        messagesFragment = new MessagesFragment();
+        dogsListFragment = new DogsListFragment();
+        tripsReportFragment = new TripsReportFragment();
 
         Bundle args = new Bundle();
         args.putLong("userId", userId);
@@ -111,11 +111,11 @@ public class ActionBarActivity extends Activity
 
         else if (id == R.id.tripsReport)
         {
-            if (manager.findFragmentByTag("trips") == null && !tripsReportActivity.isVisible())
+            if (manager.findFragmentByTag("trips") == null && !tripsReportFragment.isVisible())
             {
                 removeAllFragments();
-                tripsReportActivity.setArguments(args);
-                newTrans.replace(R.id.LayoutContainer, tripsReportActivity, "trips");
+                tripsReportFragment.setArguments(args);
+                newTrans.replace(R.id.LayoutContainer, tripsReportFragment, "trips");
             }
         }
         else if (id == R.id.messages)
@@ -159,7 +159,7 @@ public class ActionBarActivity extends Activity
         trans1.remove(dogsListFragment);
         trans1.remove(messagesFragment);
         trans1.remove(myProfileFragment);
-        trans1.remove(tripsReportActivity);
+        trans1.remove(tripsReportFragment);
         trans1.remove(searchFragment);
 
         trans1.commit();

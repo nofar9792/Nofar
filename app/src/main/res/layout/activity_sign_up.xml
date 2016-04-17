@@ -7,7 +7,7 @@
     android:background="@color/colorBackground"
     android:layoutDirection="rtl"
     android:orientation="vertical"
-    tools:context="com.example.nofarcohenzedek.dogo.SignUp">
+    tools:context=".SignUpActivity">
 
     <ImageView
         android:id="@+id/logo"

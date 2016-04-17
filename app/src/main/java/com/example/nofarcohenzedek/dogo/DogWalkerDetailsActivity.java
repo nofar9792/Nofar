@@ -16,7 +16,7 @@ import com.example.nofarcohenzedek.dogo.Model.User;
 
 import java.util.List;
 
-public class DogWalkerDetails extends Activity
+public class DogWalkerDetailsActivity extends Activity
 {
     private Long walkerId;
     private Long ownerId;

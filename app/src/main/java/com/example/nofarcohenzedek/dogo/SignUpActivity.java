@@ -24,7 +24,7 @@ import com.example.nofarcohenzedek.dogo.Model.User;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class SignUp extends Activity {
+public class SignUpActivity extends Activity {
 
     private RadioButton isOwner;
     private RadioButton isWalker;

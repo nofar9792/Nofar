@@ -29,7 +29,7 @@ import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class MyProfileActivity extends Fragment {
+public class MyProfileFragment extends Fragment {
     private Boolean isOwner;
     private Long id;
     private String userName;

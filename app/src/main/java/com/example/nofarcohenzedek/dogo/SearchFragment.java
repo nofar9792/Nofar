@@ -28,7 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends Fragment
+public class SearchFragment extends Fragment
 {
     private List<DogWalker> list;
     private ProgressBar progressBar;
@@ -50,7 +50,7 @@ public class SearchActivity extends Fragment
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Intent intent = new Intent(getActivity().getApplicationContext(), DogWalkerDetails.class);
+                Intent intent = new Intent(getActivity().getApplicationContext(), DogWalkerDetailsActivity.class);
                 intent.putExtra("walkerId", Long.toString(id));
                 intent.putExtra("ownerId", args.getLong("userId"));
                 startActivity(intent);
@@ -271,7 +271,6 @@ public class SearchActivity extends Fragment
             name.setText(walker.getFirstName() + " " + walker.getLastName());
             age.setText(Long.toString(walker.getAge()));
             address.setText(walker.getAddress() + ", " + walker.getCity());
-
 
             return convertView;
         }

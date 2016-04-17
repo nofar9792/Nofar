@@ -4,14 +4,11 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,7 +25,7 @@ import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MessagesActivity extends Fragment
+public class MessagesFragment extends Fragment
 {
     private ListView list;
     private List<User> data;
@@ -190,7 +187,7 @@ public class MessagesActivity extends Fragment
                 dogPic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetails.class);
+                        Intent intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetailsActivity.class);
                         intent.putExtra("dogOwnerId", Long.toString(dogOwner.getId()));
                         startActivity(intent);
                 }

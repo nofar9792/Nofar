@@ -19,7 +19,7 @@ import com.example.nofarcohenzedek.dogo.Model.Trip;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class TripsReportActivity extends Fragment {
+public class TripsReportFragment extends Fragment {
 
     private Boolean isOwner;
     private Long userId;

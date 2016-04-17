@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
 
     public void signUpBTNClick(View view)
     {
-        Intent intent = new Intent(this, SignUp.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
         startActivityForResult(intent, 1);
     }
 

@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -16,16 +15,11 @@ import android.widget.TextView;
 import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
-import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.example.nofarcohenzedek.dogo.Model.Utilities;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
-public class DogOwnerDetails extends Activity {
+public class DogOwnerDetailsActivity extends Activity {
 
     private ProgressBar progressBar;
 
@@ -103,7 +97,6 @@ public class DogOwnerDetails extends Activity {
             }
         });
     }
-
 
     public ProgressBar getProgressBar() {
         return progressBar;
