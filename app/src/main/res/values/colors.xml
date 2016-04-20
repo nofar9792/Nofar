@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#fe7171</color>
-    <color name="colorPrimaryDark">#ff2d2d</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorBackground">#ffeeee</color>
+    <color name="colorPrimary">#ffab3e</color>
+    <color name="colorPrimaryDark">#f67700</color>
+    <color name="colorAccent">#ff9000</color>
+    <color name="colorBackground">#ffe6cc</color>
     <color name="holo_light_primary">#080000</color>
     <color name="screen_background_light">#030000</color>
     <color name="background_holo_light">#040000</color>
     <color name="bright_foreground_holo_dark">#080000</color>
     <color name="bright_foreground_disabled_holo_dark">#070000</color>
+    <color name="primary_text_material_dark">#000000</color>
+    <color name="background_material_light">#000000</color>
 </resources>

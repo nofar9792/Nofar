@@ -1,6 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +27,14 @@ public class TripsReportFragment extends Fragment {
     private ProgressBar progressBar;
     private Context context;
 
+    public TripsReportFragment(){}
+
+    public TripsReportFragment(Long id, boolean IsOwner)
+    {
+        userId = id;
+        isOwner = IsOwner;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -36,8 +44,8 @@ public class TripsReportFragment extends Fragment {
 
         Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.tripsReportProgressBar);
-        isOwner = args.getBoolean("isOwner");
-        userId = args.getLong("userId");
+        //isOwner = args.getBoolean("isOwner");
+        //userId = args.getLong("userId");
 
         // Get all trips that connected to current user
         if(isOwner)

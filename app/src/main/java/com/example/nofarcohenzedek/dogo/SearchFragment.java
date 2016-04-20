@@ -1,6 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -33,9 +33,16 @@ public class SearchFragment extends Fragment
     private List<DogWalker> list;
     private ProgressBar progressBar;
     private DogOwner owner;
+    private Long userId;
 
     private View currentView;
     private Bundle args;
+
+    public SearchFragment(){}
+
+    public SearchFragment(Long id){
+        userId = id;
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -52,7 +59,7 @@ public class SearchFragment extends Fragment
             {
                 Intent intent = new Intent(getActivity().getApplicationContext(), DogWalkerDetailsActivity.class);
                 intent.putExtra("walkerId", Long.toString(id));
-                intent.putExtra("ownerId", args.getLong("userId"));
+                intent.putExtra("ownerId", userId);
                 startActivity(intent);
             }
         });
@@ -120,7 +127,7 @@ public class SearchFragment extends Fragment
         final boolean evening = ((CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnEveningForSearch)).isChecked();
 
         if (owner == null) {
-            Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
+            Model.getInstance().getUserById(userId, new Model.GetUserListener() {
                 @Override
                 public void onResult(User user) {
                     owner = (DogOwner) user;

@@ -1,6 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,9 +30,18 @@ public class MessagesFragment extends Fragment
     private ListView list;
     private List<User> data;
     private Boolean isOwner;
+    private  Long userId;
     private ProgressBar progressBar;
     private User currentUser;
     private Context context;
+
+    public MessagesFragment(){}
+
+    public MessagesFragment(Long id, boolean IsOwner)
+    {
+        userId = id;
+        isOwner = IsOwner;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +50,7 @@ public class MessagesFragment extends Fragment
         super.onCreateView(inflater, container, savedInstanceState);
 
         Bundle args = getArguments();
-        isOwner = args.getBoolean("isOwner");
+       // isOwner = args.getBoolean("isOwner");
         progressBar = (ProgressBar) view.findViewById(R.id.messagesProgressBar);
         data = new LinkedList<>();
         progressBar.setVisibility(View.VISIBLE);
@@ -49,7 +58,7 @@ public class MessagesFragment extends Fragment
 
         final MessagesAdapter adapter = new MessagesAdapter();
 
-        Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
+        Model.getInstance().getUserById(userId, new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
                 currentUser = user;

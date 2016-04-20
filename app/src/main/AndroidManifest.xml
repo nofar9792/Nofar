@@ -27,7 +27,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo" >
+            android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,10 +62,11 @@
         <activity
             android:name=".ActionBarActivity"
             android:label="@string/title_activity_action_bar"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".DogOwnerDetailsActivity"
-            android:label="@string/title_activity_dog_owner_details"></activity>
+            android:label="@string/title_activity_dog_owner_details" />
+
     </application>
 
 </manifest>

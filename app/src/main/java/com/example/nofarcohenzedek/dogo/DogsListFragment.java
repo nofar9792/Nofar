@@ -1,6 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,6 +28,13 @@ public class DogsListFragment extends Fragment
     private ProgressBar progressBar;
     private Context context;
 
+    public  DogsListFragment(){}
+
+    public DogsListFragment(Long id)
+    {
+        userId = id;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -38,7 +45,7 @@ public class DogsListFragment extends Fragment
         Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.dogsListProgressBar);
 
-        userId = args.getLong("userId");
+//        userId = args.getLong("userId");
 
         tripsByOwnerId = new HashMap<Long, Long>();
 

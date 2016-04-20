@@ -1,6 +1,7 @@
 package com.example.nofarcohenzedek.dogo;
 
-import android.app.Fragment;
+//import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -55,6 +56,17 @@ public class MyProfileFragment extends Fragment {
     private Context context;
     View currentView;
 
+    public MyProfileFragment()
+    {
+
+    }
+
+    public MyProfileFragment(Long userId, boolean IsOwner)
+    {
+        id = userId;
+        isOwner = IsOwner;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -66,7 +78,7 @@ public class MyProfileFragment extends Fragment {
         Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.myProfileProgressBar);
 
-        isOwner = args.getBoolean("isOwner");
+       // isOwner = args.getBoolean("isOwner");
 
         if (!isOwner)
         {
@@ -77,7 +89,7 @@ public class MyProfileFragment extends Fragment {
             view.findViewById(R.id.dogOwnerSectionInMyProfile).setVisibility(View.VISIBLE);
         }
 
-        Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
+        Model.getInstance().getUserById(id, new Model.GetUserListener() {
               @Override
             public void onResult(User user) {
                 id = user.getId();
