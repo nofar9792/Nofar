@@ -57,19 +57,19 @@ public class SearchFragment extends Fragment
             }
         });
 
-        ((RadioButton)view.findViewById(R.id.searchByDistance)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                radioButtonSearchDWBy(v);
-            }
-        });
-
-        ((RadioButton)view.findViewById(R.id.searchByParameters)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                radioButtonSearchDWBy(v);
-            }
-        });
+//        ((RadioButton)view.findViewById(R.id.searchByDistance)).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                radioButtonSearchDWBy(v);
+//            }
+//        });
+//
+//        ((RadioButton)view.findViewById(R.id.searchByParameters)).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                radioButtonSearchDWBy(v);
+//            }
+//        });
 
         ((ImageButton)view.findViewById(R.id.searchBTN)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,148 +81,119 @@ public class SearchFragment extends Fragment
         return view;
     }
 
-    public void radioButtonSearchDWBy(View view)
-    {
-        RadioButton searchByRadius = (RadioButton)currentView.findViewById(R.id.searchByDistance);
-        RadioButton searchByParametes = (RadioButton)currentView.findViewById(R.id.searchByParameters);
-        LinearLayout layoutDistance = (LinearLayout)currentView.findViewById(R.id.searchByDistanceLayout);
-        LinearLayout layoutParameters = (LinearLayout)currentView.findViewById(R.id.searchByParametersLayout);
+//    public void radioButtonSearchDWBy(View view)
+//    {
+//        RadioButton searchByRadius = (RadioButton)currentView.findViewById(R.id.searchByDistance);
+//        RadioButton searchByParametes = (RadioButton)currentView.findViewById(R.id.searchByParameters);
+//        LinearLayout layoutDistance = (LinearLayout)currentView.findViewById(R.id.searchByDistanceLayout);
+//        LinearLayout layoutParameters = (LinearLayout)currentView.findViewById(R.id.searchByParametersLayout);
+//
+//        if(searchByRadius.isChecked())
+//        {
+//            layoutDistance.setVisibility(View.VISIBLE);
+//            layoutParameters.setVisibility(View.GONE);
+//        }
+//        else if(searchByParametes.isChecked())
+//        {
+//            layoutParameters.setVisibility(View.VISIBLE);
+//            layoutDistance.setVisibility(View.GONE);
+//        }
+//
+//        ImageButton searchBTN = (ImageButton) currentView.findViewById(R.id.searchBTN);
+//        searchBTN.setEnabled(true);
+//    }
 
-        if(searchByRadius.isChecked())
-        {
-            layoutDistance.setVisibility(View.VISIBLE);
-            layoutParameters.setVisibility(View.GONE);
-        }
-        else if(searchByParametes.isChecked())
-        {
-            layoutParameters.setVisibility(View.VISIBLE);
-            layoutDistance.setVisibility(View.GONE);
-        }
-
-        ImageButton searchBTN = (ImageButton) currentView.findViewById(R.id.searchBTN);
-        searchBTN.setEnabled(true);
-    }
-
-    public void searchBTNClick (View view)
-    {
+    public void searchBTNClick (View view) {
         progressBar.setVisibility(View.VISIBLE);
 
         // check if by distance or by param
-        RadioButton byDistance = (RadioButton) currentView.findViewById(R.id.searchByDistance);
-        RadioButton byParams = (RadioButton) currentView.findViewById(R.id.searchByParameters);
+        //RadioButton byDistance = (RadioButton) currentView.findViewById(R.id.searchByDistance);
+        //RadioButton byParams = (RadioButton) currentView.findViewById(R.id.searchByParameters);
 
-        if (byDistance.isChecked())
-        {
-            final String radius = ((EditText)currentView.findViewById(R.id.radiusForSearch)).getText().toString();
+        //if (byDistance.isChecked())
+        //{
+        final String radius = ((EditText) currentView.findViewById(R.id.radiusForSearch)).getText().toString();
+        final String age = ((EditText) currentView.findViewById(R.id.ageForSearch)).getText().toString();
+        final String price = ((EditText) currentView.findViewById(R.id.priceForSearch)).getText().toString();
+        final boolean morning = ((CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnMorningForSearch)).isChecked();
+        final boolean noon = ((CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnAfternoonForSearch)).isChecked();
+        final boolean evening = ((CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnEveningForSearch)).isChecked();
 
-            if (!radius.equals(""))
-            {
-                if (owner == null) {
-                    Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
-                                @Override
-                                public void onResult(User user) {
-                                    owner = (DogOwner)user;
-                                    searchByDistance(Long.valueOf(radius));
-                                }
-                            });
+        if (owner == null) {
+            Model.getInstance().getUserById(args.getLong("userId"), new Model.GetUserListener() {
+                @Override
+                public void onResult(User user) {
+                    owner = (DogOwner) user;
+                    searchAndShowResults(radius, age, price, morning, noon, evening);
                 }
-                else
-                {
-                    searchByDistance(Long.valueOf(radius));
-                }
-            }
-        }
-        else if (byParams.isChecked())
-        {
-            String age = ((EditText)currentView.findViewById(R.id.ageForSearch)).getText().toString();
-            String price = ((EditText)currentView.findViewById(R.id.priceForSearch)).getText().toString();
-            boolean morning = ((CheckBox)currentView.findViewById(R.id.cbx_isComfortableOnMorningForSearch)).isChecked();
-            boolean noon = ((CheckBox)currentView.findViewById(R.id.cbx_isComfortableOnAfternoonForSearch)).isChecked();
-            boolean evening = ((CheckBox)currentView.findViewById(R.id.cbx_isComfortableOnEveningForSearch)).isChecked();
-
-            searchByParameters(age, price, morning, noon, evening);
+            });
+        } else {
+            searchAndShowResults(radius, age, price, morning, noon, evening);
         }
     }
 
-    private void searchByDistance(final Long radiusInMeters)
+    private void searchAndShowResults(final String radius,
+                                      final String age, final String price,
+                                      final boolean morning, final boolean noon, final boolean evening)
     {
-        final LatLng ownerCoor = Utilities.getLocationFromAddress(owner.getAddress() + ", " + owner.getCity(),getActivity().getApplicationContext());
-        final Location ownerLocation = new Location("owner");
-        ownerLocation.setLatitude(ownerCoor.latitude);
-        ownerLocation.setLongitude(ownerCoor.longitude);
+        // list that contains all dog walkers and we remove form her the ones that doesn't fit
+        final List<DogWalker> temp = new ArrayList<DogWalker>();
 
-        Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener()
-        {
+        // search by parameters (the existing ones..)
+        Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
             @Override
-            public void onResult(List<DogWalker> dogWalkers)
-            {
+            public void onResult(List<DogWalker> dogWalkers) {
                 List<DogWalker> temp = new ArrayList<DogWalker>();
 
                 // work around concurrentModificationException
-                for (DogWalker dogWalker : dogWalkers)
-                {
+                for (DogWalker dogWalker : dogWalkers) {
                     temp.add(dogWalker);
                 }
 
-                for (DogWalker dogWalker : dogWalkers)
-                {
-                    LatLng currentCoor = Utilities.getLocationFromAddress(dogWalker.getAddress() + ", " + dogWalker.getCity(),getActivity().getApplicationContext());
-                    Location currLocation = new Location("walker");
-                    currLocation.setLatitude(currentCoor.latitude);
-                    currLocation.setLongitude(currentCoor.longitude);
-
-                    if (ownerLocation.distanceTo(currLocation) > (float)radiusInMeters)
-                    {
+                for (DogWalker dogWalker : dogWalkers) {
+                    if (!age.equals("") && dogWalker.getAge() < Long.valueOf(age)) {
                         temp.remove(dogWalker);
                     }
 
-                }
-
-                list = temp;
-
-                CustomAdapter adapter = new CustomAdapter();
-                ListView listView = (ListView) currentView.findViewById(R.id.searchResultList);
-                listView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-
-                progressBar.setVisibility(View.GONE);
-
-            }
-        });
-    }
-
-    private  void searchByParameters (final String age, final String price, final boolean morning, final boolean noon, final boolean evening)
-    {
-        Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener()
-        {
-            @Override
-            public void onResult(List<DogWalker> dogWalkers)
-            {
-                List<DogWalker> temp = new ArrayList<DogWalker>();
-
-                // work around concurrentModificationExeption
-                for (DogWalker dogWalker : dogWalkers)
-                {
-                    temp.add(dogWalker);
-                }
-
-                for (DogWalker dogWalker : dogWalkers)
-                {
-                    if (!age.equals("") && dogWalker.getAge() < Long.valueOf(age))
-                    {
-                        temp.remove(dogWalker);
-                    }
-
-                    if (!price.equals("") && dogWalker.getPriceForHour() > Integer.valueOf(price))
-                    {
+                    if (!price.equals("") && dogWalker.getPriceForHour() > Integer.valueOf(price)) {
                         temp.remove(dogWalker);
                     }
 
                     if (morning && !dogWalker.isComfortableOnMorning() ||
                             noon && !dogWalker.isComfortableOnAfternoon() ||
-                            evening && !dogWalker.isComfortableOnEvening())
-                    {
+                            evening && !dogWalker.isComfortableOnEvening()) {
                         temp.remove(dogWalker);
+                    }
+                }
+
+                dogWalkers.clear();
+
+                // work around concurrentModificationException
+                for (DogWalker walker : temp) {
+                    dogWalkers.add(walker);
+                }
+
+                // search by distance- if not empty
+                if (!radius.equals("")) {
+
+                    Long radiusInMeters = Long.valueOf(radius);
+
+
+                    final LatLng ownerCoor = Utilities.getLocationFromAddress(owner.getAddress() + ", " + owner.getCity(), getActivity().getApplicationContext());
+                    final Location ownerLocation = new Location("owner");
+                    ownerLocation.setLatitude(ownerCoor.latitude);
+                    ownerLocation.setLongitude(ownerCoor.longitude);
+
+                    for (DogWalker dogWalker : dogWalkers) {
+                        LatLng currentCoor = Utilities.getLocationFromAddress(dogWalker.getAddress() + ", " + dogWalker.getCity(), getActivity().getApplicationContext());
+                        Location currLocation = new Location("walker");
+                        currLocation.setLatitude(currentCoor.latitude);
+                        currLocation.setLongitude(currentCoor.longitude);
+
+                        if (ownerLocation.distanceTo(currLocation) > (float) radiusInMeters) {
+                            temp.remove(dogWalker);
+                        }
+
                     }
                 }
 
@@ -234,6 +205,7 @@ public class SearchFragment extends Fragment
                 adapter.notifyDataSetChanged();
 
                 progressBar.setVisibility(View.GONE);
+
             }
         });
     }
