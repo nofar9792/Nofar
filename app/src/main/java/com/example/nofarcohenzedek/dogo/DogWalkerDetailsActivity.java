@@ -35,6 +35,7 @@ public class DogWalkerDetailsActivity extends Activity
 
         final TextView firstName = (TextView) findViewById(R.id.firstNameInDetails);
         final TextView lastName = (TextView) findViewById(R.id.lastNameInDetails);
+        final TextView phonenNumber = (TextView) findViewById(R.id.phoneNumberInDetails);
         final TextView city = (TextView) findViewById(R.id.cityInDetails);
         final TextView address = (TextView) findViewById(R.id.addressInDetails);
         final TextView age = (TextView) findViewById(R.id.ageInDetails);
@@ -49,6 +50,7 @@ public class DogWalkerDetailsActivity extends Activity
                 DogWalker dogWalker = (DogWalker)user;
                 firstName.setText(dogWalker.getFirstName());
                 lastName.setText(dogWalker.getLastName());
+                phonenNumber.setText(dogWalker.getPhoneNumber());
                 city.setText(dogWalker.getCity());
                 address.setText(dogWalker.getAddress());
                 age.setText(Long.toString(dogWalker.getAge()));
@@ -56,30 +58,13 @@ public class DogWalkerDetailsActivity extends Activity
                 morning.setChecked(dogWalker.isComfortableOnMorning());
                 noon.setChecked(dogWalker.isComfortableOnAfternoon());
                 evening.setChecked(dogWalker.isComfortableOnEvening());
-            }
-        });
 
-        final Button askNum = (Button) findViewById(R.id.askNumber);
-
-        Model.getInstance().getRequestForDogWalker(walkerId, new Model.GetDogOwnersListener()
-        {
-            @Override
-            public void onResult(List<DogOwner> dogOwners)
-            {
-                for (DogOwner owner : dogOwners)
-                {
-                    if (owner.getId() == ownerId)
-                    {
-                        askNum.setEnabled(false);
-                        break;
-                    }
-                }
                 progressBar.setVisibility(View.GONE);
             }
         });
     }
 
-    public void askNumberClick(View view)
+    public void sendRequestClick(View view)
     {
         Model.getInstance().addRequest(ownerId, walkerId, new Model.IsSucceedListener() {
             @Override

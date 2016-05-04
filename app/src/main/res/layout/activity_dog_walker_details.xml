@@ -82,6 +82,28 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/lbl_phoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10px"
+                android:text="@string/phoneNumber"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/phoneNumberInDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10px"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
                 android:id="@+id/lbl_city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -215,9 +237,9 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="בקש מספר"
-                android:id="@+id/askNumber"
-                android:onClick="askNumberClick"/>
+                android:text="שלח בקשה"
+                android:id="@+id/sendRequest"
+                android:onClick="sendRequestClick"/>
 
 
         </LinearLayout>

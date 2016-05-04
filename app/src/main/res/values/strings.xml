@@ -13,7 +13,7 @@
     <string name="title_activity_messages">MessagesActivity</string>
 
     <!-- signUp strings -->
-    <string name="firstName">שם:</string>
+    <string name="firstName">שם פרטי:</string>
     <string name="lastName">שם משפחה:</string>
     <string name="userName">שם משתמש:</string>
     <string name="password">סיסמא:</string>
