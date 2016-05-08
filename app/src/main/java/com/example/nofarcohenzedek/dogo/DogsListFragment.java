@@ -1,5 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -47,6 +51,14 @@ public class DogsListFragment extends Fragment
 
 //        userId = args.getLong("userId");
 
+        Button calculatePathBtn = (Button) view.findViewById(R.id.calculatePathButton);
+
+        calculatePathBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         tripsByOwnerId = new HashMap<Long, Long>();
 
         Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
@@ -65,7 +77,6 @@ public class DogsListFragment extends Fragment
                 progressBar.setVisibility(View.GONE);
             }
         });
-
 
         return view;
     }
@@ -145,16 +156,35 @@ public class DogsListFragment extends Fragment
             }
 
             TextView ownerName = (TextView) convertView.findViewById(R.id.ownerNameInDogsList);
-            TextView dogName = (TextView) convertView.findViewById(R.id.dogNameInDogsList);
+//            TextView dogName = (TextView) convertView.findViewById(R.id.dogNameInDogsList);
             TextView address = (TextView) convertView.findViewById(R.id.addressInDogsList);
-            TextView phone = (TextView) convertView.findViewById(R.id.phoneInDogsList);
+//            TextView phone = (TextView) convertView.findViewById(R.id.phoneInDogsList);
+            final TextView timeToWalkLabel = (TextView) convertView.findViewById(R.id.timeToWalkLabel);
+            final EditText timeToWalkTextbox = (EditText) convertView.findViewById(R.id.timeToWalkTextbox);
 
             final DogOwner owner = list.get(position);
 
             ownerName.setText(owner.getFirstName() + " " + owner.getLastName());
-            dogName.setText(owner.getDog().getName());
+//            dogName.setText(owner.getDog().getName());
             address.setText(owner.getAddress() + ", " + owner.getCity());
-            phone.setText(owner.getPhoneNumber());
+//            phone.setText(owner.getPhoneNumber());
+            timeToWalkLabel.setVisibility(View.INVISIBLE);
+            timeToWalkTextbox.setVisibility(View.INVISIBLE);
+
+            final CheckBox dogInListCheckBox = (CheckBox) convertView.findViewById(R.id.dogInListCheckBox);
+
+            dogInListCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(dogInListCheckBox.isChecked()){
+                        timeToWalkLabel.setVisibility(View.VISIBLE);
+                        timeToWalkTextbox.setVisibility(View.VISIBLE);
+                    }else {
+                        timeToWalkLabel.setVisibility(View.INVISIBLE);
+                        timeToWalkTextbox.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
 
             // work around
             ImageButton startTrip = (ImageButton) convertView.findViewById(R.id.startTripBtn);
@@ -173,6 +203,16 @@ public class DogsListFragment extends Fragment
                 @Override
                 public void onClick(View v) {
                     onItemClickListener(v, owner.getId());
+                }
+            });
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // on click - open the dog owner details
+                    Intent intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetailsActivity.class);
+                    intent.putExtra("dogOwnerId", Long.toString(owner.getId()));
+                    startActivity(intent);
                 }
             });
 

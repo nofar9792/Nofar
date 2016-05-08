@@ -2,126 +2,169 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layoutDirection="rtl"
     android:focusable="false"
     android:focusableInTouchMode="false">
 
     <LinearLayout
         android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:baselineAligned="false">
+    <CheckBox
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:text="שם בעל הכלב:"
-            android:textSize="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:textSize="20dp"
-            android:id="@+id/ownerNameInDogsList"/>
-
+        android:gravity="center"
+        android:id="@+id/dogInListCheckBox"
+        android:clickable="false"
+        android:checked="false" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:id="@+id/dogInListItem"
+        android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:text= "שם הכלב:"
-            android:textSize="20dp" />
+            android:orientation="horizontal">
 
-        <TextView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10px"
+                android:text="בעלים:"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10px"
+                android:textSize="20dp"
+                android:id="@+id/ownerNameInDogsList"/>
+
+        </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10px"-->
+                <!--android:text= "שם הכלב:"-->
+                <!--android:textSize="20dp" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10px"-->
+                <!--android:textSize="20dp"-->
+                <!--android:id="@+id/dogNameInDogsList"/>-->
+
+        <!--</LinearLayout>-->
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:textSize="20dp"
-            android:id="@+id/dogNameInDogsList"/>
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10px"
+                android:text="כתובת:"
+                android:textSize="20dp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10px"
+                android:textSize="20dp"
+                android:id="@+id/addressInDogsList"/>
 
-        <TextView
+        </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10px"-->
+                <!--android:text="מספר טלפון:"-->
+                <!--android:textSize="20dp" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10px"-->
+                <!--android:textSize="20dp"-->
+                <!--android:id="@+id/phoneInDogsList"/>-->
+
+        <!--</LinearLayout>-->
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:text="כתובת:"
-            android:textSize="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:textSize="20dp"
-            android:id="@+id/addressInDogsList"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:text="מספר טלפון:"
-            android:textSize="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:textSize="20dp"
-            android:id="@+id/phoneInDogsList"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:focusable="false"
-        android:focusableInTouchMode="false">
-
-        <ImageButton
-            android:layout_width="130dp"
-            android:layout_height="80dp"
-            android:id="@+id/startTripBtn"
-            android:tag="startTripTag"
+            android:orientation="horizontal"
             android:focusable="false"
-            android:scaleType="fitCenter"
-            android:background="@color/colorBackground"
-            android:src="@drawable/start_trip_button"
-            android:focusableInTouchMode="false"/>
+            android:focusableInTouchMode="false">
 
-        <ImageButton
-            android:layout_width="130dp"
-            android:layout_height="80dp"
-            android:scaleType="fitCenter"
-            android:background="@color/colorBackground"
-            android:src="@drawable/finish_trip_disable_button"
-            android:id="@+id/endTripBtn"
-            android:tag="endTripTag"
-            android:enabled="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            <ImageButton
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:id="@+id/startTripBtn"
+                android:tag="startTripTag"
+                android:focusable="false"
+                android:scaleType="fitCenter"
+                android:background="@color/colorBackground"
+                android:src="@drawable/start_trip_button"
+                android:focusableInTouchMode="false"/>
 
+            <ImageButton
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:scaleType="fitCenter"
+                android:background="@color/colorBackground"
+                android:src="@drawable/finish_trip_disable_button"
+                android:id="@+id/endTripBtn"
+                android:tag="endTripTag"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+
+        </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/timeToWalkLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:text=":זמן טיול"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/timeToWalkTextbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:inputType="number"
+            android:textSize="20dp" />
+
+    </LinearLayout>
 
 </LinearLayout>
