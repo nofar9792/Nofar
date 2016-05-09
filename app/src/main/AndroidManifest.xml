@@ -66,7 +66,11 @@
         <activity
             android:name=".DogOwnerDetailsActivity"
             android:label="@string/title_activity_dog_owner_details" />
-
+        <activity
+            android:name=".MapPathActivity"
+            android:label="@string/title_activity_map_path"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

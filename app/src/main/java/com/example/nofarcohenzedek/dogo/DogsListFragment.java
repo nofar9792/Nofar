@@ -101,7 +101,8 @@ public class DogsListFragment extends Fragment
 
                 if (isValid)
                 {
-                    // Call map
+                    Intent intent = new Intent(getActivity().getApplicationContext(), MapPathActivity.class);
+                    startActivity(intent);
                 }
             }
         });
