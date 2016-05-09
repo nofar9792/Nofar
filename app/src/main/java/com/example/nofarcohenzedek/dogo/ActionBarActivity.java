@@ -48,21 +48,26 @@ public class ActionBarActivity extends AppCompatActivity
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
+        if (isOwner){
+            tabLayout.getTabAt(4).select();
+        }
+
         // set icons
+
         tabLayout.getTabAt(0).setIcon(R.drawable.graydog);
         tabLayout.getTabAt(1).setIcon(R.drawable.grayman);
         tabLayout.getTabAt(2).setIcon(R.drawable.grayreport);
         tabLayout.getTabAt(3).setIcon(R.drawable.graymessage);
 
         if (isOwner){
-            tabLayout.getTabAt(4).setIcon(R.drawable.graysearch);
+            tabLayout.getTabAt(5).setIcon(R.drawable.graysearch);
         }
     }
 
     private class CustomAdapter extends FragmentPagerAdapter {
 
         private String walkerFragments [] = {"List","Profile","Report","Messages"};
-        private String ownerFragments [] = {"List", "Profile", "Report", "Messages", "Search"};
+        private String ownerFragments [] = {"List", "Profile", "Report", "Messages","Map","Search" };
 
         public CustomAdapter(android.support.v4.app.FragmentManager supportFragmentManager, Context applicationContext) {
             super(supportFragmentManager);
@@ -82,9 +87,16 @@ public class ActionBarActivity extends AppCompatActivity
                     return new MessagesFragment(userId, isOwner);
                 case 4:
                     if (isOwner) {
-                        return new SearchFragment(userId);
+                        return new MapsFragment(userId, address);
                     }
                     else {
+                        return null;
+                    }
+                case 5:
+                    if (isOwner){
+                        return new SearchFragment(userId);
+                    }
+                        else {
                         return null;
                     }
                 default:

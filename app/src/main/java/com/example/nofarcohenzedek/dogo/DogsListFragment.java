@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,7 +20,9 @@ import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.parse.codec.binary.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,10 @@ public class DogsListFragment extends Fragment
     private Map<Long, Long> tripsByOwnerId;
     private ProgressBar progressBar;
     private Context context;
+
+    private List<Long> ownersIDsToCalculatePath;
+    private List<Integer> walkTimesToCalculatePath;
+    private ListView listView;
 
     public  DogsListFragment(){}
 
@@ -48,6 +55,7 @@ public class DogsListFragment extends Fragment
 
         Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.dogsListProgressBar);
+        listView = (ListView)view.findViewById(R.id.dogsOfDogWalker);
 
 //        userId = args.getLong("userId");
 
@@ -56,10 +64,52 @@ public class DogsListFragment extends Fragment
         calculatePathBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                View listItem;
+                TextView errorView =  (TextView)v.getRootView().findViewById(R.id.calculatePathError);
 
+                boolean isValid = true;
+
+                errorView.setText("");
+                ownersIDsToCalculatePath.clear();
+                walkTimesToCalculatePath.clear();
+
+                for (int i=0;i<listView.getCount();i++)
+                {
+                    listItem = listView.getChildAt(i);
+
+                    if (((CheckBox)listItem.findViewById(R.id.dogInListCheckBox)).isChecked())
+                    {
+                        if (isInt(((EditText) listItem.findViewById(R.id.timeToWalkTextbox)).getText().toString()))
+                        {
+                            ownersIDsToCalculatePath.add(list.get(i).getId());
+                            walkTimesToCalculatePath.add(Integer.valueOf(((EditText) listItem.findViewById(R.id.timeToWalkTextbox)).getText().toString()));
+                        }
+                        else
+                        {
+                            isValid = false;
+                            errorView.setText("הכנס מספר לשדה זמן הטיול");
+                            break;
+                        }
+                    }
+                }
+
+                if (isValid && ownersIDsToCalculatePath.size() == 0)
+                {
+                    errorView.setText("בחר לפחות כלב אחד מהרשימה");
+                    isValid = false;
+                }
+
+                if (isValid)
+                {
+                    // Call map
+                }
             }
         });
+
         tripsByOwnerId = new HashMap<Long, Long>();
+        ownersIDsToCalculatePath = new ArrayList<Long>();
+        walkTimesToCalculatePath = new ArrayList<Integer>();
+
 
         Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
             @Override
@@ -79,6 +129,19 @@ public class DogsListFragment extends Fragment
         });
 
         return view;
+    }
+
+    private boolean isInt(String value)
+    {
+        try
+        {
+            Integer i = Integer.parseInt(value);
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
     }
 
     public void onItemClickListener(View view, final Long ownerId)
@@ -159,8 +222,8 @@ public class DogsListFragment extends Fragment
 //            TextView dogName = (TextView) convertView.findViewById(R.id.dogNameInDogsList);
             TextView address = (TextView) convertView.findViewById(R.id.addressInDogsList);
 //            TextView phone = (TextView) convertView.findViewById(R.id.phoneInDogsList);
-            final TextView timeToWalkLabel = (TextView) convertView.findViewById(R.id.timeToWalkLabel);
-            final EditText timeToWalkTextbox = (EditText) convertView.findViewById(R.id.timeToWalkTextbox);
+
+            final LinearLayout walkTimeLayout = (LinearLayout)convertView.findViewById(R.id.timeTravelLayout);
 
             final DogOwner owner = list.get(position);
 
@@ -168,20 +231,17 @@ public class DogsListFragment extends Fragment
 //            dogName.setText(owner.getDog().getName());
             address.setText(owner.getAddress() + ", " + owner.getCity());
 //            phone.setText(owner.getPhoneNumber());
-            timeToWalkLabel.setVisibility(View.INVISIBLE);
-            timeToWalkTextbox.setVisibility(View.INVISIBLE);
 
             final CheckBox dogInListCheckBox = (CheckBox) convertView.findViewById(R.id.dogInListCheckBox);
 
             dogInListCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     if(dogInListCheckBox.isChecked()){
-                        timeToWalkLabel.setVisibility(View.VISIBLE);
-                        timeToWalkTextbox.setVisibility(View.VISIBLE);
+                        walkTimeLayout.setVisibility(View.VISIBLE);
                     }else {
-                        timeToWalkLabel.setVisibility(View.INVISIBLE);
-                        timeToWalkTextbox.setVisibility(View.INVISIBLE);
+                        walkTimeLayout.setVisibility(View.GONE);
                     }
                 }
             });

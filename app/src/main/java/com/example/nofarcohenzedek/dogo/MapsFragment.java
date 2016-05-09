@@ -1,9 +1,13 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +18,7 @@ import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -29,23 +33,54 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private String address;
     private ProgressBar progressBar;
 
+    private View rootView;
+
+    public MapsFragment()
+    {}
+
+    public MapsFragment(Long id, String addr)
+    {
+        userId = id;
+        address = addr;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.activity_maps, container, false);
+        if (rootView != null)
+        {
+            ViewGroup parent = (ViewGroup)rootView.getParent();
+
+            if (parent != null)
+            {
+                parent.removeView(rootView);
+            }
+        }
+
+        try {
+            rootView = inflater.inflate(R.layout.activity_maps, container, false);
+        }
+        catch (InflateException e){
+        }
+
         super.onCreateView(inflater, container, savedInstanceState);
 
-        Bundle args = getArguments();
+      //  Bundle args = getArguments();
 
-
-        MapFragment mapFragment = (MapFragment)getChildFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
+        //MapFragment mapFragment = (MapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.mapsProgressBar);
-        userId = args.getLong("userId");
-        address = args.getString("address");
+        progressBar = (ProgressBar) rootView.findViewById(R.id.mapsProgressBar);
+      //  userId = args.getLong("userId");
+      //  address = args.getString("address");
 
-        return view;
+        return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //No call for super(). Bug on API Level > 11.
     }
 
     /**
@@ -98,4 +133,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//
+//        getChildFragmentManager().beginTransaction().remove(getChildFragmentManager().findFragmentById(R.id.map)).commit();
+//        mMap = null;
+
+
+
+//        new Handler().post(new Runnable() {
+//            public void run() {
+//                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+//
+//                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+//                ft.remove(mapFragment);
+//                ft.commit();
+//            }
+//        });
+//        }
 }
