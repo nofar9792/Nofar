@@ -17,10 +17,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapPathActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ProgressBar progressBar;
+
+    private List<String> tempAddrList;
 
 
     @Override
@@ -33,6 +38,8 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 
         progressBar = (ProgressBar) findViewById(R.id.mapsProgressBar);
+
+        tempAddrList = new ArrayList<String>();
     }
 
     @Override
@@ -43,7 +50,5 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         LatLng center = Utilities.getLocationFromAddress("Karkom 3, Modiin, Israel", getApplicationContext());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-
     }
 }
