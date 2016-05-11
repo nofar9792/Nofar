@@ -53,5 +53,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_dog_owner_details"></string>
     <string name="title_activity_action_bar"></string>
+    <string name="title_activity_map_path">MapPathActivity</string>
 
 </resources>
