@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.example.nofarcohenzedek.dogo.Model.Route;
 import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -39,7 +40,9 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
 
         progressBar = (ProgressBar) findViewById(R.id.mapsProgressBar);
 
-        tempAddrList = new ArrayList<String>();
+        tempAddrList = new ArrayList<String>(){};
+        tempAddrList.add("כרכום 3, מודיעין, ישראל");
+        tempAddrList.add("עמק איילון 30, מודיעין, ישראל");
     }
 
     @Override
@@ -50,5 +53,12 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         LatLng center = Utilities.getLocationFromAddress("Karkom 3, Modiin, Israel", getApplicationContext());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+        Route route = new Route();
+
+        route.drawRoute(mMap,getApplicationContext(),
+                Utilities.getLocationFromAddress(tempAddrList.get(0), getApplicationContext()),
+                Utilities.getLocationFromAddress(tempAddrList.get(1), getApplicationContext()),
+                true, "en");
     }
 }
