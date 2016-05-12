@@ -267,7 +267,9 @@ public class DogsListFragment extends Fragment
                 }
             });
 
-            convertView.setOnClickListener(new View.OnClickListener() {
+            View dogDetailsInListItemView = convertView.findViewById(R.id.dogDetailsInListItem);
+
+            dogDetailsInListItemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // on click - open the dog owner details

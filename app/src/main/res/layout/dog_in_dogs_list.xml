@@ -21,95 +21,60 @@
         android:checked="false" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dogInListItem"
-        android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:id="@+id/dogInListItem"
+            android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10px"
-                android:text="בעלים:"
-                android:textSize="20dp" />
-
-            <TextView
+                android:id="@+id/dogDetailsInListItem"
+                android:orientation="vertical">
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10px"
-                android:textSize="20dp"
-                android:id="@+id/ownerNameInDogsList"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:text="בעלים:"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:textSize="20dp"
+                    android:id="@+id/ownerNameInDogsList"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:text="כתובת:"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10px"
+                    android:textSize="20dp"
+                    android:id="@+id/addressInDogsList"/>
+
+            </LinearLayout>
 
         </LinearLayout>
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="10px"-->
-                <!--android:text= "שם הכלב:"-->
-                <!--android:textSize="20dp" />-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="10px"-->
-                <!--android:textSize="20dp"-->
-                <!--android:id="@+id/dogNameInDogsList"/>-->
-
-        <!--</LinearLayout>-->
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10px"
-                android:text="כתובת:"
-                android:textSize="20dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10px"
-                android:textSize="20dp"
-                android:id="@+id/addressInDogsList"/>
-
-        </LinearLayout>
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="10px"-->
-                <!--android:text="מספר טלפון:"-->
-                <!--android:textSize="20dp" />-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="10px"-->
-                <!--android:textSize="20dp"-->
-                <!--android:id="@+id/phoneInDogsList"/>-->
-
-        <!--</LinearLayout>-->
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -135,7 +100,6 @@
                 android:textSize="20dp" />
 
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -168,7 +132,6 @@
                 android:focusableInTouchMode="false"/>
 
         </LinearLayout>
-
 
     </LinearLayout>
 
