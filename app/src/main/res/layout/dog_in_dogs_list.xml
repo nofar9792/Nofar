@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10px"
-                android:text=":זמן טיול"
+                android:text=":זמן טיול (דקות)"
                 android:textSize="20dp" />
 
             <EditText

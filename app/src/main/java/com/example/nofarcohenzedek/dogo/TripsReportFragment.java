@@ -17,6 +17,10 @@ import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TripsReportFragment extends Fragment {
@@ -74,6 +78,8 @@ public class TripsReportFragment extends Fragment {
                 @Override
                 public void onResult(List<Trip> trips) {
                     allTrips = trips;
+                    Collections.sort(allTrips,new TripsComparator());
+
 
                     if (allTrips != null && !allTrips.isEmpty()) {
                         CustomAdapter adapter = new CustomAdapter();
@@ -117,6 +123,14 @@ public class TripsReportFragment extends Fragment {
             isPaid.setEnabled(false);
         }
     }
+
+    public class TripsComparator implements Comparator<Trip> {
+        @Override
+        public int compare(Trip t1, Trip t2) {
+            return t2.getStartOfWalking().compareTo(t1.getStartOfWalking());
+        }
+    }
+
 
     class CustomAdapter extends BaseAdapter {
 

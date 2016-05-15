@@ -17,6 +17,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,9 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         tempAddrList = new ArrayList<String>(){};
         tempAddrList.add("כרכום 3, מודיעין, ישראל");
         tempAddrList.add("עמק איילון 30, מודיעין, ישראל");
+        tempAddrList.add("לבונה 6, מודיעין, ישראל");
+        tempAddrList.add("עמק החולה 70, מודיעין, ישראל");
+        tempAddrList.add("כרכום 3, מודיעין, ישראל");
     }
 
     @Override
@@ -56,9 +60,25 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
 
         Route route = new Route();
 
-        route.drawRoute(mMap,getApplicationContext(),
-                Utilities.getLocationFromAddress(tempAddrList.get(0), getApplicationContext()),
-                Utilities.getLocationFromAddress(tempAddrList.get(1), getApplicationContext()),
-                true, "en");
+        //route.drawRoute(mMap,getApplicationContext(),
+          //      Utilities.getLocationFromAddress(tempAddrList.get(0), getApplicationContext()),
+            //    Utilities.getLocationFromAddress(tempAddrList.get(1), getApplicationContext()),
+              //  true, "en");
+
+        route.drawRoute(mMap, getApplicationContext(),
+                new ArrayList<LatLng>()
+                {{ add(Utilities.getLocationFromAddress(tempAddrList.get(0), getApplicationContext()));
+                        add(Utilities.getLocationFromAddress(tempAddrList.get(1), getApplicationContext()));
+                        add(Utilities.getLocationFromAddress(tempAddrList.get(2), getApplicationContext()));
+                        add(Utilities.getLocationFromAddress(tempAddrList.get(3), getApplicationContext()));
+                        add(Utilities.getLocationFromAddress(tempAddrList.get(4), getApplicationContext()));
+                    }},false,"en",false
+        );
+
+        mMap.addMarker(new MarkerOptions().position(Utilities.getLocationFromAddress(tempAddrList.get(0), getApplicationContext())).title("1"));
+        mMap.addMarker(new MarkerOptions().position(Utilities.getLocationFromAddress(tempAddrList.get(1), getApplicationContext())).title("2"));
+        mMap.addMarker(new MarkerOptions().position(Utilities.getLocationFromAddress(tempAddrList.get(2), getApplicationContext())).title("3"));
+        mMap.addMarker(new MarkerOptions().position(Utilities.getLocationFromAddress(tempAddrList.get(3), getApplicationContext())).title("4"));
+        mMap.addMarker(new MarkerOptions().position(Utilities.getLocationFromAddress(tempAddrList.get(4), getApplicationContext())).title("5"));
     }
 }
