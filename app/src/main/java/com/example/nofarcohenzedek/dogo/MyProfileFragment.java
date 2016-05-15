@@ -75,10 +75,7 @@ public class MyProfileFragment extends Fragment {
         currentView = view;
         super.onCreateView(inflater, container, savedInstanceState);
 
-        Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.myProfileProgressBar);
-
-       // isOwner = args.getBoolean("isOwner");
 
         if (!isOwner)
         {
