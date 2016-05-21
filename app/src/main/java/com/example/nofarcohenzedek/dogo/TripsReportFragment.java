@@ -1,5 +1,8 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -31,6 +34,8 @@ public class TripsReportFragment extends Fragment {
     private ProgressBar progressBar;
     private Context context;
 
+    private ListView listView;
+
     public TripsReportFragment(){}
 
     public TripsReportFragment(Long id, boolean IsOwner)
@@ -48,6 +53,7 @@ public class TripsReportFragment extends Fragment {
 
         Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.tripsReportProgressBar);
+        listView = (ListView) view.findViewById(R.id.tripsList);
         //isOwner = args.getBoolean("isOwner");
         //userId = args.getLong("userId");
 
@@ -61,7 +67,6 @@ public class TripsReportFragment extends Fragment {
 
                     if (allTrips != null && !allTrips.isEmpty()) {
                         CustomAdapter adapter = new CustomAdapter();
-                        ListView listView = (ListView) view.findViewById(R.id.tripsList);
                         listView.setAdapter(adapter);
                     }
                     else
@@ -150,7 +155,7 @@ public class TripsReportFragment extends Fragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(R.layout.raw_trips_layout, null);
@@ -212,6 +217,38 @@ public class TripsReportFragment extends Fragment {
             {
                 isPaid.setEnabled(false);
             }
+
+
+            // Delete event
+
+            final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener(){
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which)
+                    {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            allTrips.remove(position);
+                            notifyDataSetChanged();
+                            // TODO : DELETE ITEM FROM DB
+                            break;
+                    }
+
+                }
+            };
+
+            convertView.setOnLongClickListener(
+                    new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                            dialog.setMessage("Delete?").setPositiveButton("Yes",dialogClickListener)
+                            .setNegativeButton("No",dialogClickListener).show();
+
+                            return false;
+                        }
+                    }
+            );
 
             return convertView;
         }
