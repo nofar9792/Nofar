@@ -3,7 +3,7 @@ package com.example.nofarcohenzedek.dogo.Model;
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
-public abstract class User
+public class User
 {
     private long id;
     private String userName;
@@ -13,6 +13,9 @@ public abstract class User
     private String address;
     private String city;
 
+    public User(){
+
+    }
     public User(long id, String userName, String firstName, String lastName, String phoneNumber,
                 String address, String city)
     {

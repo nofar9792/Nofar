@@ -12,6 +12,10 @@ public class DogWalker extends User{
     private boolean isComfortableOnAfternoon;
     private boolean isComfortableOnEvening;
 
+    public DogWalker(){
+        super();
+
+    }
     public DogWalker(long id, String userName, String firstName, String lastName, String phoneNumber,
                      String address, String city, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening) {
         super(id, userName, firstName, lastName, phoneNumber, address, city);
