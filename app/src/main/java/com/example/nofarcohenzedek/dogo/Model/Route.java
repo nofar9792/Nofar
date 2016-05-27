@@ -65,13 +65,13 @@ public class Route {
         lang = language;
         if(points.size() == 2)
         {
-            String url = makeURL(points.get(0).latitude,points.get(0).longitude,points.get(1).latitude,points.get(1).longitude,"driving");
+            String url = makeURL(points.get(0).latitude,points.get(0).longitude,points.get(1).latitude,points.get(1).longitude,"walking");
             new connectAsyncTask(url,withIndications).execute();
             return true;
         }
         else if(points.size() > 2)
         {
-            String url = makeURL(points,"driving",optimize);
+            String url = makeURL(points,"walking",optimize);
             new connectAsyncTask(url,withIndications).execute();
             return true;
         }
@@ -87,13 +87,13 @@ public class Route {
         lang = language;
         if(points.size() == 2)
         {
-            String url = makeURL(points.get(0).latitude,points.get(0).longitude,points.get(1).latitude,points.get(1).longitude,"driving");
+            String url = makeURL(points.get(0).latitude,points.get(0).longitude,points.get(1).latitude,points.get(1).longitude,"walking");
             new connectAsyncTask(url,false).execute();
             return true;
         }
         else if(points.size() > 2)
         {
-            String url = makeURL(points,"driving",optimize);
+            String url = makeURL(points,"walking",optimize);
             new connectAsyncTask(url,false).execute();
             return true;
         }
@@ -133,7 +133,7 @@ public class Route {
         mMap = map;
         context = c;
 
-        String url = makeURL(source.latitude,source.longitude,dest.latitude,dest.longitude,"driving");
+        String url = makeURL(source.latitude,source.longitude,dest.latitude,dest.longitude,"walking");
         new connectAsyncTask(url,withIndications).execute();
         lang = language;
 
@@ -145,7 +145,7 @@ public class Route {
         mMap = map;
         context = c;
 
-        String url = makeURL(source.latitude,source.longitude,dest.latitude,dest.longitude,"driving");
+        String url = makeURL(source.latitude,source.longitude,dest.latitude,dest.longitude,"walking");
         new connectAsyncTask(url,false).execute();
         lang = language;
 
@@ -167,7 +167,7 @@ public class Route {
         StringBuilder urlString = new StringBuilder();
 
         if(mode == null)
-            mode = "driving";
+            mode = "walking";
 
         urlString.append("http://maps.googleapis.com/maps/api/directions/json");
         urlString.append("?origin=");// from
@@ -205,7 +205,7 @@ public class Route {
         StringBuilder urlString = new StringBuilder();
 
         if(mode == null)
-            mode = "driving";
+            mode = "walking";
 
         urlString.append("http://maps.googleapis.com/maps/api/directions/json");
         urlString.append("?origin=");// from
