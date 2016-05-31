@@ -56,6 +56,7 @@ public class LoginActivity extends Activity {
                     {
                         TextView error = (TextView)findViewById(R.id.error);
                         error.setText("שם משתמש או הסיסמא אינם נכונים.");
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
             });

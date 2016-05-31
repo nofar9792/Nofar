@@ -2,11 +2,10 @@ package com.example.nofarcohenzedek.dogo;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -29,7 +28,7 @@ public class DogOwnerDetailsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dog_owner_details);
 
-        progressBar = (ProgressBar)findViewById(R.id.dogOwnerProgressBar);
+        progressBar = (ProgressBar) findViewById(R.id.dogOwnerProgressBar);
 
         Intent intent = getIntent();
         final String dogOwnerId = intent.getStringExtra("dogOwnerId");
@@ -44,23 +43,41 @@ public class DogOwnerDetailsActivity extends Activity {
         final RadioButton isMedium = (RadioButton) findViewById(R.id.isMediumForDetais);
         final RadioButton isSmall = (RadioButton) findViewById(R.id.isSmallForDetais);
         final ImageView dogPic = (ImageView) findViewById(R.id.dogPicForDetais);
+        final CheckBox isComfortable6To8 = (CheckBox) findViewById(R.id.checkbox6To8);
+        final CheckBox isComfortable8To10 = (CheckBox) findViewById(R.id.checkbox8To10);
+        final CheckBox isComfortable10To12 = (CheckBox) findViewById(R.id.checkbox10To12);
+        final CheckBox isComfortable12To14 = (CheckBox) findViewById(R.id.checkbox12To14);
+        final CheckBox isComfortable14To16 = (CheckBox) findViewById(R.id.checkbox14To16);
+        final CheckBox isComfortable16To18 = (CheckBox) findViewById(R.id.checkbox16To18);
+        final CheckBox isComfortable18To20 = (CheckBox) findViewById(R.id.checkbox18To20);
+        final CheckBox isComfortable20To22 = (CheckBox) findViewById(R.id.checkbox20To22);
 
         // Get the dog owner
         Model.getInstance().getUserById(Long.parseLong(dogOwnerId), new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
-                if(user != null) {
+                if (user != null) {
                     if (user instanceof DogOwner) {
-                        firstName.setText(user.getFirstName());
-                        lastName.setText(user.getLastName());
-                        city.setText(user.getCity());
-                        address.setText(user.getAddress());
-                        Dog dog = ((DogOwner) user).getDog();
+                        DogOwner dogOwner = (DogOwner) user;
+
+                        firstName.setText(dogOwner.getFirstName());
+                        lastName.setText(dogOwner.getLastName());
+                        city.setText(dogOwner.getCity());
+                        address.setText(dogOwner.getAddress());
+                        Dog dog = dogOwner.getDog();
                         dogName.setText(dog.getName());
                         dogAge.setText(String.valueOf(dog.getAge()));
+                        isComfortable6To8.setChecked(dogOwner.isComfortable6To8());
+                        isComfortable8To10.setChecked(dogOwner.isComfortable8To10());
+                        isComfortable10To12.setChecked(dogOwner.isComfortable10To12());
+                        isComfortable12To14.setChecked(dogOwner.isComfortable12To14());
+                        isComfortable14To16.setChecked(dogOwner.isComfortable14To16());
+                        isComfortable16To18.setChecked(dogOwner.isComfortable16To18());
+                        isComfortable18To20.setChecked(dogOwner.isComfortable18To20());
+                        isComfortable20To22.setChecked(dogOwner.isComfortable20To22());
 
                         // Load the picture of dog
-                        final String picRef = (((DogOwner) user).getDog().getPicRef());
+                        final String picRef = dog.getPicRef();
 
                         if (picRef != null) {
                             if (Utilities.isFileExistInDevice(picRef)) {
@@ -96,13 +113,5 @@ public class DogOwnerDetailsActivity extends Activity {
                 progressBar.setVisibility(View.GONE);
             }
         });
-    }
-
-    public ProgressBar getProgressBar() {
-        return progressBar;
-    }
-
-    public void setProgressBar(ProgressBar progressBar) {
-        this.progressBar = progressBar;
     }
 }

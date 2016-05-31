@@ -41,14 +41,23 @@ public class SignUpActivity extends Activity {
     private RadioButton isSmall;
     private RadioButton isMedium;
     private RadioButton isBig;
-    private String  age;
+    private String age;
     private String priceForHour;
+    // todo: delete this
     private CheckBox isComfortableOnAfternoon;
     private CheckBox isComfortableOnMorning;
     private CheckBox isComfortableOnEvening;
+    private CheckBox isComfortable6To8;
+    private CheckBox isComfortable8To10;
+    private CheckBox isComfortable10To12;
+    private CheckBox isComfortable12To14;
+    private CheckBox isComfortable14To16;
+    private CheckBox isComfortable16To18;
+    private CheckBox isComfortable18To20;
+    private CheckBox isComfortable20To22;
     private static final int SELECT_PHOTO = 100;
     private String errorMessage;
-    private  Bitmap dogPic;
+    private Bitmap dogPic;
     private boolean isSaved;
 
     @Override
@@ -60,26 +69,23 @@ public class SignUpActivity extends Activity {
     /**
      * When user choose on type of user, This method check which type he chosen
      * and visible the relevant layout
+     *
      * @param view
      */
-    public void checkTypeOfUserBTNClick(View view)
-    {
+    public void checkTypeOfUserBTNClick(View view) {
         // Get the value of radio buttons
-        RadioButton isOwner = (RadioButton)findViewById(R.id.isOwner);
-        RadioButton isWalker = (RadioButton)findViewById(R.id.isWalker);
+        RadioButton isOwner = (RadioButton) findViewById(R.id.isOwner);
+        RadioButton isWalker = (RadioButton) findViewById(R.id.isWalker);
 
         // Get the layouts
-        LinearLayout layoutWalker = (LinearLayout)findViewById(R.id.layoutWalker);
-        LinearLayout layoutOwner = (LinearLayout)findViewById(R.id.layoutOwner);
+        LinearLayout layoutWalker = (LinearLayout) findViewById(R.id.layoutWalker);
+        LinearLayout layoutOwner = (LinearLayout) findViewById(R.id.layoutOwner);
 
         // Check which radio chosen
-        if(isOwner.isChecked())
-        {
+        if (isOwner.isChecked()) {
             layoutOwner.setVisibility(View.VISIBLE);
             layoutWalker.setVisibility(View.GONE);
-        }
-        else if(isWalker.isChecked())
-        {
+        } else if (isWalker.isChecked()) {
             layoutWalker.setVisibility(View.VISIBLE);
             layoutOwner.setVisibility(View.GONE);
         }
@@ -87,6 +93,7 @@ public class SignUpActivity extends Activity {
 
     /**
      * This method save the new user
+     *
      * @param view
      */
     public void saveBTN(View view) {
@@ -107,41 +114,45 @@ public class SignUpActivity extends Activity {
                         Long.parseLong(dogAge), picRef);
 
                 // Save the owner on DB
-                Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog, new Model.GetIdListener() {
-                    @Override
-                    public void onResult(long id, boolean isSucceed) {
-                        if (isSucceed) {
-                            if (picRef != null) {
-                                Model.getInstance().saveImage(picRef, dogPic, new Model.IsSucceedListener() {
-                                    @Override
-                                    public void onResult(boolean isSucceed) {
-                                        if (isSucceed) {
-                                            isSaved = true;
-                                            Toast.makeText(getApplicationContext(), "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
-                                        }
+                Model.getInstance().addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog,
+                        isComfortable6To8.isChecked(), isComfortable8To10.isChecked(), isComfortable10To12.isChecked(),
+                        isComfortable12To14.isChecked(), isComfortable14To16.isChecked(), isComfortable16To18.isChecked(),
+                        isComfortable18To20.isChecked(), isComfortable20To22.isChecked(), new Model.GetIdListener() {
+                            @Override
+                            public void onResult(long id, boolean isSucceed) {
+                                if (isSucceed) {
+                                    if (picRef != null) {
+                                        Model.getInstance().saveImage(picRef, dogPic, new Model.IsSucceedListener() {
+                                            @Override
+                                            public void onResult(boolean isSucceed) {
+                                                if (isSucceed) {
+                                                    isSaved = true;
+                                                    Toast.makeText(getApplicationContext(), "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     }
-                                });
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, new Model.ExceptionListener() {
-                    @Override
-                    public void onResult(String message) {
-                        if (message.equals("user already exist")) {
-                            error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
-                        }
-                    }
-                });
+                        }, new Model.ExceptionListener() {
+                            @Override
+                            public void onResult(String message) {
+                                if (message.equals("user already exist")) {
+                                    error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
+                                }
+                            }
+                        });
 
             } else {
                 // Save the walker on DB
                 Model.getInstance().addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, Long.parseLong(age),
-                        Integer.parseInt(priceForHour), isComfortableOnMorning.isChecked(), isComfortableOnAfternoon.isChecked(),
-                        isComfortableOnEvening.isChecked(), new Model.GetIdListener() {
+                        Integer.parseInt(priceForHour), isComfortable6To8.isChecked(), isComfortable8To10.isChecked(), isComfortable10To12.isChecked(),
+                        isComfortable12To14.isChecked(), isComfortable14To16.isChecked(), isComfortable16To18.isChecked(),
+                        isComfortable18To20.isChecked(), isComfortable20To22.isChecked(), new Model.GetIdListener() {
                             @Override
                             public void onResult(long id, boolean isSucceed) {
                                 if (isSucceed) {
@@ -165,18 +176,14 @@ public class SignUpActivity extends Activity {
                 Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
                     @Override
                     public void onResult(User user) {
-                        if (user != null)
-                        {
-                            Intent intent = new Intent(getApplicationContext(),ActionBarActivity.class);
+                        if (user != null) {
+                            Intent intent = new Intent(getApplicationContext(), ActionBarActivity.class);
                             intent.putExtra("userId", user.getId());
 
-                            if (user instanceof DogOwner)
-                            {
+                            if (user instanceof DogOwner) {
                                 intent.putExtra("isOwner", true);
                                 intent.putExtra("address", user.getAddress() + ", " + user.getCity());
-                            }
-                            else
-                            {
+                            } else {
                                 intent.putExtra("isOwner", false);
                             }
 
@@ -193,10 +200,10 @@ public class SignUpActivity extends Activity {
 
     /**
      * This method open the user gallery foe chosen the dog picture
+     *
      * @param view
      */
-    public void openGalleryBTN(View view)
-    {
+    public void openGalleryBTN(View view) {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, SELECT_PHOTO);
@@ -204,44 +211,34 @@ public class SignUpActivity extends Activity {
 
     /**
      * Check if all details of user arn't empty
+     *
      * @return
      */
-    private boolean isValid()
-    {
+    private boolean isValid() {
         boolean isValid = true;
         errorMessage = "";
 
-        if(!isOwner.isChecked() && !isWalker.isChecked())
-        {
+        if (!isOwner.isChecked() && !isWalker.isChecked()) {
             errorMessage = "אנא בחר/י את סוג המשתמש";
             isValid = false;
-        }
-        else if(firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || password.isEmpty() || phoneNumber.isEmpty() ||
-                city.isEmpty() || address.isEmpty())
-        {
+        } else if (firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || password.isEmpty() || phoneNumber.isEmpty() ||
+                city.isEmpty() || address.isEmpty()) {
             errorMessage = "אנא מלא את כל שדות ההרשמה.";
             isValid = false;
-        }
-        else if (isOwner.isChecked())
-        {
+        } else if (isOwner.isChecked()) {
             if (dogName.isEmpty() || dogAge.isEmpty() ||
-                    (!isBig.isChecked() && !isMedium.isChecked() && !isSmall.isChecked()))
-            {
+                    (!isBig.isChecked() && !isMedium.isChecked() && !isSmall.isChecked())) {
                 errorMessage = "אנא מלא את פרטי הכלב.";
                 isValid = false;
             }
-        }
-
-        else if (isWalker.isChecked())
-        {
-            if (priceForHour.isEmpty() || age.isEmpty())
-            {
+        } else if (isWalker.isChecked()) {
+            if (priceForHour.isEmpty() || age.isEmpty()) {
                 errorMessage = "אנא מלא את כל הפרטים.";
                 isValid = false;
             }
         }
 
-        TextView error = (TextView)findViewById(R.id.error);
+        TextView error = (TextView) findViewById(R.id.error);
         error.setText(errorMessage);
 
         return isValid;
@@ -250,31 +247,36 @@ public class SignUpActivity extends Activity {
     /**
      * Get all details of user
      */
-    private void initAllDetails()
-    {
-        isOwner = (RadioButton)findViewById(R.id.isOwner);
-        isWalker = (RadioButton)findViewById(R.id.isWalker);
-        firstName = ((EditText)findViewById(R.id.firstName)).getText().toString();
-        lastName = ((EditText)findViewById(R.id.lastName)).getText().toString();
-        userName = ((EditText)findViewById(R.id.userName)).getText().toString();
-        password = ((EditText)findViewById(R.id.password)).getText().toString();
-        phoneNumber = ((EditText)findViewById(R.id.phoneNumber)).getText().toString();
-        city = ((EditText)findViewById(R.id.city)).getText().toString();
-        address = ((EditText)findViewById(R.id.address)).getText().toString();
-        dogName = ((EditText)findViewById(R.id.dogName)).getText().toString();
+    private void initAllDetails() {
+        isOwner = (RadioButton) findViewById(R.id.isOwner);
+        isWalker = (RadioButton) findViewById(R.id.isWalker);
+        firstName = ((EditText) findViewById(R.id.firstName)).getText().toString();
+        lastName = ((EditText) findViewById(R.id.lastName)).getText().toString();
+        userName = ((EditText) findViewById(R.id.userName)).getText().toString();
+        password = ((EditText) findViewById(R.id.password)).getText().toString();
+        phoneNumber = ((EditText) findViewById(R.id.phoneNumber)).getText().toString();
+        city = ((EditText) findViewById(R.id.city)).getText().toString();
+        address = ((EditText) findViewById(R.id.address)).getText().toString();
+        dogName = ((EditText) findViewById(R.id.dogName)).getText().toString();
         dogAge = ((EditText) findViewById(R.id.dogAge)).getText().toString();
-        isSmall = (RadioButton)findViewById(R.id.isSmall);
-        isMedium = (RadioButton)findViewById(R.id.isMedium);
-        isBig = (RadioButton)findViewById(R.id.isBig);
+        isSmall = (RadioButton) findViewById(R.id.isSmall);
+        isMedium = (RadioButton) findViewById(R.id.isMedium);
+        isBig = (RadioButton) findViewById(R.id.isBig);
         age = ((EditText) findViewById(R.id.age)).getText().toString();
         priceForHour = ((EditText) findViewById(R.id.priceForHour)).getText().toString();
-        isComfortableOnAfternoon = (CheckBox)findViewById(R.id.cbx_isComfortableOnAfternoon);
-        isComfortableOnMorning = (CheckBox)findViewById(R.id.cbx_isComfortableOnMorning);
-        isComfortableOnEvening = (CheckBox)findViewById(R.id.cbx_isComfortableOnEvening);
+        isComfortable6To8 = (CheckBox) findViewById(R.id.checkbox6To8);
+        isComfortable8To10 = (CheckBox) findViewById(R.id.checkbox8To10);
+        isComfortable10To12 = (CheckBox) findViewById(R.id.checkbox10To12);
+        isComfortable12To14 = (CheckBox) findViewById(R.id.checkbox12To14);
+        isComfortable14To16 = (CheckBox) findViewById(R.id.checkbox14To16);
+        isComfortable16To18 = (CheckBox) findViewById(R.id.checkbox16To18);
+        isComfortable18To20 = (CheckBox) findViewById(R.id.checkbox18To20);
+        isComfortable20To22 = (CheckBox) findViewById(R.id.checkbox20To22);
     }
 
     /**
      * This method called when user choose picture
+     *
      * @param requestCode
      * @param resultCode
      * @param imageReturnedIntent
@@ -283,10 +285,9 @@ public class SignUpActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        switch(requestCode)
-        {
+        switch (requestCode) {
             case SELECT_PHOTO:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     Uri selectedImage = imageReturnedIntent.getData();
                     InputStream imageStream = null;
                     try {
@@ -298,7 +299,7 @@ public class SignUpActivity extends Activity {
 
                     // Save selected image, and path
                     picRef = String.valueOf(selectedImage.getPath().hashCode());
-                    ((ImageView)findViewById(R.id.dogPic)).setImageBitmap(dogPic);
+                    ((ImageView) findViewById(R.id.dogPic)).setImageBitmap(dogPic);
                 }
         }
     }

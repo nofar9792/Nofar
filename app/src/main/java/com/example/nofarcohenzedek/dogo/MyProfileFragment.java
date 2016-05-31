@@ -41,9 +41,14 @@ public class MyProfileFragment extends Fragment {
     private EditText city;
     private EditText age;
     private EditText price;
-    private CheckBox morning;
-    private CheckBox afternoon;
-    private CheckBox evening;
+    private CheckBox isComfortable6To8;
+    private CheckBox isComfortable8To10;
+    private CheckBox isComfortable10To12;
+    private CheckBox isComfortable12To14;
+    private CheckBox isComfortable14To16;
+    private CheckBox isComfortable16To18;
+    private CheckBox isComfortable18To20;
+    private CheckBox isComfortable20To22;
     private EditText dogName;
     private RadioButton isBig;
     private RadioButton isMedium;
@@ -99,9 +104,14 @@ public class MyProfileFragment extends Fragment {
                 city = (EditText) currentView.findViewById(R.id.cityMP);
                 age = (EditText) currentView.findViewById(R.id.ageMP);
                 price = (EditText) currentView.findViewById(R.id.priceForHourMP);
-                morning = (CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnMorningMP);
-                afternoon = (CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnAfternoonMP);
-                evening = (CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnEveningMP);
+                isComfortable6To8 = (CheckBox) currentView.findViewById(R.id.checkbox6To8);
+                isComfortable8To10 = (CheckBox) currentView.findViewById(R.id.checkbox8To10);
+                isComfortable10To12 = (CheckBox) currentView.findViewById(R.id.checkbox10To12);
+                isComfortable12To14 = (CheckBox) currentView.findViewById(R.id.checkbox12To14);
+                isComfortable14To16 = (CheckBox) currentView.findViewById(R.id.checkbox14To16);
+                isComfortable16To18 = (CheckBox) currentView.findViewById(R.id.checkbox16To18);
+                isComfortable18To20 = (CheckBox) currentView.findViewById(R.id.checkbox18To20);
+                isComfortable20To22 = (CheckBox) currentView.findViewById(R.id.checkbox20To22);
                 dogName = (EditText) currentView.findViewById(R.id.dogNameMP);
                 isBig = (RadioButton) currentView.findViewById(R.id.isBigMP);
                 isMedium = (RadioButton) currentView.findViewById(R.id.isMediumMP);
@@ -113,13 +123,18 @@ public class MyProfileFragment extends Fragment {
                 phone.setText(user.getPhoneNumber());
                 address.setText(user.getAddress());
                 city.setText(user.getCity());
+                  isComfortable6To8.setChecked(user.isComfortable6To8());
+                  isComfortable8To10.setChecked(user.isComfortable8To10());
+                  isComfortable10To12.setChecked(user.isComfortable10To12());
+                  isComfortable12To14.setChecked(user.isComfortable12To14());
+                  isComfortable14To16.setChecked(user.isComfortable14To16());
+                  isComfortable16To18.setChecked(user.isComfortable16To18());
+                  isComfortable18To20.setChecked(user.isComfortable18To20());
+                  isComfortable20To22.setChecked(user.isComfortable20To22());
 
                 if (!isOwner) {
                     age.setText(Long.toString(((DogWalker) user).getAge()));
                     price.setText(Long.toString(((DogWalker) user).getPriceForHour()));
-                    morning.setChecked(((DogWalker) user).isComfortableOnMorning());
-                    afternoon.setChecked(((DogWalker) user).isComfortableOnAfternoon());
-                    evening.setChecked(((DogWalker) user).isComfortableOnEvening());
                 } else {
                     dogName.setText(((DogOwner) user).getDog().getName());
                     DogSize size = ((DogOwner) user).getDog().getSize();
@@ -180,7 +195,9 @@ public class MyProfileFragment extends Fragment {
 
                 progressBar.setVisibility(View.VISIBLE);
                 Model.getInstance().updateDogOwner(new DogOwner(id, userName, firstNameVal, lastNameVal, phoneVal, addressVal, cityVal,
-                        new Dog(dogNameVal, sizeVal, dogAgeVal, dogPic)), new Model.IsSucceedListener() {
+                        new Dog(dogNameVal, sizeVal, dogAgeVal, dogPic), isComfortable6To8.isChecked(), isComfortable8To10.isChecked(), isComfortable10To12.isChecked(),
+                        isComfortable12To14.isChecked(), isComfortable14To16.isChecked(), isComfortable16To18.isChecked(),
+                        isComfortable18To20.isChecked(), isComfortable20To22.isChecked()), new Model.IsSucceedListener() {
                     @Override
                     public void onResult(boolean isSucceed) {
                         if(isSucceed){
@@ -196,13 +213,12 @@ public class MyProfileFragment extends Fragment {
             {
                 Long ageVal = Long.valueOf(age.getText().toString());
                 int priceVal = Integer.valueOf(price.getText().toString());
-                Boolean morningVal = morning.isChecked();
-                Boolean noonVal = afternoon.isChecked();
-                Boolean eveningVal = evening.isChecked();
 
                 progressBar.setVisibility(View.VISIBLE);
                 Model.getInstance().updateDogWalker(new DogWalker(id, userName, firstNameVal, lastNameVal, phoneVal, addressVal, cityVal,
-                        ageVal, priceVal, morningVal, noonVal, eveningVal), new Model.IsSucceedListener() {
+                        ageVal, priceVal, isComfortable6To8.isChecked(), isComfortable8To10.isChecked(), isComfortable10To12.isChecked(),
+                        isComfortable12To14.isChecked(), isComfortable14To16.isChecked(), isComfortable16To18.isChecked(),
+                        isComfortable18To20.isChecked(), isComfortable20To22.isChecked()), new Model.IsSucceedListener() {
                     @Override
                     public void onResult(boolean isSucceed) {
                         progressBar.setVisibility(View.GONE);

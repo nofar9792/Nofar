@@ -207,33 +207,91 @@
                 android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/morningInDetails"
+                    android:id="@+id/checkbox6To8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:text="@string/isComfortableOnMorning"
+                    android:text="@string/hour6To8"
                     android:textSize="15dp" />
 
                 <CheckBox
-                    android:id="@+id/afternoonInDetails"
+                    android:id="@+id/checkbox8To10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dp"
-                    android:clickable="false"
-                    android:text="@string/isComfortableOnAfternoon"
+                    android:text="@string/hour8To10"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox10To12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hour10To12"
                     android:textSize="15dp" />
 
                 <CheckBox
-                    android:id="@+id/eveningInDetails"
+                    android:id="@+id/checkbox12To14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dp"
-                    android:clickable="false"
-                    android:text="@string/isComfortableOnEvening"
+                    android:text="@string/hour12To14"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkbox14To16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hour14To16"
+                    android:textSize="15dp" />
+
+                <CheckBox
+                    android:id="@+id/checkbox16To18"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:text="@string/hour16To18"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <CheckBox
+                    android:id="@+id/checkbox18To20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hour18To20"
+                    android:textSize="15dp" />
+
+                <CheckBox
+                    android:id="@+id/checkbox20To22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:text="@string/hour20To22"
                     android:textSize="15dp" />
 
             </LinearLayout>
-
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
