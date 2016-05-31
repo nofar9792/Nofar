@@ -38,6 +38,10 @@ public class Model {
     //region Singletone Methods
     private Model() {
         xstream.alias("User", User.class);
+        xstream.alias("ArrayOfDogWalker", ArrayOfDogWalker.class);
+        xstream.addImplicitCollection(ArrayOfDogWalker.class, "list");
+        xstream.alias("ArrayOfDogOwner", ArrayOfDogOwner.class);
+        xstream.addImplicitCollection(ArrayOfDogOwner.class, "list");
         xstream.alias("DogWalker", DogWalker.class);
         xstream.alias("DogOwner", DogOwner.class);
     }
@@ -79,19 +83,18 @@ public class Model {
         String url = baseUrl + "DogWalkers?userName=" + userName;
 
         try {
-            Object dogWalker = new HttpAsyncTask().execute(url).get();
+            Object dogWalkers = new HttpAsyncTask().execute(url).get();
 
             // If it is not null is means that now we are with the second thread (not the main thread)
-            if(dogWalker != null &&
-               dogWalker instanceof DogWalker &&
-               ((DogWalker)dogWalker).getPassword().equals(password)){
-               return dogWalker;
+            if(dogWalkers != null &&
+               dogWalkers instanceof ArrayOfDogWalker &&
+               ((ArrayOfDogWalker)dogWalkers).size() != 0 &&
+               ((ArrayOfDogWalker)dogWalkers).get(0).getPassword().equals(password)){
+               return ((ArrayOfDogWalker)dogWalkers).get(0);
             }else {
                 return new Object();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -101,19 +104,19 @@ public class Model {
         String url = baseUrl + "DogOwners?userName=" + userName;
 
         try {
-            Object dogOwner = new HttpAsyncTask().execute(url).get();
+            Object dogOwners = new HttpAsyncTask().execute(url).get();
 
             // If it is not null is means that now we are with the second thread (not the main thread)
-            if(dogOwner != null){
-                if(dogOwner instanceof DogOwner &&((DogOwner)dogOwner).getPassword().equals(password)) {
-                    return dogOwner;
+            if(dogOwners != null){
+                if(dogOwners instanceof ArrayOfDogOwner &&
+                   ((ArrayOfDogOwner)dogOwners).size() != 0 &&
+                   ((ArrayOfDogOwner)dogOwners).get(0).getPassword().equals(password)) {
+                    return ((ArrayOfDogOwner)dogOwners).get(0);
                 }else {
                     return new Object();
                 }
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -156,9 +159,7 @@ public class Model {
             }else {
                 return new Object();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -177,9 +178,7 @@ public class Model {
             }else {
                 return new Object();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -189,8 +188,27 @@ public class Model {
 
     //region Dog Walker Methods
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
-        final List<DogWalker> dogWalkersResult = new LinkedList<>();
-        listener.onResult(dogWalkersResult);
+        String url = baseUrl + "DogWalkers";
+
+        try {
+            Object dogWalkers = new HttpAsyncTask().execute(url).get();
+
+            // If it is not null is means that now we are with the second thread (not the main thread)
+            if(dogWalkers != null &&
+               dogWalkers instanceof ArrayOfDogWalker){
+
+                listener.onResult(((ArrayOfDogWalker)dogWalkers).getList());
+
+            }else {
+                // !!!
+                listener.onResult((LinkedList<DogWalker>)new Object());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        final List<DogWalker> dogWalkersResult = new LinkedList<>();
+//        listener.onResult(dogWalkersResult);
     }
     
     public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
@@ -348,7 +366,7 @@ public class Model {
             // convert inputstream to string
             if(inputStream != null) {
                 xml = convertInputStreamToString(inputStream);
-                xml = removeRedudantParts(xml);
+                //xml = removeRedudantParts(xml);
             }
             else
                 xml = "Did not work!";
@@ -357,7 +375,7 @@ public class Model {
             Log.d("InputStream", e.getLocalizedMessage());
         }
 
-        if (xml == "") {
+        if (xml.equals("")) {
             return new Object();
         }
 
