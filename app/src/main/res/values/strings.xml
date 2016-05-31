@@ -54,5 +54,6 @@
     <string name="title_activity_dog_owner_details"></string>
     <string name="title_activity_action_bar"></string>
     <string name="title_activity_map_path">MapPathActivity</string>
+    <string name="title_activity_owner_trip_offering">OwnerTripOffering</string>
 
 </resources>
