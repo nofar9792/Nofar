@@ -70,6 +70,11 @@
             android:label="@string/title_activity_map_path"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".OwnerTripOffering"
+            android:label="@string/title_activity_owner_trip_offering"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

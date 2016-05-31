@@ -67,7 +67,7 @@ public class ActionBarActivity extends AppCompatActivity
     private class CustomAdapter extends FragmentPagerAdapter {
 
         private String walkerFragments [] = {"List","Profile","Report","Messages"};
-        private String ownerFragments [] = {"List", "Profile", "Report", "Messages","Map","Search" };
+        private String ownerFragments [] = {"List", "Profile", "Report", "Messages","Map","Search","Offering" };
 
         public CustomAdapter(android.support.v4.app.FragmentManager supportFragmentManager, Context applicationContext) {
             super(supportFragmentManager);
@@ -98,6 +98,10 @@ public class ActionBarActivity extends AppCompatActivity
                     }
                         else {
                         return null;
+                    }
+                case 6:
+                    if (isOwner){
+                        return new OwnerTripOffering(userId);
                     }
                 default:
                     return null;
