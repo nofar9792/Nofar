@@ -62,18 +62,18 @@ public class UserParse {
     }
 
     public static void logIn(String userName, String password, final Model.GetUserListener listener){
-        ParseUser.logInInBackground(userName, password, new LogInCallback() {
-            public void done(ParseUser parseUser, ParseException e) {
-                if (parseUser != null) {
-                    User user = convertFromParseUserToUser(parseUser);
-
-                    listener.onResult(user);
-                } else {
-                    e.printStackTrace();
-                    listener.onResult(null);
-                }
-            }
-        });
+//        ParseUser.logInInBackground(userName, password, new LogInCallback() {
+//            public void done(ParseUser parseUser, ParseException e) {
+//                if (parseUser != null) {
+//                    User user = convertFromParseUserToUser(parseUser);
+//
+//                    listener.onResult(user);
+//                } else {
+//                    e.printStackTrace();
+//                    listener.onResult(null);
+//                }
+//            }
+//        });
     }
 
     public static void logOut(){
@@ -84,18 +84,18 @@ public class UserParse {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(UserConsts.USER_ID, id);
 
-        query.getFirstInBackground(new GetCallback<ParseUser>() {
-            @Override
-            public void done(ParseUser parseUser, ParseException e) {
-                if (e == null) {
-                    User user = convertFromParseUserToUser(parseUser);
-
-                    listener.onResult(user);
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        query.getFirstInBackground(new GetCallback<ParseUser>() {
+//            @Override
+//            public void done(ParseUser parseUser, ParseException e) {
+//                if (e == null) {
+//                    User user = convertFromParseUserToUser(parseUser);
+//
+//                    listener.onResult(user);
+//                } else {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     public static void getDogWalkerUsers(String fromDate, final Model.GetDogWalkersListener listener) {
@@ -112,7 +112,7 @@ public class UserParse {
                 List<DogWalker> dogWalkers = new LinkedList<>();
                 if (e == null) {
                     for (ParseUser parseUser : list) {
-                        dogWalkers.add((DogWalker) convertFromParseUserToUser(parseUser));
+//                        dogWalkers.add((DogWalker) convertFromParseUserToUser(parseUser));
                     }
                 } else {
                     e.printStackTrace();
@@ -187,25 +187,25 @@ public class UserParse {
         });
     }
 
-    private static User convertFromParseUserToUser(ParseUser parseUser){
-        User user;
-
-        long userId = parseUser.getLong(UserConsts.USER_ID);
-        String userName = parseUser.getUsername();
-        String firstName = parseUser.getString(UserConsts.FIRST_NAME);
-        String lastName = parseUser.getString(UserConsts.LAST_NAME);
-        String phoneNumber = parseUser.getString(UserConsts.PHONE_NUMBER);
-        String address = parseUser.getString(UserConsts.ADDRESS);
-        String city = parseUser.getString(UserConsts.CITY);
-        Boolean isDogWalker = parseUser.getBoolean(UserConsts.IS_DOG_WALKER);
-
-        if (isDogWalker) {
-            user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
-        } else {
-            user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
-        }
-
-        return user;
-    }
+//    private static User convertFromParseUserToUser(ParseUser parseUser){
+//        User user;
+//
+//        long userId = parseUser.getLong(UserConsts.USER_ID);
+//        String userName = parseUser.getUsername();
+//        String firstName = parseUser.getString(UserConsts.FIRST_NAME);
+//        String lastName = parseUser.getString(UserConsts.LAST_NAME);
+//        String phoneNumber = parseUser.getString(UserConsts.PHONE_NUMBER);
+//        String address = parseUser.getString(UserConsts.ADDRESS);
+//        String city = parseUser.getString(UserConsts.CITY);
+//        Boolean isDogWalker = parseUser.getBoolean(UserConsts.IS_DOG_WALKER);
+//
+//        if (isDogWalker) {
+//            user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
+//        } else {
+//            user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
+//        }
+//
+//        return user;
+//    }
     //endregion
 }

@@ -11,11 +11,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
@@ -64,21 +61,8 @@ public class SearchFragment extends Fragment
             }
         });
 
-//        ((RadioButton)view.findViewById(R.id.searchByDistance)).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                radioButtonSearchDWBy(v);
-//            }
-//        });
-//
-//        ((RadioButton)view.findViewById(R.id.searchByParameters)).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                radioButtonSearchDWBy(v);
-//            }
-//        });
 
-        ((ImageButton)view.findViewById(R.id.searchBTN)).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.searchBTN).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchBTNClick(v);
@@ -88,68 +72,47 @@ public class SearchFragment extends Fragment
         return view;
     }
 
-//    public void radioButtonSearchDWBy(View view)
-//    {
-//        RadioButton searchByRadius = (RadioButton)currentView.findViewById(R.id.searchByDistance);
-//        RadioButton searchByParametes = (RadioButton)currentView.findViewById(R.id.searchByParameters);
-//        LinearLayout layoutDistance = (LinearLayout)currentView.findViewById(R.id.searchByDistanceLayout);
-//        LinearLayout layoutParameters = (LinearLayout)currentView.findViewById(R.id.searchByParametersLayout);
-//
-//        if(searchByRadius.isChecked())
-//        {
-//            layoutDistance.setVisibility(View.VISIBLE);
-//            layoutParameters.setVisibility(View.GONE);
-//        }
-//        else if(searchByParametes.isChecked())
-//        {
-//            layoutParameters.setVisibility(View.VISIBLE);
-//            layoutDistance.setVisibility(View.GONE);
-//        }
-//
-//        ImageButton searchBTN = (ImageButton) currentView.findViewById(R.id.searchBTN);
-//        searchBTN.setEnabled(true);
-//    }
-
     public void searchBTNClick (View view) {
         progressBar.setVisibility(View.VISIBLE);
 
-        // check if by distance or by param
-        //RadioButton byDistance = (RadioButton) currentView.findViewById(R.id.searchByDistance);
-        //RadioButton byParams = (RadioButton) currentView.findViewById(R.id.searchByParameters);
-
-        //if (byDistance.isChecked())
-        //{
         final String radius = ((EditText) currentView.findViewById(R.id.radiusForSearch)).getText().toString();
         final String age = ((EditText) currentView.findViewById(R.id.ageForSearch)).getText().toString();
         final String price = ((EditText) currentView.findViewById(R.id.priceForSearch)).getText().toString();
-        final boolean morning = ((CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnMorningForSearch)).isChecked();
-        final boolean noon = ((CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnAfternoonForSearch)).isChecked();
-        final boolean evening = ((CheckBox) currentView.findViewById(R.id.cbx_isComfortableOnEveningForSearch)).isChecked();
+        final boolean isComfortable6To8 = ((CheckBox) currentView.findViewById(R.id.checkbox6To8)).isChecked();
+        final boolean isComfortable8To10 = ((CheckBox) currentView.findViewById(R.id.checkbox8To10)).isChecked();
+        final boolean isComfortable10To12 = ((CheckBox) currentView.findViewById(R.id.checkbox10To12)).isChecked();
+        final boolean isComfortable12To14 = ((CheckBox) currentView.findViewById(R.id.checkbox12To14)).isChecked();
+        final boolean isComfortable14To16 = ((CheckBox) currentView.findViewById(R.id.checkbox14To16)).isChecked();
+        final boolean isComfortable16To18 = ((CheckBox) currentView.findViewById(R.id.checkbox16To18)).isChecked();
+        final boolean isComfortable18To20 = ((CheckBox) currentView.findViewById(R.id.checkbox18To20)).isChecked();
+        final boolean isComfortable20To22 = ((CheckBox) currentView.findViewById(R.id.checkbox20To22)).isChecked();
 
         if (owner == null) {
             Model.getInstance().getUserById(userId, new Model.GetUserListener() {
                 @Override
                 public void onResult(User user) {
                     owner = (DogOwner) user;
-                    searchAndShowResults(radius, age, price, morning, noon, evening);
+                    searchAndShowResults(radius, age, price,isComfortable6To8, isComfortable8To10, isComfortable10To12,
+                            isComfortable12To14, isComfortable14To16, isComfortable16To18, isComfortable18To20, isComfortable20To22);
                 }
             });
         } else {
-            searchAndShowResults(radius, age, price, morning, noon, evening);
+            searchAndShowResults(radius, age, price, isComfortable6To8, isComfortable8To10, isComfortable10To12,
+                    isComfortable12To14, isComfortable14To16, isComfortable16To18, isComfortable18To20, isComfortable20To22);
         }
     }
 
     private void searchAndShowResults(final String radius,
                                       final String age, final String price,
-                                      final boolean morning, final boolean noon, final boolean evening)
+                                      final boolean isComfortable6To8, final boolean isComfortable8To10, final boolean isComfortable10To12,
+                                      final boolean isComfortable12To14, final boolean isComfortable14To16, final boolean isComfortable16To18,
+                                      final boolean isComfortable18To20, final boolean isComfortable20To22)
     {
-        // list that contains all dog walkers and we remove form her the ones that doesn't fit
-        final List<DogWalker> temp = new ArrayList<DogWalker>();
-
         // search by parameters (the existing ones..)
         Model.getInstance().getAllDogWalkers(new Model.GetDogWalkersListener() {
             @Override
             public void onResult(List<DogWalker> dogWalkers) {
+                // list that contains all dog walkers and we remove form her the ones that doesn't fit
                 List<DogWalker> temp = new ArrayList<DogWalker>();
 
                 // work around concurrentModificationException
@@ -166,9 +129,14 @@ public class SearchFragment extends Fragment
                         temp.remove(dogWalker);
                     }
 
-                    if (morning && !dogWalker.isComfortableOnMorning() ||
-                            noon && !dogWalker.isComfortableOnAfternoon() ||
-                            evening && !dogWalker.isComfortableOnEvening()) {
+                    if (isComfortable6To8 && !dogWalker.isComfortable6To8() ||
+                        isComfortable8To10 && !dogWalker.isComfortable8To10() ||
+                        isComfortable10To12 && !dogWalker.isComfortable10To12() ||
+                        isComfortable12To14 && !dogWalker.isComfortable12To14() ||
+                        isComfortable14To16 && !dogWalker.isComfortable14To16() ||
+                        isComfortable16To18 && !dogWalker.isComfortable16To18() ||
+                        isComfortable18To20 && !dogWalker.isComfortable18To20() ||
+                        isComfortable20To22 && !dogWalker.isComfortable20To22()) {
                         temp.remove(dogWalker);
                     }
                 }
@@ -184,7 +152,6 @@ public class SearchFragment extends Fragment
                 if (!radius.equals("")) {
 
                     Long radiusInMeters = Long.valueOf(radius);
-
 
                     final LatLng ownerCoor = Utilities.getLocationFromAddress(owner.getAddress() + ", " + owner.getCity(), getActivity().getApplicationContext());
                     final Location ownerLocation = new Location("owner");
@@ -212,7 +179,6 @@ public class SearchFragment extends Fragment
                 adapter.notifyDataSetChanged();
 
                 progressBar.setVisibility(View.GONE);
-
             }
         });
     }

@@ -41,26 +41,26 @@ public class UserSql
         Cursor cursor = db.query(UserConsts.USER_TABLE, null,  where, args, null, null, null);
         List<DogWalker> users = new LinkedList<>();
 
-        if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(UserConsts.USER_ID);
-            int userNameIndex = cursor.getColumnIndex(UserConsts.USERNAME);
-            int firstNameIndex = cursor.getColumnIndex(UserConsts.FIRST_NAME);
-            int lastNameIndex = cursor.getColumnIndex(UserConsts.LAST_NAME);
-            int phoneNumberIndex = cursor.getColumnIndex(UserConsts.PHONE_NUMBER);
-            int addressIndex = cursor.getColumnIndex(UserConsts.ADDRESS);
-            int cityIndex = cursor.getColumnIndex(UserConsts.CITY);
-            do {
-                long id = cursor.getLong(idIndex);
-                String userName = cursor.getString(userNameIndex);
-                String firstName = cursor.getString(firstNameIndex);
-                String lastName = cursor.getString(lastNameIndex);
-                String phoneNumber = cursor.getString(phoneNumberIndex);
-                String address = cursor.getString(addressIndex);
-                String city = cursor.getString(cityIndex);
-                DogWalker dogWalker = new DogWalker(id,userName, firstName, lastName, phoneNumber, address, city);
-                users.add(dogWalker);
-            } while (cursor.moveToNext());
-        }
+//        if (cursor.moveToFirst()) {
+//            int idIndex = cursor.getColumnIndex(UserConsts.USER_ID);
+//            int userNameIndex = cursor.getColumnIndex(UserConsts.USERNAME);
+//            int firstNameIndex = cursor.getColumnIndex(UserConsts.FIRST_NAME);
+//            int lastNameIndex = cursor.getColumnIndex(UserConsts.LAST_NAME);
+//            int phoneNumberIndex = cursor.getColumnIndex(UserConsts.PHONE_NUMBER);
+//            int addressIndex = cursor.getColumnIndex(UserConsts.ADDRESS);
+//            int cityIndex = cursor.getColumnIndex(UserConsts.CITY);
+//            do {
+//                long id = cursor.getLong(idIndex);
+//                String userName = cursor.getString(userNameIndex);
+//                String firstName = cursor.getString(firstNameIndex);
+//                String lastName = cursor.getString(lastNameIndex);
+//                String phoneNumber = cursor.getString(phoneNumberIndex);
+//                String address = cursor.getString(addressIndex);
+//                String city = cursor.getString(cityIndex);
+//                DogWalker dogWalker = new DogWalker(id,userName, firstName, lastName, phoneNumber, address, city);
+//                users.add(dogWalker);
+//            } while (cursor.moveToNext());
+//        }
         return users;
     }
 
@@ -71,29 +71,29 @@ public class UserSql
         Cursor cursor = db.query(UserConsts.USER_TABLE, null,  where, args, null, null, null);
         User user = null;
 
-        if (cursor.moveToFirst()) {
-            int userNameIndex = cursor.getColumnIndex(UserConsts.USERNAME);
-            int firstNameIndex = cursor.getColumnIndex(UserConsts.FIRST_NAME);
-            int lastNameIndex = cursor.getColumnIndex(UserConsts.LAST_NAME);
-            int phoneNumberIndex = cursor.getColumnIndex(UserConsts.PHONE_NUMBER);
-            int addressIndex = cursor.getColumnIndex(UserConsts.ADDRESS);
-            int cityIndex = cursor.getColumnIndex(UserConsts.CITY);
-            int isDogWalkerIndex = cursor.getColumnIndex(UserConsts.IS_DOG_WALKER);
-
-            String userName = cursor.getString(userNameIndex);
-            String firstName = cursor.getString(firstNameIndex);
-            String lastName = cursor.getString(lastNameIndex);
-            String phoneNumber = cursor.getString(phoneNumberIndex);
-            String address = cursor.getString(addressIndex);
-            String city = cursor.getString(cityIndex);
-            Boolean isDogWalker = cursor.getInt(isDogWalkerIndex) == 1;
-
-            if(isDogWalker) {
-                user = new DogWalker(id,userName, firstName, lastName, phoneNumber, address, city);
-            }else {
-                user = new DogOwner(id,userName, firstName, lastName, phoneNumber, address, city);
-            }
-        }
+//        if (cursor.moveToFirst()) {
+//            int userNameIndex = cursor.getColumnIndex(UserConsts.USERNAME);
+//            int firstNameIndex = cursor.getColumnIndex(UserConsts.FIRST_NAME);
+//            int lastNameIndex = cursor.getColumnIndex(UserConsts.LAST_NAME);
+//            int phoneNumberIndex = cursor.getColumnIndex(UserConsts.PHONE_NUMBER);
+//            int addressIndex = cursor.getColumnIndex(UserConsts.ADDRESS);
+//            int cityIndex = cursor.getColumnIndex(UserConsts.CITY);
+//            int isDogWalkerIndex = cursor.getColumnIndex(UserConsts.IS_DOG_WALKER);
+//
+//            String userName = cursor.getString(userNameIndex);
+//            String firstName = cursor.getString(firstNameIndex);
+//            String lastName = cursor.getString(lastNameIndex);
+//            String phoneNumber = cursor.getString(phoneNumberIndex);
+//            String address = cursor.getString(addressIndex);
+//            String city = cursor.getString(cityIndex);
+//            Boolean isDogWalker = cursor.getInt(isDogWalkerIndex) == 1;
+//
+//            if(isDogWalker) {
+//                user = new DogWalker(id,userName, firstName, lastName, phoneNumber, address, city);
+//            }else {
+//                user = new DogOwner(id,userName, firstName, lastName, phoneNumber, address, city);
+//            }
+//        }
         return user;
     }
 
