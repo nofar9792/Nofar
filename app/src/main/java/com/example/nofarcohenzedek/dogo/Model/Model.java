@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfDogOwner;
+import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfDogWalker;
+import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfTrip;
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
 import com.thoughtworks.xstream.XStream;
@@ -24,40 +27,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Nofar Cohen Zedek on 02-Jan-16.
- */
 public class Model {
     //region Private Members
-    private ModelSql modelSql;
+//    private ModelSql modelSql;
     private ModelParse modelParse;
-    private String baseUrl = "http://db.cs.colman.ac.il/DogoServer/api/";
-    private XStream xstream = new XStream(new DomDriver());
     private static final Model instance = new Model();
     //endregion
 
     //region Singletone Methods
     private Model() {
-        xstream.alias("User", User.class);
-        xstream.alias("ArrayOfDogWalker", ArrayOfDogWalker.class);
-        xstream.addImplicitCollection(ArrayOfDogWalker.class, "list");
-        xstream.alias("ArrayOfDogOwner", ArrayOfDogOwner.class);
-        xstream.addImplicitCollection(ArrayOfDogOwner.class, "list");
-        xstream.alias("DogWalker", DogWalker.class);
-        xstream.alias("DogOwner", DogOwner.class);
     }
 
     public void init(Context context) {
 //        if(modelSql == null){
 //            modelSql = new ModelSql(context);
 //        }
-//        if(modelParse == null){
-//            modelParse = new ModelParse(context);
-//        }
+        if(modelParse == null){
+            modelParse = new ModelParse(context);
+        }
     }
 
     public static Model getInstance() {
@@ -66,228 +58,55 @@ public class Model {
     //endregion
 
     //region User Methods
-
-    private Long isUsernameExist(String userName ){
-
-        Long isExist = Long.parseLong("0");
-
-        // dog walker
-        String url = baseUrl + "DogWalkers?userName=" + userName;
-
-        try {
-            Object dogWalkers = new HttpAsyncTask().execute(url).get();
-
-            if(dogWalkers != null &&
-                    dogWalkers instanceof ArrayOfDogWalker &&
-                    ((ArrayOfDogWalker)dogWalkers).size() != 0) {
-                isExist = ((ArrayOfDogWalker) dogWalkers).get(0).getId();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // dog owner
-        url = baseUrl + "DogOwners?userName=" + userName;
-
-        try {
-            Object dogOwners = new HttpAsyncTask().execute(url).get();
-
-            if(dogOwners != null){
-                if(dogOwners instanceof ArrayOfDogOwner &&
-                        ((ArrayOfDogOwner)dogOwners).size() != 0 ) {
-                    isExist = ((ArrayOfDogOwner) dogOwners).get(0).getId();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return isExist;
-    }
-
     public void logIn(String userName, String password, GetUserListener listener) {
-        Object dogWalker = tryLoginDogWalker(userName, password);
-        if(dogWalker != null){
-            if(dogWalker instanceof DogWalker){
-                listener.onResult((DogWalker)dogWalker);
-            }else {
-                Object dogOwner = tryLoginDogOwner(userName, password);
-                if(dogOwner != null){
-                    if(dogOwner instanceof DogOwner){
-                        listener.onResult((DogOwner)dogOwner);
-                    }else {
-                        listener.onResult(null);
-                    }
-                }
-            }
-        }
-    }
-
-    private Object tryLoginDogWalker(String userName, String password){
-        String url = baseUrl + "DogWalkers?userName=" + userName;
-
-        try {
-            Object dogWalkers = new HttpAsyncTask().execute(url).get();
-
-            // If it is not null is means that now we are with the second thread (not the main thread)
-            if(dogWalkers != null &&
-               dogWalkers instanceof ArrayOfDogWalker &&
-               ((ArrayOfDogWalker)dogWalkers).size() != 0 &&
-               ((ArrayOfDogWalker)dogWalkers).get(0).getPassword().equals(password)){
-               return ((ArrayOfDogWalker)dogWalkers).get(0);
-            }else {
-                return new Object();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Object tryLoginDogOwner(String userName, String password){
-        String url = baseUrl + "DogOwners?userName=" + userName;
-
-        try {
-            Object dogOwners = new HttpAsyncTask().execute(url).get();
-
-            // If it is not null is means that now we are with the second thread (not the main thread)
-            if(dogOwners != null){
-                if(dogOwners instanceof ArrayOfDogOwner &&
-                   ((ArrayOfDogOwner)dogOwners).size() != 0 &&
-                   ((ArrayOfDogOwner)dogOwners).get(0).getPassword().equals(password)) {
-                    return ((ArrayOfDogOwner)dogOwners).get(0);
-                }else {
-                    return new Object();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // This line will execute only in the main thread
-        return null;
+        modelParse.logIn(userName, password, listener);
     }
 
     public void logOut() {
-        //modelParse.logOut();
+        modelParse.logOut();
     }
 
     public void getUserById(long userId, final Model.GetUserListener listener) {
-        Object dogWalker = tryGetDogWalkerById(userId);
-        if(dogWalker != null){
-            if(dogWalker instanceof DogWalker){
-                listener.onResult((DogWalker)dogWalker);
-            }else {
-                Object dogOwner = tryGetDogOwnerById(userId);
-                if(dogOwner != null){
-                    if(dogOwner instanceof DogOwner){
-                        listener.onResult((DogOwner)dogOwner);
-                    }else {
-                        listener.onResult(null);
-                    }
-                }
-            }
-        }
+        modelParse.getUserById(userId, listener);
     }
-
-    private Object tryGetDogWalkerById(long userId){
-        String url = baseUrl + "DogWalkers/" + userId;
-
-        try {
-            Object dogWalker = new HttpAsyncTask().execute(url).get();
-
-            // If it is not null is means that now we are with the second thread (not the main thread)
-            if(dogWalker != null &&
-               dogWalker instanceof DogWalker){
-                return dogWalker;
-            }else {
-                return new Object();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Object tryGetDogOwnerById(long userId){
-        String url = baseUrl + "DogOwners/" + userId;
-
-        try {
-            Object dogOwner = new HttpAsyncTask().execute(url).get();
-
-            // If it is not null is means that now we are with the second thread (not the main thread)
-            if(dogOwner != null &&
-               dogOwner instanceof DogOwner){
-                return dogOwner;
-            }else {
-                return new Object();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     //endregion
 
     //region Dog Walker Methods
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
-        String url = baseUrl + "DogWalkers";
-
-        try {
-            Object dogWalkers = new HttpAsyncTask().execute(url).get();
-
-            // If it is not null is means that now we are with the second thread (not the main thread)
-            if(dogWalkers != null &&
-               dogWalkers instanceof ArrayOfDogWalker){
-
-                listener.onResult(((ArrayOfDogWalker)dogWalkers).getList());
-
-            }else {
-                // !!!
-                listener.onResult((LinkedList<DogWalker>)new Object());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-//        final List<DogWalker> dogWalkersResult = new LinkedList<>();
-//        listener.onResult(dogWalkersResult);
+        modelParse.getAllDogWalkers(null,listener);
+//        final List<DogWalker> dogWalkersResult = modelSql.getAllDogWalkers();
+//        String lastUpdateDate = modelSql.getDogWalkersLastUpdateDate();
+//
+//        modelParse.getAllDogWalkers(null, new GetDogWalkersListener() {
+//            @Override
+//            public void onResult(List<DogWalker> dogWalkers) {
+//                if (dogWalkers.size() > 0) {
+//                    for (DogWalker dogWalker : dogWalkers) {
+//                        modelSql.addDogWalker(dogWalker);
+//                    }
+//
+//                    dogWalkersResult.removeAll(dogWalkersResult);
+//                    dogWalkersResult.addAll(modelSql.getAllDogWalkers());
+//                }
+//                modelSql.setDogWalkersLastUpdateDate(Calendar.getInstance().getTime());
+//                listener.onResult(dogWalkersResult);
+//            }
+//        });
     }
-    
+
     public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
                              String address, String city, long age, int priceForHour, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
                              boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
-                             boolean isComfortable20To22, GetIdListener listener,  ExceptionListener exceptionListener) {
-        // check if username exist
-        if (isUsernameExist(userName) == 0) {
-            String url = baseUrl + "DogWalkers";
-
-            DogWalker walker = new DogWalker(9,userName,password,firstName,lastName,phoneNumber,address,city,age,priceForHour,isComfortable6To8,
-                    isComfortable8To10,isComfortable10To12,isComfortable12To14,isComfortable14To16,isComfortable16To18,isComfortable18To20,isComfortable20To22);
-
-            try {
-                boolean b =  Boolean.parseBoolean(new PostHttpAsyncTask(walker,"DogWalker").execute(url).get().toString());
-
-                listener.onResult(isUsernameExist(userName),b);
-
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            exceptionListener.onResult("user already exist");
-        }
+                             boolean isComfortable20To22, GetIdListener listener,  ExceptionListener exceptionListener){
+        modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour,
+                                isComfortable6To8,  isComfortable8To10,  isComfortable10To12, isComfortable12To14,
+                                isComfortable14To16,  isComfortable16To18,  isComfortable18To20, isComfortable20To22,
+                                listener, exceptionListener);
     }
 
     public void updateDogWalker(DogWalker dogWalker, IsSucceedListener listener){
-        // todo: send request to server
-//        modelParse.updateDogWalker(dogWalker, listener);
+        modelParse.updateDogWalker(dogWalker, listener);
     }
-
     //endregion
 
     //region Dog Owner Methods
@@ -295,15 +114,15 @@ public class Model {
                             String address, String city, Dog dog, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
                             boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
                             boolean isComfortable20To22, GetIdListener listener, ExceptionListener exceptionListener) {
-        // todo: send request to server
-
+        modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog,
+                                isComfortable6To8,  isComfortable8To10,  isComfortable10To12, isComfortable12To14,
+                                isComfortable14To16,  isComfortable16To18,  isComfortable18To20, isComfortable20To22,
+                                listener, exceptionListener);
     }
 
     public void updateDogOwner(DogOwner dogOwner, IsSucceedListener listener){
-        // todo: send request to server
-//        modelParse.updateDogOwner(dogOwner, listener);
+        modelParse.updateDogOwner(dogOwner, listener);
     }
-
     //endregion
 
     //region Trip Methods
@@ -343,20 +162,86 @@ public class Model {
 
     // Connections between walker to some owners
     public void getOwnersConnectToWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
-        final List<DogOwner> dogOwnersResult = new LinkedList<>();
-        listener.onResult(dogOwnersResult);
+        // todo: ניסיתי לתקן את הקוד בהערהה שמתחת אבל אני לא בטוחה לגבי זה
+        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
+            @Override
+            public void onResult(List<Request> requests) {
+                final List<DogOwner> dogOwnersResult = new LinkedList<DogOwner>();
+                for (Request request : requests) {
+                    dogOwnersResult.add(request.getDogOwner());
+                }
+                listener.onResult(dogOwnersResult);
+            }
+        });
+
+//        final List<DogOwner> dogOwnersResult = modelSql.getOwnersConnectToWalker(dogWalkerId);
+//        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
+//
+//        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
+//            @Override
+//            public void onResult(List<Request> requests) {
+//                if (requests.size() > 0) {
+//                    for (Request request : requests) {
+//                        modelSql.addDogOwner(request.getDogOwner());
+//                        modelSql.addRequest(request);
+//                    }
+//
+//                    dogOwnersResult.removeAll(dogOwnersResult);
+//                    dogOwnersResult.addAll(modelSql.getOwnersConnectToWalker(dogWalkerId));
+//                }
+//                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
+//                listener.onResult(dogOwnersResult);
+//            }
+//        });
     }
 
     // Messages for dog walker
     public void getRequestForDogWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
-        final List<DogOwner> dogOwnersResult = new LinkedList<>();
-        listener.onResult(dogOwnersResult);
+        // todo: fix this
+
+//        final List<DogOwner> dogOwnersResult = modelSql.getRequestForDogWalker(dogWalkerId);
+//        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
+//
+//        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
+//            @Override
+//            public void onResult(List<Request> requests) {
+//                if (requests.size() > 0) {
+//                    for (Request request : requests) {
+//                        modelSql.addDogOwner(request.getDogOwner());
+//                        modelSql.addRequest(request);
+//                    }
+//
+//                    dogOwnersResult.removeAll(dogOwnersResult);
+//                    dogOwnersResult.addAll(modelSql.getRequestForDogWalker(dogWalkerId));
+//                }
+//                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
+//                listener.onResult(dogOwnersResult);
+//            }
+//        });
     }
 
     // Messages of dog owner
     public void getRequestOfDogOwner(final long dogOwnerId, final GetDogWalkersListener listener) {
-        final List<DogWalker> dogWalkersResult = new LinkedList<>();
-        listener.onResult(dogWalkersResult);
+        // todo: fix this
+//        final List<DogWalker> dogWalkersResult = modelSql.getRequestForDogOwner(dogOwnerId);
+//        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
+//
+//        modelParse.getRequestByDogOwner(dogOwnerId, null, new GetRequestsListener() {
+//            @Override
+//            public void onResult(List<Request> requests) {
+//                if (requests.size() > 0) {
+//                    for (Request request : requests) {
+//                        modelSql.addDogWalker(request.getDogWalker());
+//                        modelSql.addRequest(request);
+//                    }
+//
+//                    dogWalkersResult.removeAll(dogWalkersResult);
+//                    dogWalkersResult.addAll(modelSql.getRequestForDogOwner(dogOwnerId));
+//                }
+//                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
+//                listener.onResult(dogWalkersResult);
+//            }
+//        });
     }
     //endregion
 
@@ -411,125 +296,5 @@ public class Model {
     }
 
     //endregion
-
-    public Object GET(String url){
-        InputStream inputStream = null;
-        String xml = "";
-        try {
-            // create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
-
-            HttpGet httpGet = new HttpGet(url);
-            httpGet.addHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-
-            // make GET request to the given URL
-            HttpResponse httpResponse = httpclient.execute(httpGet);
-
-            // receive response as inputStream
-            inputStream = httpResponse.getEntity().getContent();
-
-            // convert inputstream to string
-            if(inputStream != null) {
-                xml = convertInputStreamToString(inputStream);
-                //xml = removeRedudantParts(xml);
-            }
-            else
-                xml = "Did not work!";
-
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
-        }
-
-        if (xml.equals("")) {
-            return new Object();
-        }
-
-        Object object = new Object();
-
-        try {
-            object = xstream.fromXML(xml);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return object;
-    }
-
-    public boolean POST (String url, Object objectToInsert,String objectType){
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(url);
-
-        try {
-
-            String objectAsXML = xstream.toXML(objectToInsert).replace("<"+objectType+">", "<"+objectType+" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/DoGoService.DataObjects\">");
-
-            StringEntity se = new StringEntity(objectAsXML,HTTP.UTF_8);
-            se.setContentType("text/xml");
-            httppost.setEntity(se);
-
-            HttpResponse httpresponse = httpclient.execute(httppost);
-
-            // todo status code is always 500
-            if (httpresponse.getStatusLine().getStatusCode() == 200)
-            {
-                // todo return true
-            }
-
-        } catch (ClientProtocolException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    private String convertInputStreamToString(InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
-        String line = "";
-        String result = "";
-        while((line = bufferedReader.readLine()) != null)
-            result += line;
-
-        inputStream.close();
-        return result;
-    }
-
-    private String removeRedudantParts(String xml) {
-        xml = xml.replaceFirst("<ArrayOfDogWalker xmlns:i=\\\"http://www.w3.org/2001/XMLSchema-instance\\\" xmlns=\\\"http://schemas.datacontract.org/2004/07/DoGoService.DataObjects\">", "");
-        xml = xml.replaceFirst("</ArrayOfDogWalker>", "");
-        xml = xml.replaceFirst("<ArrayOfDogWalker xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/DoGoService.DataObjects\" />", "");
-        xml = xml.replaceFirst("<ArrayOfDogOwner xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/DoGoService.DataObjects\">", "");
-        xml = xml.replaceFirst("</ArrayOfDogOwner>", "");
-        xml = xml.replaceFirst("<ArrayOfDogOwner xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/DoGoService.DataObjects\" />", "");
-        return xml;
-    }
-
-    private class HttpAsyncTask extends AsyncTask<String, Void, Object> {
-        @Override
-        protected Object doInBackground(String... urls) {
-            return GET(urls[0]);
-        }
-    }
-
-    private class PostHttpAsyncTask extends AsyncTask<String, Void, Object> {
-
-        private Object objToInsert;
-        private String objectType;
-
-        public PostHttpAsyncTask(Object obj, String objectType){
-            objToInsert = obj;
-            this.objectType = objectType;
-        }
-
-        @Override
-        protected Object doInBackground(String... urls) {
-            return POST(urls[0], objToInsert, objectType);
-        }
-    }
 }
 

@@ -13,15 +13,12 @@ import com.parse.SaveCallback;
  * Created by Nofar Cohen Zedek on 02-Jan-16.
  */
 public class DogWalkerParse {
-    public static void addToDogWalkersTable(long userId, long age, int priceForHour, boolean isComfortableOnMorning, boolean isComfortableOnAfternoon, boolean isComfortableOnEvening,  final Model.IsSucceedListener listener) {
+    public static void addToDogWalkersTable(long userId, long age, int priceForHour,  final Model.IsSucceedListener listener) {
         ParseObject newDogWalkerParseObject = new ParseObject(WalkerConsts.DOG_WALKERS_TABLE);
 
         newDogWalkerParseObject.put(WalkerConsts.USER_ID, userId);
         newDogWalkerParseObject.put(WalkerConsts.AGE, age);
         newDogWalkerParseObject.put(WalkerConsts.PRICE_FOR_HOUR, priceForHour);
-//        newDogWalkerParseObject.put(WalkerConsts.IS_COMFORTABLE_ON_MORNING, isComfortableOnMorning);
-//        newDogWalkerParseObject.put(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON, isComfortableOnAfternoon);
-//        newDogWalkerParseObject.put(WalkerConsts.IS_COMFORTABLE_ON_EVENING, isComfortableOnEvening);
 
         newDogWalkerParseObject.saveInBackground(new SaveCallback() {
             @Override
@@ -45,9 +42,6 @@ public class DogWalkerParse {
                 if (e == null) {
                     dogWalker.setAge(parseObject.getInt(WalkerConsts.AGE));
                     dogWalker.setPriceForHour(parseObject.getInt(WalkerConsts.PRICE_FOR_HOUR));
-//                    dogWalker.setIsComfortableOnMorning(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_MORNING));
-//                    dogWalker.setIsComfortableOnAfternoon(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON));
-//                    dogWalker.setIsComfortableOnEvening(parseObject.getBoolean(WalkerConsts.IS_COMFORTABLE_ON_EVENING));
 
                     listener.onResult(dogWalker);
                 }else{
@@ -67,9 +61,6 @@ public class DogWalkerParse {
                 if (e == null) {
                     parseObject.put(WalkerConsts.AGE, dogWalker.getAge());
                     parseObject.put(WalkerConsts.PRICE_FOR_HOUR, dogWalker.getPriceForHour());
-//                    parseObject.put(WalkerConsts.IS_COMFORTABLE_ON_MORNING, dogWalker.isComfortableOnMorning());
-//                    parseObject.put(WalkerConsts.IS_COMFORTABLE_ON_AFTERNOON, dogWalker.isComfortableOnAfternoon());
-//                    parseObject.put(WalkerConsts.IS_COMFORTABLE_ON_EVENING, dogWalker.isComfortableOnEvening());
 
                     parseObject.saveInBackground(new SaveCallback() {
                         @Override

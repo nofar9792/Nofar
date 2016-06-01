@@ -16,6 +16,10 @@ public class Trip
     private Date endOfWalking;
     private Boolean isPaid;
 
+    public Trip(){
+
+    }
+
     public Trip(long id,long dogOwnerId, long dogWalkerId, Date startOfWalking, Date endOfWalking, Boolean isPaid)
     {
         this.id = id;

@@ -22,7 +22,9 @@ import java.util.List;
  */
 public class UserParse {
     public static void addToUsersTable(final String userName, final String password, final String firstName, final String lastName, final String phoneNumber,
-                                       final String address, final String city, final Boolean isDogWalker, final Model.GetIdListener listener, final Model.ExceptionListener exceptionListener) {
+                                       final String address, final String city, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
+                                       boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
+                                       boolean isComfortable20To22, final Boolean isDogWalker, final Model.GetIdListener listener, final Model.ExceptionListener exceptionListener) {
         isUserNameAlreadyExist(userName, new Model.IsSucceedListener() {
             @Override
             public void onResult(boolean isExist) {
@@ -34,6 +36,7 @@ public class UserParse {
                         public void onResult(final long newUserId, boolean isSucceed) {
                             ParseUser user = new ParseUser();
 
+                            // todo: add the new members
                             user.setUsername(userName);
                             user.setPassword(password);
                             user.put(UserConsts.USER_ID, newUserId);
@@ -62,18 +65,18 @@ public class UserParse {
     }
 
     public static void logIn(String userName, String password, final Model.GetUserListener listener){
-//        ParseUser.logInInBackground(userName, password, new LogInCallback() {
-//            public void done(ParseUser parseUser, ParseException e) {
-//                if (parseUser != null) {
-//                    User user = convertFromParseUserToUser(parseUser);
-//
-//                    listener.onResult(user);
-//                } else {
-//                    e.printStackTrace();
-//                    listener.onResult(null);
-//                }
-//            }
-//        });
+        ParseUser.logInInBackground(userName, password, new LogInCallback() {
+            public void done(ParseUser parseUser, ParseException e) {
+                if (parseUser != null) {
+                    User user = convertFromParseUserToUser(parseUser);
+
+                    listener.onResult(user);
+                } else {
+                    e.printStackTrace();
+                    listener.onResult(null);
+                }
+            }
+        });
     }
 
     public static void logOut(){
@@ -84,18 +87,18 @@ public class UserParse {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(UserConsts.USER_ID, id);
 
-//        query.getFirstInBackground(new GetCallback<ParseUser>() {
-//            @Override
-//            public void done(ParseUser parseUser, ParseException e) {
-//                if (e == null) {
-//                    User user = convertFromParseUserToUser(parseUser);
-//
-//                    listener.onResult(user);
-//                } else {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (e == null) {
+                    User user = convertFromParseUserToUser(parseUser);
+
+                    listener.onResult(user);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public static void getDogWalkerUsers(String fromDate, final Model.GetDogWalkersListener listener) {
@@ -112,7 +115,7 @@ public class UserParse {
                 List<DogWalker> dogWalkers = new LinkedList<>();
                 if (e == null) {
                     for (ParseUser parseUser : list) {
-//                        dogWalkers.add((DogWalker) convertFromParseUserToUser(parseUser));
+                        dogWalkers.add((DogWalker) convertFromParseUserToUser(parseUser));
                     }
                 } else {
                     e.printStackTrace();
@@ -187,25 +190,28 @@ public class UserParse {
         });
     }
 
-//    private static User convertFromParseUserToUser(ParseUser parseUser){
+    private static User convertFromParseUserToUser(ParseUser parseUser){
+        // todo : return to this line after fixing the lines above
 //        User user;
-//
-//        long userId = parseUser.getLong(UserConsts.USER_ID);
-//        String userName = parseUser.getUsername();
-//        String firstName = parseUser.getString(UserConsts.FIRST_NAME);
-//        String lastName = parseUser.getString(UserConsts.LAST_NAME);
-//        String phoneNumber = parseUser.getString(UserConsts.PHONE_NUMBER);
-//        String address = parseUser.getString(UserConsts.ADDRESS);
-//        String city = parseUser.getString(UserConsts.CITY);
-//        Boolean isDogWalker = parseUser.getBoolean(UserConsts.IS_DOG_WALKER);
-//
-//        if (isDogWalker) {
+        User user =  null;
+
+        long userId = parseUser.getLong(UserConsts.USER_ID);
+        String userName = parseUser.getUsername();
+        String firstName = parseUser.getString(UserConsts.FIRST_NAME);
+        String lastName = parseUser.getString(UserConsts.LAST_NAME);
+        String phoneNumber = parseUser.getString(UserConsts.PHONE_NUMBER);
+        String address = parseUser.getString(UserConsts.ADDRESS);
+        String city = parseUser.getString(UserConsts.CITY);
+        Boolean isDogWalker = parseUser.getBoolean(UserConsts.IS_DOG_WALKER);
+        // todo: add the new members
+
+        if (isDogWalker) {
 //            user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
-//        } else {
+        } else {
 //            user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
-//        }
-//
-//        return user;
-//    }
+        }
+
+        return user;
+    }
     //endregion
 }

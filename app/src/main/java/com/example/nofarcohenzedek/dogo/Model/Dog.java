@@ -9,7 +9,9 @@ public class Dog {
     private long age;
     private String picRef;
 
+    public Dog(){
 
+    }
     public Dog(String name, DogSize size, long age, String picRef)
     {
         this.name = name;
