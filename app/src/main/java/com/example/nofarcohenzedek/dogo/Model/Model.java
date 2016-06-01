@@ -10,10 +10,15 @@ import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,6 +66,45 @@ public class Model {
     //endregion
 
     //region User Methods
+
+    private Long isUsernameExist(String userName ){
+
+        Long isExist = Long.parseLong("0");
+
+        // dog walker
+        String url = baseUrl + "DogWalkers?userName=" + userName;
+
+        try {
+            Object dogWalkers = new HttpAsyncTask().execute(url).get();
+
+            if(dogWalkers != null &&
+                    dogWalkers instanceof ArrayOfDogWalker &&
+                    ((ArrayOfDogWalker)dogWalkers).size() != 0) {
+                isExist = ((ArrayOfDogWalker) dogWalkers).get(0).getId();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // dog owner
+        url = baseUrl + "DogOwners?userName=" + userName;
+
+        try {
+            Object dogOwners = new HttpAsyncTask().execute(url).get();
+
+            if(dogOwners != null){
+                if(dogOwners instanceof ArrayOfDogOwner &&
+                        ((ArrayOfDogOwner)dogOwners).size() != 0 ) {
+                    isExist = ((ArrayOfDogOwner) dogOwners).get(0).getId();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isExist;
+    }
+
     public void logIn(String userName, String password, GetUserListener listener) {
         Object dogWalker = tryLoginDogWalker(userName, password);
         if(dogWalker != null){
@@ -215,7 +259,28 @@ public class Model {
                              String address, String city, long age, int priceForHour, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
                              boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
                              boolean isComfortable20To22, GetIdListener listener,  ExceptionListener exceptionListener) {
-       // todo: send request to server
+        // check if username exist
+        if (isUsernameExist(userName) == 0) {
+            String url = baseUrl + "DogWalkers";
+
+            DogWalker walker = new DogWalker(9,userName,password,firstName,lastName,phoneNumber,address,city,age,priceForHour,isComfortable6To8,
+                    isComfortable8To10,isComfortable10To12,isComfortable12To14,isComfortable14To16,isComfortable16To18,isComfortable18To20,isComfortable20To22);
+
+            try {
+                boolean b =  Boolean.parseBoolean(new PostHttpAsyncTask(walker,"DogWalker").execute(url).get().toString());
+
+                listener.onResult(isUsernameExist(userName),b);
+
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            exceptionListener.onResult("user already exist");
+        }
     }
 
     public void updateDogWalker(DogWalker dogWalker, IsSucceedListener listener){
@@ -390,6 +455,39 @@ public class Model {
         return object;
     }
 
+    public boolean POST (String url, Object objectToInsert,String objectType){
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost(url);
+
+        try {
+
+            String objectAsXML = xstream.toXML(objectToInsert).replace("<"+objectType+">", "<"+objectType+" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/DoGoService.DataObjects\">");
+
+            StringEntity se = new StringEntity(objectAsXML,HTTP.UTF_8);
+            se.setContentType("text/xml");
+            httppost.setEntity(se);
+
+            HttpResponse httpresponse = httpclient.execute(httppost);
+
+            // todo status code is always 500
+            if (httpresponse.getStatusLine().getStatusCode() == 200)
+            {
+                // todo return true
+            }
+
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     private String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
         String line = "";
@@ -415,6 +513,22 @@ public class Model {
         @Override
         protected Object doInBackground(String... urls) {
             return GET(urls[0]);
+        }
+    }
+
+    private class PostHttpAsyncTask extends AsyncTask<String, Void, Object> {
+
+        private Object objToInsert;
+        private String objectType;
+
+        public PostHttpAsyncTask(Object obj, String objectType){
+            objToInsert = obj;
+            this.objectType = objectType;
+        }
+
+        @Override
+        protected Object doInBackground(String... urls) {
+            return POST(urls[0], objToInsert, objectType);
         }
     }
 }

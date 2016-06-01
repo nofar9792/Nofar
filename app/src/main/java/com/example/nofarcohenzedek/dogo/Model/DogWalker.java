@@ -8,21 +8,21 @@ public class DogWalker extends User{
         super();
     }
 
-    public DogWalker(long id, String userName, String firstName, String lastName, String phoneNumber,
+    public DogWalker(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
                      String address, String city, long age, int priceForHour , boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
                      boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
                      boolean isComfortable20To22) {
-        super(id, userName, firstName, lastName, phoneNumber, address, city, isComfortable6To8, isComfortable8To10, isComfortable10To12,
+        super(id, userName, password, firstName, lastName, phoneNumber, address, city, isComfortable6To8, isComfortable8To10, isComfortable10To12,
                 isComfortable12To14, isComfortable14To16, isComfortable16To18, isComfortable18To20, isComfortable20To22);
         this.age = age;
         this.priceForHour = priceForHour;
     }
 
-    public DogWalker(long id, String userName, String firstName, String lastName, String phoneNumber,
+    public DogWalker(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
                      String address, String city, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
                      boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
                      boolean isComfortable20To22){
-        super(id, userName, firstName, lastName, phoneNumber, address, city, isComfortable6To8, isComfortable8To10, isComfortable10To12,
+        super(id, userName,password, firstName, lastName, phoneNumber, address, city, isComfortable6To8, isComfortable8To10, isComfortable10To12,
                 isComfortable12To14, isComfortable14To16, isComfortable16To18, isComfortable18To20, isComfortable20To22);
     }
 

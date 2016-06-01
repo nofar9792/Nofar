@@ -34,6 +34,7 @@ public class MyProfileFragment extends Fragment {
     private Boolean isOwner;
     private Long id;
     private String userName;
+    private String password;
     private EditText firstName;
     private EditText lastName;
     private EditText phone;
@@ -96,6 +97,7 @@ public class MyProfileFragment extends Fragment {
             public void onResult(User user) {
                 id = user.getId();
                 userName = user.getUserName();
+                  password = user.getPassword();
 
                 firstName = (EditText) currentView.findViewById(R.id.firstNameMP);
                 lastName = (EditText) currentView.findViewById(R.id.lastNameMP);
@@ -194,7 +196,7 @@ public class MyProfileFragment extends Fragment {
                 DogSize sizeVal = (isSmall.isChecked() ? DogSize.Small : (isMedium.isChecked() ? DogSize.Medium : DogSize.Large));
 
                 progressBar.setVisibility(View.VISIBLE);
-                Model.getInstance().updateDogOwner(new DogOwner(id, userName, firstNameVal, lastNameVal, phoneVal, addressVal, cityVal,
+                Model.getInstance().updateDogOwner(new DogOwner(id, userName, password,firstNameVal, lastNameVal, phoneVal, addressVal, cityVal,
                         new Dog(dogNameVal, sizeVal, dogAgeVal, dogPic), isComfortable6To8.isChecked(), isComfortable8To10.isChecked(), isComfortable10To12.isChecked(),
                         isComfortable12To14.isChecked(), isComfortable14To16.isChecked(), isComfortable16To18.isChecked(),
                         isComfortable18To20.isChecked(), isComfortable20To22.isChecked()), new Model.IsSucceedListener() {
@@ -215,7 +217,7 @@ public class MyProfileFragment extends Fragment {
                 int priceVal = Integer.valueOf(price.getText().toString());
 
                 progressBar.setVisibility(View.VISIBLE);
-                Model.getInstance().updateDogWalker(new DogWalker(id, userName, firstNameVal, lastNameVal, phoneVal, addressVal, cityVal,
+                Model.getInstance().updateDogWalker(new DogWalker(id, userName,password, firstNameVal, lastNameVal, phoneVal, addressVal, cityVal,
                         ageVal, priceVal, isComfortable6To8.isChecked(), isComfortable8To10.isChecked(), isComfortable10To12.isChecked(),
                         isComfortable12To14.isChecked(), isComfortable14To16.isChecked(), isComfortable16To18.isChecked(),
                         isComfortable18To20.isChecked(), isComfortable20To22.isChecked()), new Model.IsSucceedListener() {
