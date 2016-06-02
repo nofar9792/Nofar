@@ -17,9 +17,6 @@ import com.parse.SignUpCallback;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Nofar Cohen Zedek on 02-Jan-16.
- */
 public class UserParse {
     public static void addToUsersTable(final String userName, final String password, final String firstName, final String lastName, final String phoneNumber,
                                        final String address, final String city, final boolean isComfortable6To8, final boolean isComfortable8To10, final boolean isComfortable10To12,
@@ -36,7 +33,6 @@ public class UserParse {
                         public void onResult(final long newUserId, boolean isSucceed) {
                             ParseUser user = new ParseUser();
 
-                            // todo: add the new members
                             user.setUsername(userName);
                             user.setPassword(password);
                             user.put(UserConsts.USER_ID, newUserId);
@@ -199,9 +195,7 @@ public class UserParse {
     }
 
     private static User convertFromParseUserToUser(ParseUser parseUser){
-        // todo : return to this line after fixing the lines above
         User user;
-        //User user =  null;
 
         long userId = parseUser.getLong(UserConsts.USER_ID);
         String userName = parseUser.getUsername();
@@ -219,9 +213,6 @@ public class UserParse {
         Boolean isComfortableFrom16To18 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_16_TO_18);
         Boolean isComfortableFrom18To20 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_18_TO_20);
         Boolean isComfortableFrom20To22 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_20_TO_22);
-
-
-        // todo: add the new members
 
         if (isDogWalker) {
             user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city,

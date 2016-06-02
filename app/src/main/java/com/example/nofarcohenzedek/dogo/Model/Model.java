@@ -2,39 +2,13 @@ package com.example.nofarcohenzedek.dogo.Model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.util.Log;
 
-//import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfDogOwner;
-//import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfDogWalker;
-//import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfTrip;
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
-import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class Model {
     //region Private Members
-//    private ModelSql modelSql;
     private ModelParse modelParse;
     private static final Model instance = new Model();
     //endregion
@@ -44,9 +18,6 @@ public class Model {
     }
 
     public void init(Context context) {
-//        if(modelSql == null){
-//            modelSql = new ModelSql(context);
-//        }
         if(modelParse == null){
             modelParse = new ModelParse(context);
         }
@@ -74,24 +45,6 @@ public class Model {
     //region Dog Walker Methods
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
         modelParse.getAllDogWalkers(null,listener);
-//        final List<DogWalker> dogWalkersResult = modelSql.getAllDogWalkers();
-//        String lastUpdateDate = modelSql.getDogWalkersLastUpdateDate();
-//
-//        modelParse.getAllDogWalkers(null, new GetDogWalkersListener() {
-//            @Override
-//            public void onResult(List<DogWalker> dogWalkers) {
-//                if (dogWalkers.size() > 0) {
-//                    for (DogWalker dogWalker : dogWalkers) {
-//                        modelSql.addDogWalker(dogWalker);
-//                    }
-//
-//                    dogWalkersResult.removeAll(dogWalkersResult);
-//                    dogWalkersResult.addAll(modelSql.getAllDogWalkers());
-//                }
-//                modelSql.setDogWalkersLastUpdateDate(Calendar.getInstance().getTime());
-//                listener.onResult(dogWalkersResult);
-//            }
-//        });
     }
 
     public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
@@ -162,86 +115,17 @@ public class Model {
 
     // Connections between walker to some owners
     public void getOwnersConnectToWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
-        // todo: ניסיתי לתקן את הקוד בהערהה שמתחת אבל אני לא בטוחה לגבי זה
-        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
-            @Override
-            public void onResult(List<Request> requests) {
-                final List<DogOwner> dogOwnersResult = new LinkedList<DogOwner>();
-                for (Request request : requests) {
-                    dogOwnersResult.add(request.getDogOwner());
-                }
-                listener.onResult(dogOwnersResult);
-            }
-        });
-
-//        final List<DogOwner> dogOwnersResult = modelSql.getOwnersConnectToWalker(dogWalkerId);
-//        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
-//
-//        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
-//            @Override
-//            public void onResult(List<Request> requests) {
-//                if (requests.size() > 0) {
-//                    for (Request request : requests) {
-//                        modelSql.addDogOwner(request.getDogOwner());
-//                        modelSql.addRequest(request);
-//                    }
-//
-//                    dogOwnersResult.removeAll(dogOwnersResult);
-//                    dogOwnersResult.addAll(modelSql.getOwnersConnectToWalker(dogWalkerId));
-//                }
-//                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
-//                listener.onResult(dogOwnersResult);
-//            }
-//        });
+        modelParse.getOwnersConnectToWalker(dogWalkerId, listener);
     }
 
     // Messages for dog walker
     public void getRequestForDogWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
-        // todo: fix this
-
-//        final List<DogOwner> dogOwnersResult = modelSql.getRequestForDogWalker(dogWalkerId);
-//        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
-//
-//        modelParse.getRequestByDogWalker(dogWalkerId, null, new GetRequestsListener() {
-//            @Override
-//            public void onResult(List<Request> requests) {
-//                if (requests.size() > 0) {
-//                    for (Request request : requests) {
-//                        modelSql.addDogOwner(request.getDogOwner());
-//                        modelSql.addRequest(request);
-//                    }
-//
-//                    dogOwnersResult.removeAll(dogOwnersResult);
-//                    dogOwnersResult.addAll(modelSql.getRequestForDogWalker(dogWalkerId));
-//                }
-//                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
-//                listener.onResult(dogOwnersResult);
-//            }
-//        });
+        modelParse.getRequestForDogWalker(dogWalkerId, listener);
     }
 
     // Messages of dog owner
     public void getRequestOfDogOwner(final long dogOwnerId, final GetDogWalkersListener listener) {
-        // todo: fix this
-//        final List<DogWalker> dogWalkersResult = modelSql.getRequestForDogOwner(dogOwnerId);
-//        final String lastUpdateDate = modelSql.getRequestsLastUpdateDate();
-//
-//        modelParse.getRequestByDogOwner(dogOwnerId, null, new GetRequestsListener() {
-//            @Override
-//            public void onResult(List<Request> requests) {
-//                if (requests.size() > 0) {
-//                    for (Request request : requests) {
-//                        modelSql.addDogWalker(request.getDogWalker());
-//                        modelSql.addRequest(request);
-//                    }
-//
-//                    dogWalkersResult.removeAll(dogWalkersResult);
-//                    dogWalkersResult.addAll(modelSql.getRequestForDogOwner(dogOwnerId));
-//                }
-//                modelSql.setRequestsLastUpdateDate(Calendar.getInstance().getTime());
-//                listener.onResult(dogWalkersResult);
-//            }
-//        });
+        modelParse.getRequestOfDogOwner(dogOwnerId, listener);
     }
     //endregion
 

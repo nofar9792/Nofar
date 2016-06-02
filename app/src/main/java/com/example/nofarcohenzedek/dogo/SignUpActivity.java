@@ -43,10 +43,6 @@ public class SignUpActivity extends Activity {
     private RadioButton isBig;
     private String age;
     private String priceForHour;
-    // todo: delete this
-    private CheckBox isComfortableOnAfternoon;
-    private CheckBox isComfortableOnMorning;
-    private CheckBox isComfortableOnEvening;
     private CheckBox isComfortable6To8;
     private CheckBox isComfortable8To10;
     private CheckBox isComfortable10To12;
