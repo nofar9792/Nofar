@@ -34,6 +34,9 @@ public class ModelParse {
                 if (user != null) {
                     addDetailsByInstance(user, listener);
                 }
+                else {
+                    listener.onResult(null);
+                }
             }
         });
     }

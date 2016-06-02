@@ -131,6 +131,30 @@ public class SignUpActivity extends Activity {
                                                 } else {
                                                     Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
                                                 }
+
+                                                if (isSaved) {
+                                                    Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
+                                                        @Override
+                                                        public void onResult(User user) {
+                                                            if (user != null) {
+                                                                Intent intent = new Intent(getApplicationContext(), ActionBarActivity.class);
+                                                                intent.putExtra("userId", user.getId());
+
+                                                                if (user instanceof DogOwner) {
+                                                                    intent.putExtra("isOwner", true);
+                                                                    intent.putExtra("address", user.getAddress() + ", " + user.getCity());
+                                                                } else {
+                                                                    intent.putExtra("isOwner", false);
+                                                                }
+
+                                                                startActivity(intent);
+                                                            } else {
+                                                                TextView error = (TextView) findViewById(R.id.error);
+                                                                error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
+                                                            }
+                                                        }
+                                                    });
+                                                }
                                             }
                                         });
                                     }
@@ -161,6 +185,31 @@ public class SignUpActivity extends Activity {
                                 } else {
                                     Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
                                 }
+
+                                // Connect to dogo with the new username and password - only if user succeed to sign.
+                                if (isSaved) {
+                                    Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
+                                        @Override
+                                        public void onResult(User user) {
+                                            if (user != null) {
+                                                Intent intent = new Intent(getApplicationContext(), ActionBarActivity.class);
+                                                intent.putExtra("userId", user.getId());
+
+                                                if (user instanceof DogOwner) {
+                                                    intent.putExtra("isOwner", true);
+                                                    intent.putExtra("address", user.getAddress() + ", " + user.getCity());
+                                                } else {
+                                                    intent.putExtra("isOwner", false);
+                                                }
+
+                                                startActivity(intent);
+                                            } else {
+                                                TextView error = (TextView) findViewById(R.id.error);
+                                                error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         }, new Model.ExceptionListener() {
                             @Override
@@ -170,30 +219,6 @@ public class SignUpActivity extends Activity {
                                 }
                             }
                         });
-            }
-            // Connect to dogo with the new username and password - only if user succeed to sign.
-            if (isSaved) {
-                Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
-                    @Override
-                    public void onResult(User user) {
-                        if (user != null) {
-                            Intent intent = new Intent(getApplicationContext(), ActionBarActivity.class);
-                            intent.putExtra("userId", user.getId());
-
-                            if (user instanceof DogOwner) {
-                                intent.putExtra("isOwner", true);
-                                intent.putExtra("address", user.getAddress() + ", " + user.getCity());
-                            } else {
-                                intent.putExtra("isOwner", false);
-                            }
-
-                            startActivity(intent);
-                        } else {
-                            TextView error = (TextView) findViewById(R.id.error);
-                            error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
-                        }
-                    }
-                });
             }
         }
     }

@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfDogOwner;
-import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfDogWalker;
-import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfTrip;
+//import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfDogOwner;
+//import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfDogWalker;
+//import com.example.nofarcohenzedek.dogo.Model.Arrays.ArrayOfTrip;
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 import com.example.nofarcohenzedek.dogo.Model.Sql.ModelSql;
 import com.thoughtworks.xstream.XStream;

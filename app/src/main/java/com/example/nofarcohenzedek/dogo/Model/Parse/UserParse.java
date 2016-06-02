@@ -22,9 +22,9 @@ import java.util.List;
  */
 public class UserParse {
     public static void addToUsersTable(final String userName, final String password, final String firstName, final String lastName, final String phoneNumber,
-                                       final String address, final String city, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
-                                       boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
-                                       boolean isComfortable20To22, final Boolean isDogWalker, final Model.GetIdListener listener, final Model.ExceptionListener exceptionListener) {
+                                       final String address, final String city, final boolean isComfortable6To8, final boolean isComfortable8To10, final boolean isComfortable10To12,
+                                       final boolean isComfortable12To14, final boolean isComfortable14To16, final boolean isComfortable16To18, final boolean isComfortable18To20,
+                                       final boolean isComfortable20To22, final Boolean isDogWalker, final Model.GetIdListener listener, final Model.ExceptionListener exceptionListener) {
         isUserNameAlreadyExist(userName, new Model.IsSucceedListener() {
             @Override
             public void onResult(boolean isExist) {
@@ -46,6 +46,14 @@ public class UserParse {
                             user.put(UserConsts.ADDRESS, address);
                             user.put(UserConsts.CITY, city);
                             user.put(UserConsts.IS_DOG_WALKER, isDogWalker);
+                            user.put(UserConsts.IS_COMFORTABLE_6_TO_8,isComfortable6To8);
+                            user.put(UserConsts.IS_COMFORTABLE_8_TO_10,isComfortable8To10);
+                            user.put(UserConsts.IS_COMFORTABLE_10_TO_12,isComfortable10To12);
+                            user.put(UserConsts.IS_COMFORTABLE_12_TO_14,isComfortable12To14);
+                            user.put(UserConsts.IS_COMFORTABLE_14_TO_16,isComfortable14To16);
+                            user.put(UserConsts.IS_COMFORTABLE_16_TO_18,isComfortable16To18);
+                            user.put(UserConsts.IS_COMFORTABLE_18_TO_20,isComfortable18To20);
+                            user.put(UserConsts.IS_COMFORTABLE_20_TO_22,isComfortable20To22);
 
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(ParseException e) {
@@ -192,8 +200,8 @@ public class UserParse {
 
     private static User convertFromParseUserToUser(ParseUser parseUser){
         // todo : return to this line after fixing the lines above
-//        User user;
-        User user =  null;
+        User user;
+        //User user =  null;
 
         long userId = parseUser.getLong(UserConsts.USER_ID);
         String userName = parseUser.getUsername();
@@ -203,12 +211,26 @@ public class UserParse {
         String address = parseUser.getString(UserConsts.ADDRESS);
         String city = parseUser.getString(UserConsts.CITY);
         Boolean isDogWalker = parseUser.getBoolean(UserConsts.IS_DOG_WALKER);
+        Boolean isComfortableFrom6To8 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_6_TO_8);
+        Boolean isComfortableFrom8To10 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_8_TO_10);
+        Boolean isComfortableFrom10To12 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_10_TO_12);
+        Boolean isComfortableFrom12To14 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_12_TO_14);
+        Boolean isComfortableFrom14To16 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_14_TO_16);
+        Boolean isComfortableFrom16To18 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_16_TO_18);
+        Boolean isComfortableFrom18To20 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_18_TO_20);
+        Boolean isComfortableFrom20To22 = parseUser.getBoolean(UserConsts.IS_COMFORTABLE_20_TO_22);
+
+
         // todo: add the new members
 
         if (isDogWalker) {
-//            user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city);
+            user = new DogWalker(userId, userName, firstName, lastName, phoneNumber, address, city,
+                    isComfortableFrom6To8,isComfortableFrom8To10,isComfortableFrom10To12,isComfortableFrom12To14,
+                    isComfortableFrom14To16,isComfortableFrom16To18,isComfortableFrom18To20,isComfortableFrom20To22);
         } else {
-//            user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city);
+            user = new DogOwner(userId, userName, firstName, lastName, phoneNumber, address, city,
+                    isComfortableFrom6To8,isComfortableFrom8To10,isComfortableFrom10To12,isComfortableFrom12To14,
+                    isComfortableFrom14To16,isComfortableFrom16To18,isComfortableFrom18To20,isComfortableFrom20To22);
         }
 
         return user;

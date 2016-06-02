@@ -25,13 +25,12 @@ public class User
 
     }
 
-    public User(long id, String userName, String password, String firstName, String lastName, String phoneNumber,
+    public User(long id, String userName, String firstName, String lastName, String phoneNumber,
                 String address, String city, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
                 boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
                 boolean isComfortable20To22) {
         this.id = id;
         this.userName = userName;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
