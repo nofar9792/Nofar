@@ -3,6 +3,7 @@ package com.example.nofarcohenzedek.dogo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.AvoidXfermode;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -178,7 +179,7 @@ public class TripsReportFragment extends Fragment {
             CheckBox isPaid = (CheckBox) convertView.findViewById(R.id.isPaid);
 
             // Get all properties from TRIP object
-            Trip trip = allTrips.get(position);
+            final Trip trip = allTrips.get(position);
             dogName.setText(trip.getDogOwner().getDog().getName());
             ownerName.setText(trip.getDogOwner().getFirstName());
             walkerName.setText(trip.getDogWalker().getFirstName());
@@ -227,13 +228,27 @@ public class TripsReportFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which)
                     {
-                        case DialogInterface.BUTTON_POSITIVE:
-                            allTrips.remove(position);
-                            notifyDataSetChanged();
-                            // TODO : DELETE ITEM FROM DB
-                            break;
-                    }
+                        case DialogInterface.BUTTON_POSITIVE: {
 
+                            // TODO : DELETE ITEM FROM DB
+
+                            Model.getInstance().deleteTrip(trip.getId(), new Model.IsSucceedListener() {
+                                @Override
+                                public void onResult(boolean isSucceed) {
+                                    if (isSucceed) {
+                                        allTrips.remove(position);
+                                        notifyDataSetChanged();
+                                        Toast.makeText(getActivity().getApplicationContext(),"הטיול נמחק בהצלחה", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getActivity().getApplicationContext(),"אירעה שגיאה בעת המחיקה", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                            });
+
+                            break;
+                        }
+                    }
                 }
             };
 

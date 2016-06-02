@@ -98,6 +98,10 @@ public class Model {
     public void payTrip(long tripId, IsSucceedListener listener) {
         modelParse.payTrip(tripId, listener);
     }
+
+    public void deleteTrip(long tripId, IsSucceedListener listener){
+        modelParse.deleteTrip(tripId,listener);
+    }
     //endregion
 
     //region Request Methods

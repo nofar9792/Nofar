@@ -220,7 +220,7 @@ public class ModelParse {
             public void onResult(final List<Trip> trips) {
                 final List<Trip> resultTrips = new LinkedList<>();
 
-                if(trips.size() != 0){
+                if (trips.size() != 0) {
                     for (final Trip trip : trips) {
                         getUserById(trip.getDogOwnerId(), new Model.GetUserListener() {
                             @Override
@@ -239,24 +239,28 @@ public class ModelParse {
                             }
                         });
                     }
-                }else {
+                } else {
                     listener.onResult(resultTrips);
                 }
             }
         });
     }
 
-            public void startTrip(long dogOwnerId, long dogWalkerId, Model.GetIdListener listener) {
-                TripParse.startTrip(dogOwnerId, dogWalkerId, listener);
-            }
+    public void startTrip(long dogOwnerId, long dogWalkerId, Model.GetIdListener listener) {
+        TripParse.startTrip(dogOwnerId, dogWalkerId, listener);
+    }
 
-            public void endTrip(long tripId, Model.IsSucceedListener listener) {
-                TripParse.endTrip(tripId, listener);
-            }
+    public void endTrip(long tripId, Model.IsSucceedListener listener) {
+        TripParse.endTrip(tripId, listener);
+    }
 
-            public void payTrip(long tripId, Model.IsSucceedListener listener) {
-                TripParse.changeTripToPaid(tripId, listener);
-            }
+    public void payTrip(long tripId, Model.IsSucceedListener listener) {
+        TripParse.changeTripToPaid(tripId, listener);
+    }
+
+    public void deleteTrip(long tripId, Model.IsSucceedListener listener){
+        TripParse.deleteTrip(tripId,listener);
+    }
 
             // endregion
 

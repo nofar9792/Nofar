@@ -25,7 +25,7 @@ public class OwnerTripOffering extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.activity_search, container, false);
+        View view = inflater.inflate(R.layout.activity_owner_trip_offering, container, false);
 
         return view;
     }

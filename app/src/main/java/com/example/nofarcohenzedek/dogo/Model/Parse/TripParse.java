@@ -2,6 +2,7 @@ package com.example.nofarcohenzedek.dogo.Model.Parse;
 
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -66,9 +67,9 @@ public class TripParse {
                     parseObject.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if(e == null){
+                            if (e == null) {
                                 listener.onResult(true);
-                            }else {
+                            } else {
                                 e.printStackTrace();
                                 listener.onResult(false);
                             }
@@ -94,10 +95,9 @@ public class TripParse {
                     parseObject.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if(e == null){
+                            if (e == null) {
                                 listener.onResult(true);
-                            }
-                            else {
+                            } else {
                                 e.printStackTrace();
                                 listener.onResult(false);
                             }
@@ -162,6 +162,30 @@ public class TripParse {
                 } else {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+
+    public static void deleteTrip (long tripId, final Model.IsSucceedListener listener){
+        ParseQuery<ParseObject> query = new ParseQuery<>(TRIPS_TABLE);
+        query.whereEqualTo(TRIP_ID, tripId);
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+
+                parseObject.deleteInBackground(new DeleteCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            listener.onResult(true);
+                        }
+                        else {
+                            e.printStackTrace();
+                            listener.onResult(false);
+                        }
+                    }
+                });
             }
         });
     }
