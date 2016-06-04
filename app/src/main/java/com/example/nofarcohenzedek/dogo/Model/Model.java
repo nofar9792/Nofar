@@ -52,9 +52,9 @@ public class Model {
                              boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
                              boolean isComfortable20To22, GetIdListener listener,  ExceptionListener exceptionListener){
         modelParse.addDogWalker(userName, password, firstName, lastName, phoneNumber, address, city, age, priceForHour,
-                                isComfortable6To8,  isComfortable8To10,  isComfortable10To12, isComfortable12To14,
-                                isComfortable14To16,  isComfortable16To18,  isComfortable18To20, isComfortable20To22,
-                                listener, exceptionListener);
+                isComfortable6To8, isComfortable8To10, isComfortable10To12, isComfortable12To14,
+                isComfortable14To16, isComfortable16To18, isComfortable18To20, isComfortable20To22,
+                listener, exceptionListener);
     }
 
     public void updateDogWalker(DogWalker dogWalker, IsSucceedListener listener){
@@ -122,10 +122,14 @@ public class Model {
     }
 
     // Connections between walker to some owners
-    public void getOwnersConnectToWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
+    public void getOwnersConnectToWalker(long dogWalkerId, GetDogOwnersListener listener) {
         modelParse.getOwnersConnectToWalker(dogWalkerId, listener);
     }
 
+    // Connections between owner to some walkers
+    public void getWalkersConnectToOwner(long dogOwnerId, GetDogWalkersListener listener) {
+        modelParse.getWalkersConnectToOwner(dogOwnerId, listener);
+    }
     public void getRequestsByDogWalkerId(final long dogWalkerId, final GetRequestsListener listener) {
         modelParse.getRequestsByDogWalkerId(dogWalkerId, listener);
     }

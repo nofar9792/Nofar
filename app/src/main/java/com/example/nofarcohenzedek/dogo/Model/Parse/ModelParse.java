@@ -300,6 +300,30 @@ public class ModelParse {
         });
     }
 
+    public void getWalkersConnectToOwner(long dogOwnerId, final Model.GetDogWalkersListener listener) {
+        RequestParse.getWalkersIdsConnectedToOwner(dogOwnerId, new GetIdsListener() {
+            @Override
+            public void onResult(final List<Long> ids) {
+                final List<DogWalker> dogWalkers = new LinkedList<>();
+                if (ids.size() != 0) {
+                    for (long dogWalkerId : ids) {
+                        getUserById(dogWalkerId, new Model.GetUserListener() {
+                            @Override
+                            public void onResult(User user) {
+                                dogWalkers.add((DogWalker) user);
+                                if (ids.size() == dogWalkers.size()) {
+                                    listener.onResult(dogWalkers);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    listener.onResult(dogWalkers);
+                }
+            }
+        });
+    }
+
     public void getRequestsByDogWalkerId(long dogWalkerId, final Model.GetRequestsListener listener) {
         RequestParse.getRequestsByDogWalkerId(dogWalkerId, new Model.GetRequestsListener() {
             @Override

@@ -57,6 +57,26 @@ public class RequestParse {
         });
     }
 
+    public static void getWalkersIdsConnectedToOwner(long dogOwnerId, final ModelParse.GetIdsListener listener){
+        ParseQuery<ParseObject> query = new ParseQuery<>(RequestConsts.REQUESTS_TABLE);
+        query.whereEqualTo(RequestConsts.DOG_OWNER_ID, dogOwnerId).whereEqualTo(RequestConsts.REQUEST_STATUS, RequestStatus.Accepted.name());
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null) {
+                    List<Long> dogWalkersIds = new LinkedList<>();
+                    for (ParseObject po : list) {
+                        dogWalkersIds.add(po.getLong(RequestConsts.DOG_WALKER_ID));
+                    }
+                    listener.onResult(dogWalkersIds);
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public static void getRequestsByDogWalkerId(final long dogWalkerId, final Model.GetRequestsListener listener){
         ParseQuery<ParseObject> query = new ParseQuery<>(RequestConsts.REQUESTS_TABLE);
         query.whereEqualTo(RequestConsts.DOG_WALKER_ID, dogWalkerId).whereEqualTo(RequestConsts.REQUEST_STATUS, RequestStatus.Waiting.name());;
