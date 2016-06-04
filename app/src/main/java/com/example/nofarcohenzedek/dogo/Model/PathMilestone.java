@@ -5,29 +5,29 @@ package com.example.nofarcohenzedek.dogo.Model;
  */
 public class PathMilestone
 {
-    PathAction action;
+    PathAction type;
     int duration;
-    String address;
+    String waypoint;
 
     public PathMilestone(){}
 
     public PathMilestone (PathAction action, int duration, String address)
     {
-        this.action = action;
+        this.type = action;
         this.duration = duration;
-        this.address = address;
+        this.waypoint = address;
     }
 
-    public PathAction getAction(){return this.action;}
+    public PathAction getAction(){return this.type;}
 
-    public void setAction (PathAction action){this.action = action;}
+    public void setAction (PathAction action){this.type = action;}
 
     public int getDuration (){return this.duration;}
 
     public void setDuration(int duration) {this.duration = duration;}
 
-    public String getAddress(){return this.address;}
+    public String getAddress(){return this.waypoint;}
 
-    public void setAddress(String address){this.address = address;}
+    public void setAddress(String address){this.waypoint = address;}
 
 }
