@@ -55,7 +55,7 @@ public class SearchFragment extends Fragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 Intent intent = new Intent(getActivity().getApplicationContext(), DogWalkerDetailsActivity.class);
-                intent.putExtra("walkerId", Long.toString(id));
+                intent.putExtra("walkerId", id);
                 intent.putExtra("ownerId", userId);
                 startActivity(intent);
             }

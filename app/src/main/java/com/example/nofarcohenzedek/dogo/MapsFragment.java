@@ -1,12 +1,9 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Activity;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,15 +62,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
         super.onCreateView(inflater, container, savedInstanceState);
 
-      //  Bundle args = getArguments();
-
         SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
-        //MapFragment mapFragment = (MapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         progressBar = (ProgressBar) rootView.findViewById(R.id.mapsProgressBar);
-      //  userId = args.getLong("userId");
-      //  address = args.getString("address");
 
         return rootView;
     }
@@ -125,7 +117,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), DogWalkerDetailsActivity.class);
-                intent.putExtra("walkerId", marker.getTitle());
+                intent.putExtra("walkerId", Long.valueOf(marker.getTitle()));
                 intent.putExtra("ownerId", userId);
                 startActivity(intent);
 
@@ -133,23 +125,4 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
-
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//
-//        getChildFragmentManager().beginTransaction().remove(getChildFragmentManager().findFragmentById(R.id.map)).commit();
-//        mMap = null;
-
-
-
-//        new Handler().post(new Runnable() {
-//            public void run() {
-//                SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-//
-//                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-//                ft.remove(mapFragment);
-//                ft.commit();
-//            }
-//        });
-//        }
 }

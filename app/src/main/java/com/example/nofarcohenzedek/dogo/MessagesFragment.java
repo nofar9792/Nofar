@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.Request;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.example.nofarcohenzedek.dogo.Model.Utilities;
 
@@ -28,9 +29,9 @@ import java.util.List;
 public class MessagesFragment extends Fragment
 {
     private ListView list;
-    private List<User> data;
+    private List<Request> data;
     private Boolean isOwner;
-    private  Long userId;
+    private Long userId;
     private ProgressBar progressBar;
     private User currentUser;
     private Context context;
@@ -49,8 +50,6 @@ public class MessagesFragment extends Fragment
         final View view = inflater.inflate(R.layout.activity_messages, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
 
-        Bundle args = getArguments();
-       // isOwner = args.getBoolean("isOwner");
         progressBar = (ProgressBar) view.findViewById(R.id.messagesProgressBar);
         data = new LinkedList<>();
         progressBar.setVisibility(View.VISIBLE);
@@ -64,14 +63,13 @@ public class MessagesFragment extends Fragment
                 currentUser = user;
 
                 if (user instanceof DogWalker) {
-                    Model.getInstance().getRequestForDogWalker(user.getId(), new Model.GetDogOwnersListener() {
+                    Model.getInstance().getRequestsByDogWalkerId(user.getId(), new Model.GetRequestsListener() {
                         @Override
-                        public void onResult(List<DogOwner> dogOwners) {
-                            if (!dogOwners.isEmpty()) {
-                                for (DogOwner dogOwner : dogOwners) {
-                                    data.add(dogOwner);
-                                    list.setAdapter(adapter);
-                                }
+                        public void onResult(List<Request> requests) {
+                            if (!requests.isEmpty()) {
+                                data = requests;
+                                list.setAdapter(adapter);
+
                             } else {
                                 ((TextView) view.findViewById(R.id.errorInMessagesList)).setText("אין הודעות להצגה");
                             }
@@ -79,14 +77,12 @@ public class MessagesFragment extends Fragment
                         }
                     });
                 } else {
-                    Model.getInstance().getRequestOfDogOwner(user.getId(), new Model.GetDogWalkersListener() {
+                    Model.getInstance().getRequestsByDogOwnerId(user.getId(), new Model.GetRequestsListener() {
                         @Override
-                        public void onResult(List<DogWalker> dogWalkers) {
-                            if (!dogWalkers.isEmpty()) {
-                                for (DogWalker dogWalker : dogWalkers) {
-                                    data.add(dogWalker);
-                                    list.setAdapter(adapter);
-                                }
+                        public void onResult(List<Request> requests) {
+                            if (!requests.isEmpty()) {
+                                data = requests;
+                                list.setAdapter(adapter);
                             } else {
                                 ((TextView) view.findViewById(R.id.errorInMessagesList)).setText("אין הודעות להצגה");
                             }
@@ -119,101 +115,180 @@ public class MessagesFragment extends Fragment
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            if(currentUser instanceof DogWalker) {
-                if (convertView == null) {
-                    LayoutInflater inflater = getActivity().getLayoutInflater();
-                    convertView = inflater.inflate(R.layout.walker_requests_row_layout, null);
-                    ImageButton acceptButton = (ImageButton) convertView.findViewById(R.id.acceptButton);
-                    ImageButton declineButton = (ImageButton) convertView.findViewById(R.id.declineButton);
-                    acceptButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Model.getInstance().acceptRequest(data.get(position).getId(), currentUser.getId(), new Model.IsSucceedListener() {
-                                @Override
-                                public void onResult(boolean isSucceed) {
-                                    if(isSucceed){
-                                        Toast.makeText(context, "ההודעה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(context, "אירעה שגיאה אנה נזה שנית", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            data.remove(position);
-                            notifyDataSetChanged();
-                        }
-                    });
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            if (isOwner) {
+                if (data.get(position).isOwnerAskedWalker()) {
+                    return createRequestingMessage(inflater, position);
 
-                    declineButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Model.getInstance().declineRequest(data.get(position).getId(), currentUser.getId(), new Model.IsSucceedListener() {
-                                @Override
-                                public void onResult(boolean isSucceed) {
-                                    if(isSucceed){
-                                        Toast.makeText(context, "ההודעה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(context, "אירעה שגיאה אנה נזה שנית", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            data.remove(position);
-                            notifyDataSetChanged();
-                        }
-                    });
+                } else {
+                    return createRequestedMessage(inflater, position);
                 }
+            } else {
+                if (data.get(position).isOwnerAskedWalker()) {
+                    return createRequestedMessage(inflater, position);
 
-                TextView dogOwnerNameTV = (TextView) convertView.findViewById(R.id.dogOwnerName);
-                TextView dogNameTV = (TextView) convertView.findViewById(R.id.dogName);
-                final ImageView dogPic = (ImageView)convertView.findViewById(R.id.csrlImage);
+                } else {
+                    return createRequestingMessage(inflater, position);
+                }
+            }
+        }
 
-                final DogOwner dogOwner = (DogOwner) data.get(position);
-                dogOwnerNameTV.setText(dogOwner.getFirstName() + " " + dogOwner.getLastName());
-                dogNameTV.setText(dogOwner.getDog().getName());
-                final String picRef = dogOwner.getDog().getPicRef();
+        private View createRequestingMessage(LayoutInflater inflater, int position) {
+            View convertView = inflater.inflate(R.layout.owner_requests_row_layout, null);
+            TextView userFullNameTV = (TextView) convertView.findViewById(R.id.requestingUser);
 
-                // Get the dog image
-                if (picRef != null) {
-                    if (Utilities.isFileExistInDevice(picRef)) {
-                        Bitmap picture = Utilities.loadImageFromDevice(picRef);
+            final User requestUser;
 
-                        if (picture != null) {
-                            dogPic.setImageBitmap(picture);
-                        }
-                    } else {
-                        Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
+            if(isOwner){
+                requestUser = data.get(position).getDogWalker();
+            }else {
+                requestUser = data.get(position).getDogOwner();
+            }
+
+            userFullNameTV.setText(requestUser.getFirstName() + " " + requestUser.getLastName());
+
+            return convertView;
+        }
+
+        private View createRequestedMessage(LayoutInflater inflater, final int position) {
+            View convertView = inflater.inflate(R.layout.walker_requests_row_layout, null);
+            ImageButton acceptButton = (ImageButton) convertView.findViewById(R.id.acceptButton);
+            ImageButton declineButton = (ImageButton) convertView.findViewById(R.id.declineButton);
+
+            setAcceptButton(acceptButton, position);
+            setDeclineButton(declineButton, position);
+
+            TextView userFullNameTV = (TextView) convertView.findViewById(R.id.requestingUser);
+            final ImageView detailsImage = (ImageView) convertView.findViewById(R.id.csrlImage);
+
+            final User requestUser;
+
+            if(isOwner){
+                requestUser = data.get(position).getDogWalker();
+            }else {
+                requestUser = data.get(position).getDogOwner();
+            }
+
+            userFullNameTV.setText(requestUser.getFirstName() + " " + requestUser.getLastName());
+
+            if(requestUser instanceof DogOwner){
+                setDogPic(detailsImage, requestUser);
+            }
+
+            setDetailsImageButton(detailsImage, requestUser);
+
+            return convertView;
+        }
+
+        private void setAcceptButton(ImageButton acceptButton, final int position) {
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isOwner){
+                        Model.getInstance().acceptRequest(currentUser.getId(),data.get(position).getDogWalkerId(), new Model.IsSucceedListener() {
                             @Override
-                            public void onResult(Bitmap picture) {
-                                if (picture != null) {
-                                    dogPic.setImageBitmap(picture);
-                                    Utilities.saveImageOnDevice(picRef, picture);
+                            public void onResult(boolean isSucceed) {
+                                if(isSucceed){
+                                    Toast.makeText(context, "ההודעה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(context,"אירעה שגיאה, אנא נסה שנית" ,Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }else {
+                        Model.getInstance().acceptRequest(data.get(position).getDogOwnerId(), currentUser.getId(), new Model.IsSucceedListener() {
+                            @Override
+                            public void onResult(boolean isSucceed) {
+                                if(isSucceed){
+                                    Toast.makeText(context, "ההודעה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(context,"אירעה שגיאה, אנא נסה שנית" ,Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
-                }
 
-                // on click - open the dog owner details
-                dogPic.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetailsActivity.class);
-                        intent.putExtra("dogOwnerId", Long.toString(dogOwner.getId()));
-                        startActivity(intent);
+                    data.remove(position);
+                    notifyDataSetChanged();
                 }
-                });
+            });
+        }
+
+        private void setDeclineButton(ImageButton declineButton, final int position) {
+            declineButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isOwner){
+                        Model.getInstance().declineRequest(currentUser.getId(), data.get(position).getDogWalkerId(), new Model.IsSucceedListener() {
+                            @Override
+                            public void onResult(boolean isSucceed) {
+                                if (isSucceed) {
+                                    Toast.makeText(context, "ההודעה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context,"אירעה שגיאה, אנא נסה שנית" ,Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }else {
+                        Model.getInstance().declineRequest(data.get(position).getDogOwnerId(), currentUser.getId(), new Model.IsSucceedListener() {
+                            @Override
+                            public void onResult(boolean isSucceed) {
+                                if(isSucceed){
+                                    Toast.makeText(context, "ההודעה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(context,"אירעה שגיאה, אנא נסה שנית" ,Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                    data.remove(position);
+                    notifyDataSetChanged();
+                }
+            });
+        }
+
+        private void setDogPic(final ImageView detailsImage, final User requestUser) {
+            final String picRef = ((DogOwner)requestUser).getDog().getPicRef();
+
+            // Get the dog image
+            if (picRef != null) {
+                if (Utilities.isFileExistInDevice(picRef)) {
+                    Bitmap picture = Utilities.loadImageFromDevice(picRef);
+
+                    if (picture != null) {
+                        detailsImage.setImageBitmap(picture);
+                    }
+                } else {
+                    Model.getInstance().getImage(picRef, new Model.GetBitmapListener() {
+                        @Override
+                        public void onResult(Bitmap picture) {
+                            if (picture != null) {
+                                detailsImage.setImageBitmap(picture);
+                                Utilities.saveImageOnDevice(picRef, picture);
+                            }
+                        }
+                    });
+                }
             }
-            else{
-                if (convertView == null) {
-                    LayoutInflater inflater = getActivity().getLayoutInflater();
-                    convertView = inflater.inflate(R.layout.owner_requests_row_layout, null);
+        }
+
+        private void setDetailsImageButton(ImageView detailsImage, final User requestUser) {
+            detailsImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = null;
+                    if (currentUser instanceof DogWalker) {
+                        intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetailsActivity.class);
+                        intent.putExtra("ownerId", requestUser.getId());
+                        intent.putExtra("walkerId", userId);
+                    } else {
+                        intent = new Intent(getActivity().getApplicationContext(), DogWalkerDetailsActivity.class);
+                        intent.putExtra("walkerId", requestUser.getId());
+                        intent.putExtra("ownerId", userId);
+                    }
+                    startActivity(intent);
                 }
-
-                TextView dogWalkerNameTV = (TextView) convertView.findViewById(R.id.dogWalkerName);
-
-                DogWalker dogWalker = (DogWalker) data.get(position);
-                dogWalkerNameTV.setText(dogWalker.getFirstName() + " " + dogWalker.getLastName());
-            }
-            return convertView;
+            });
         }
     }
 }

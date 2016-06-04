@@ -3,6 +3,7 @@ package com.example.nofarcohenzedek.dogo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,7 +26,7 @@ public class DogWalkerDetailsActivity extends Activity
 
         progressBar = (ProgressBar) findViewById(R.id.dogWalkerDetailsProgressBar);
 
-        walkerId = Long.valueOf(getIntent().getStringExtra("walkerId"));
+        walkerId = getIntent().getLongExtra("walkerId", 0);
         ownerId = getIntent().getLongExtra("ownerId", 0);
 
         final TextView firstName = (TextView) findViewById(R.id.firstNameInDetails);
@@ -65,6 +66,17 @@ public class DogWalkerDetailsActivity extends Activity
                 isComfortable20To22.setChecked(dogWalker.isComfortable20To22());
 
                 progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        final Button sendRequestButton = (Button) findViewById(R.id.sendRequest);
+
+        Model.getInstance().checkRequestExist(ownerId, walkerId, new Model.IsSucceedListener() {
+            @Override
+            public void onResult(boolean isRequestExist) {
+                if (!isRequestExist) {
+                    sendRequestButton.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

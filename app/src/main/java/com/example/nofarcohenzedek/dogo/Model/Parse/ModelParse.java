@@ -16,9 +16,6 @@ import com.parse.Parse;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Nofar Cohen Zedek on 02-Jan-16.
- */
 public class ModelParse {
     //region Ctor
     public ModelParse(Context context) {
@@ -33,8 +30,7 @@ public class ModelParse {
             public void onResult(User user) {
                 if (user != null) {
                     addDetailsByInstance(user, listener);
-                }
-                else {
+                } else {
                     listener.onResult(null);
                 }
             }
@@ -71,14 +67,13 @@ public class ModelParse {
     //endregion
 
     //region Dog Walker Methods
-
     public void getAllDogWalkers(String fromDate, final Model.GetDogWalkersListener listener) {
         UserParse.getDogWalkerUsers(fromDate, new Model.GetDogWalkersListener() {
             @Override
             public void onResult(final List<DogWalker> dogWalkers) {
                 final List<DogWalker> resultDogWalkers = new LinkedList<>();
-                if(dogWalkers.size() != 0){
-                    for(DogWalker dogWalker : dogWalkers) {
+                if (dogWalkers.size() != 0) {
+                    for (DogWalker dogWalker : dogWalkers) {
                         getUserById(dogWalker.getId(), new Model.GetUserListener() {
                             @Override
                             public void onResult(User user) {
@@ -89,7 +84,7 @@ public class ModelParse {
                             }
                         });
                     }
-                }else{
+                } else {
                     listener.onResult(resultDogWalkers);
                 }
             }
@@ -99,37 +94,37 @@ public class ModelParse {
     public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
                              String address, String city, final long age, final int priceForHour, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
                              boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
-                             boolean isComfortable20To22, final Model.GetIdListener listener, Model.ExceptionListener exceptionListener){
-        UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, isComfortable6To8,  isComfortable8To10,
-                            isComfortable10To12, isComfortable12To14,  isComfortable14To16,  isComfortable16To18,  isComfortable18To20,
-                         isComfortable20To22, true, new Model.GetIdListener() {
-            @Override
-            public void onResult(final long id, boolean isSucceed) {
-                if (isSucceed) {
-                    DogWalkerParse.addToDogWalkersTable(id, age, priceForHour, new Model.IsSucceedListener() {
-                        @Override
-                        public void onResult(boolean isSucceed) {
-                            if (isSucceed) {
-                                listener.onResult(id, true);
-                            } else {
-                                listener.onResult(-1, false);
-                            }
+                             boolean isComfortable20To22, final Model.GetIdListener listener, Model.ExceptionListener exceptionListener) {
+        UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, isComfortable6To8, isComfortable8To10,
+                isComfortable10To12, isComfortable12To14, isComfortable14To16, isComfortable16To18, isComfortable18To20,
+                isComfortable20To22, true, new Model.GetIdListener() {
+                    @Override
+                    public void onResult(final long id, boolean isSucceed) {
+                        if (isSucceed) {
+                            DogWalkerParse.addToDogWalkersTable(id, age, priceForHour, new Model.IsSucceedListener() {
+                                @Override
+                                public void onResult(boolean isSucceed) {
+                                    if (isSucceed) {
+                                        listener.onResult(id, true);
+                                    } else {
+                                        listener.onResult(-1, false);
+                                    }
+                                }
+                            });
+                        } else {
+                            listener.onResult(-1, false);
                         }
-                    });
-                }else{
-                    listener.onResult(-1, false);
-                }
-            }
-        }, exceptionListener);
+                    }
+                }, exceptionListener);
     }
 
-    public void updateDogWalker(final DogWalker dogWalker, final Model.IsSucceedListener listener){
+    public void updateDogWalker(final DogWalker dogWalker, final Model.IsSucceedListener listener) {
         UserParse.updateUser(dogWalker, new Model.IsSucceedListener() {
             @Override
             public void onResult(boolean isSucceed) {
-                if(isSucceed){
+                if (isSucceed) {
                     DogWalkerParse.updateDogWalker(dogWalker, listener);
-                }else{
+                } else {
                     listener.onResult(false);
                 }
             }
@@ -143,30 +138,30 @@ public class ModelParse {
                             String address, String city, final Dog dog, boolean isComfortable6To8, boolean isComfortable8To10, boolean isComfortable10To12,
                             boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
                             boolean isComfortable20To22, final Model.GetIdListener listener, Model.ExceptionListener exceptionListener) {
-        UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, isComfortable6To8,  isComfortable8To10,
-                isComfortable10To12, isComfortable12To14,  isComfortable14To16,  isComfortable16To18,  isComfortable18To20,
+        UserParse.addToUsersTable(userName, password, firstName, lastName, phoneNumber, address, city, isComfortable6To8, isComfortable8To10,
+                isComfortable10To12, isComfortable12To14, isComfortable14To16, isComfortable16To18, isComfortable18To20,
                 isComfortable20To22, false, new Model.GetIdListener() {
-            @Override
-            public void onResult(final long id, boolean isSucceed) {
-                if (isSucceed) {
-                    DogParse.addToDogsTable(id, dog, new Model.IsSucceedListener() {
-                        @Override
-                        public void onResult(boolean isSucceed) {
-                            if (isSucceed) {
-                                listener.onResult(id, true);
-                            } else {
-                                listener.onResult(-1, false);
-                            }
+                    @Override
+                    public void onResult(final long id, boolean isSucceed) {
+                        if (isSucceed) {
+                            DogParse.addToDogsTable(id, dog, new Model.IsSucceedListener() {
+                                @Override
+                                public void onResult(boolean isSucceed) {
+                                    if (isSucceed) {
+                                        listener.onResult(id, true);
+                                    } else {
+                                        listener.onResult(-1, false);
+                                    }
+                                }
+                            });
+                        } else {
+                            listener.onResult(-1, false);
                         }
-                    });
-                } else {
-                    listener.onResult(-1, false);
-                }
-            }
-        }, exceptionListener);
+                    }
+                }, exceptionListener);
     }
 
-    public void updateDogOwner(final DogOwner dogOwner , final Model.IsSucceedListener listener){
+    public void updateDogOwner(final DogOwner dogOwner, final Model.IsSucceedListener listener) {
         UserParse.updateUser(dogOwner, new Model.IsSucceedListener() {
             @Override
             public void onResult(boolean isSucceed) {
@@ -182,13 +177,13 @@ public class ModelParse {
     //endregion
 
     //region Trip Methods
-    public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener){
+    public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener) {
         TripParse.getTripsDetailsByDogOwnerId(dogOwnerId, new GetTripsDetailsListener() {
             @Override
             public void onResult(final List<Trip> trips) {
-                final List<Trip> resultTrips = new LinkedList<Trip>();
+                final List<Trip> resultTrips = new LinkedList<>();
 
-                if(trips.size() != 0) {
+                if (trips.size() != 0) {
                     for (final Trip trip : trips) {
                         getUserById(trip.getDogOwnerId(), new Model.GetUserListener() {
                             @Override
@@ -207,7 +202,7 @@ public class ModelParse {
                             }
                         });
                     }
-                }else{
+                } else {
                     listener.onResult(resultTrips);
                 }
             }
@@ -258,11 +253,11 @@ public class ModelParse {
         TripParse.changeTripToPaid(tripId, listener);
     }
 
-    public void deleteTrip(long tripId, Model.IsSucceedListener listener){
-        TripParse.deleteTrip(tripId,listener);
+    public void deleteTrip(long tripId, Model.IsSucceedListener listener) {
+        TripParse.deleteTrip(tripId, listener);
     }
 
-            // endregion
+    // endregion
 
     //region Request Methods
     public void addRequest(long dogOwnerId, long dogWalkerId, Model.IsSucceedListener listener) {
@@ -274,7 +269,11 @@ public class ModelParse {
     }
 
     public void declineRequest(long dogOwnerId, long dogWalkerId, Model.IsSucceedListener listener) {
-        RequestParse.updateRequest(dogOwnerId, dogWalkerId, RequestStatus.Declined, listener);
+        RequestParse.deleteRequest(dogOwnerId, dogWalkerId, listener);
+    }
+
+    public void checkRequestExist(long dogOwnerId, long dogWalkerId, Model.IsSucceedListener listener) {
+        RequestParse.checkRequestExist(dogOwnerId, dogWalkerId, listener);
     }
 
     public void getOwnersConnectToWalker(long dogWalkerId, final Model.GetDogOwnersListener listener) {
@@ -301,120 +300,58 @@ public class ModelParse {
         });
     }
 
-    /*
-     * get waiting requests for dog walker
-     */
-    public void getRequestForDogWalker(long dogWalkerId, final Model.GetDogOwnersListener listener) {
-        RequestParse.getRequestForDogWalker(dogWalkerId, new GetIdsListener() {
-            @Override
-            public void onResult(final List<Long> ids) {
-                final List<DogOwner> dogOwners = new LinkedList<>();
-                if (ids.size() != 0) {
-                    for (long dogOwnerId : ids) {
-                        getUserById(dogOwnerId, new Model.GetUserListener() {
-                            @Override
-                            public void onResult(User user) {
-                                dogOwners.add((DogOwner) user);
-                                if (ids.size() == dogOwners.size()) {
-                                    listener.onResult(dogOwners);
-                                }
-                            }
-                        });
-                    }
-                } else {
-                    listener.onResult(dogOwners);
-                }
-            }
-        });
-    }
-
-    /*
-     * get waiting requests of dog owner
-     */
-    public void getRequestOfDogOwner(long dogOwnerId, final Model.GetDogWalkersListener listener) {
-        RequestParse.getRequestOfDogOwner(dogOwnerId, new GetIdsListener() {
-            @Override
-            public void onResult(final List<Long> ids) {
-                final List<DogWalker> dogWalkers = new LinkedList<>();
-                if (ids.size() != 0) {
-                    for (long dogWalkerId : ids) {
-                        getUserById(dogWalkerId, new Model.GetUserListener() {
-                            @Override
-                            public void onResult(User user) {
-                                dogWalkers.add((DogWalker) user);
-                                if (ids.size() == dogWalkers.size()) {
-                                    listener.onResult(dogWalkers);
-                                }
-                            }
-                        });
-                    }
-                } else {
-                    listener.onResult(dogWalkers);
-                }
-            }
-        });
-    }
-
-    /*
-     * get all status requests of dog walker
-     */
-    public void getRequestByDogWalker(long dogWalkerId, String fromDate, final Model.GetRequestsListener listener) {
-        RequestParse.getRequestByDogWalker(dogWalkerId, fromDate, new Model.GetRequestsListener() {
+    public void getRequestsByDogWalkerId(long dogWalkerId, final Model.GetRequestsListener listener) {
+        RequestParse.getRequestsByDogWalkerId(dogWalkerId, new Model.GetRequestsListener() {
             @Override
             public void onResult(final List<Request> requests) {
-                final List<Request> resultRequests = new LinkedList<>();
+                final List<Object> listForCounting = new LinkedList<>();
                 if (requests.size() != 0) {
                     for (final Request request : requests) {
                         getUserById(request.getDogOwnerId(), new Model.GetUserListener() {
                             @Override
                             public void onResult(User user) {
                                 request.setDogOwner((DogOwner) user);
-                                resultRequests.add(request);
-                                if (requests.size() == resultRequests.size()) {
-                                    listener.onResult(resultRequests);
+                                listForCounting.add(new Object());
+                                if (requests.size() == listForCounting.size()) {
+                                    listener.onResult(requests);
                                 }
                             }
                         });
                     }
                 } else {
-                    listener.onResult(resultRequests);
+                    listener.onResult(requests);
                 }
             }
         });
     }
 
-    /*
-     * get all status requests of dog owner
-     */
-    public void getRequestByDogOwner(long dogOwnerId, String fromDate, final Model.GetRequestsListener listener) {
-        RequestParse.getRequestByDogOwner(dogOwnerId, fromDate, new Model.GetRequestsListener() {
+    public void getRequestsByDogOwnerId(long dogOwnerId, final Model.GetRequestsListener listener) {
+        RequestParse.getRequestsByDogOwnerId(dogOwnerId, new Model.GetRequestsListener() {
             @Override
             public void onResult(final List<Request> requests) {
-                final List<Request> resultRequests = new LinkedList<>();
+                final List<Object> listForCounting = new LinkedList<>();
                 if (requests.size() != 0) {
                     for (final Request request : requests) {
                         getUserById(request.getDogWalkerId(), new Model.GetUserListener() {
                             @Override
                             public void onResult(User user) {
                                 request.setDogWalker((DogWalker) user);
-                                resultRequests.add(request);
-                                if (requests.size() == resultRequests.size()) {
-                                    listener.onResult(resultRequests);
+                                listForCounting.add(new Object());
+                                if (requests.size() == listForCounting.size()) {
+                                    listener.onResult(requests);
                                 }
                             }
                         });
                     }
                 } else {
-                    listener.onResult(resultRequests);
+                    listener.onResult(requests);
                 }
             }
         });
     }
-
     //endregion
 
     //region Image Methods
-
     public void saveImage(String imageName, Bitmap picture, Model.IsSucceedListener listener) {
         ImageParse.addToImagesTable(imageName, picture, listener);
     }
@@ -422,7 +359,6 @@ public class ModelParse {
     public void getImage(String imageName, Model.GetBitmapListener listener) {
         ImageParse.getImage(imageName, listener);
     }
-
     //endregion
 
     //region Interfaces

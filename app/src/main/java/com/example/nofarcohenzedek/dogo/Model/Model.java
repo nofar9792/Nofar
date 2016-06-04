@@ -100,7 +100,7 @@ public class Model {
     }
 
     public void deleteTrip(long tripId, IsSucceedListener listener){
-        modelParse.deleteTrip(tripId,listener);
+        modelParse.deleteTrip(tripId, listener);
     }
     //endregion
 
@@ -117,20 +117,23 @@ public class Model {
         modelParse.declineRequest(dogOwnerId, dogWalkerId, listener);
     }
 
+    public void checkRequestExist(long dogOwnerId, long dogWalkerId, IsSucceedListener listener) {
+        modelParse.checkRequestExist(dogOwnerId, dogWalkerId, listener);
+    }
+
     // Connections between walker to some owners
     public void getOwnersConnectToWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
         modelParse.getOwnersConnectToWalker(dogWalkerId, listener);
     }
 
-    // Messages for dog walker
-    public void getRequestForDogWalker(final long dogWalkerId, final GetDogOwnersListener listener) {
-        modelParse.getRequestForDogWalker(dogWalkerId, listener);
+    public void getRequestsByDogWalkerId(final long dogWalkerId, final GetRequestsListener listener) {
+        modelParse.getRequestsByDogWalkerId(dogWalkerId, listener);
     }
 
-    // Messages of dog owner
-    public void getRequestOfDogOwner(final long dogOwnerId, final GetDogWalkersListener listener) {
-        modelParse.getRequestOfDogOwner(dogOwnerId, listener);
+    public void getRequestsByDogOwnerId(final long dogOwnerId, final GetRequestsListener listener) {
+        modelParse.getRequestsByDogOwnerId(dogOwnerId, listener);
     }
+
     //endregion
 
     //region Image Methods

@@ -245,18 +245,14 @@ public class DogsListFragment extends Fragment
             }
 
             TextView ownerName = (TextView) convertView.findViewById(R.id.ownerNameInDogsList);
-//            TextView dogName = (TextView) convertView.findViewById(R.id.dogNameInDogsList);
             TextView address = (TextView) convertView.findViewById(R.id.addressInDogsList);
-//            TextView phone = (TextView) convertView.findViewById(R.id.phoneInDogsList);
 
             final LinearLayout walkTimeLayout = (LinearLayout)convertView.findViewById(R.id.timeTravelLayout);
 
             final DogOwner owner = list.get(position);
 
             ownerName.setText(owner.getFirstName() + " " + owner.getLastName());
-//            dogName.setText(owner.getDog().getName());
             address.setText(owner.getAddress() + ", " + owner.getCity());
-//            phone.setText(owner.getPhoneNumber());
 
             // IS CHECKED
             final CheckBox dogInListCheckBox = (CheckBox) convertView.findViewById(R.id.dogInListCheckBox);

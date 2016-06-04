@@ -1,15 +1,16 @@
 package com.example.nofarcohenzedek.dogo;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
@@ -21,6 +22,8 @@ import com.example.nofarcohenzedek.dogo.Model.Utilities;
 public class DogOwnerDetailsActivity extends Activity {
 
     private ProgressBar progressBar;
+    private Long walkerId;
+    private Long ownerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +33,8 @@ public class DogOwnerDetailsActivity extends Activity {
 
         progressBar = (ProgressBar) findViewById(R.id.dogOwnerProgressBar);
 
-        Intent intent = getIntent();
-        final String dogOwnerId = intent.getStringExtra("dogOwnerId");
+        ownerId = getIntent().getLongExtra("ownerId", 0);
+        walkerId = getIntent().getLongExtra("walkerId", 0);
 
         final TextView firstName = (TextView) findViewById(R.id.firstNameInDetails);
         final TextView lastName = (TextView) findViewById(R.id.lastNameInDetails);
@@ -53,28 +56,26 @@ public class DogOwnerDetailsActivity extends Activity {
         final CheckBox isComfortable20To22 = (CheckBox) findViewById(R.id.checkbox20To22);
 
         // Get the dog owner
-        Model.getInstance().getUserById(Long.parseLong(dogOwnerId), new Model.GetUserListener() {
+        Model.getInstance().getUserById(ownerId, new Model.GetUserListener() {
             @Override
             public void onResult(User user) {
                 if (user != null) {
                     if (user instanceof DogOwner) {
-                        DogOwner dogOwner = (DogOwner) user;
-
-                        firstName.setText(dogOwner.getFirstName());
-                        lastName.setText(dogOwner.getLastName());
-                        city.setText(dogOwner.getCity());
-                        address.setText(dogOwner.getAddress());
-                        Dog dog = dogOwner.getDog();
+                        firstName.setText(user.getFirstName());
+                        lastName.setText(user.getLastName());
+                        city.setText(user.getCity());
+                        address.setText(user.getAddress());
+                        Dog dog = ((DogOwner) user).getDog();
                         dogName.setText(dog.getName());
                         dogAge.setText(String.valueOf(dog.getAge()));
-                        isComfortable6To8.setChecked(dogOwner.isComfortable6To8());
-                        isComfortable8To10.setChecked(dogOwner.isComfortable8To10());
-                        isComfortable10To12.setChecked(dogOwner.isComfortable10To12());
-                        isComfortable12To14.setChecked(dogOwner.isComfortable12To14());
-                        isComfortable14To16.setChecked(dogOwner.isComfortable14To16());
-                        isComfortable16To18.setChecked(dogOwner.isComfortable16To18());
-                        isComfortable18To20.setChecked(dogOwner.isComfortable18To20());
-                        isComfortable20To22.setChecked(dogOwner.isComfortable20To22());
+                        isComfortable6To8.setChecked(user.isComfortable6To8());
+                        isComfortable8To10.setChecked(user.isComfortable8To10());
+                        isComfortable10To12.setChecked(user.isComfortable10To12());
+                        isComfortable12To14.setChecked(user.isComfortable12To14());
+                        isComfortable14To16.setChecked(user.isComfortable14To16());
+                        isComfortable16To18.setChecked(user.isComfortable16To18());
+                        isComfortable18To20.setChecked(user.isComfortable18To20());
+                        isComfortable20To22.setChecked(user.isComfortable20To22());
 
                         // Load the picture of dog
                         final String picRef = dog.getPicRef();
@@ -111,6 +112,31 @@ public class DogOwnerDetailsActivity extends Activity {
                 }
 
                 progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        final Button sendRequestButton = (Button) findViewById(R.id.sendRequest);
+
+        Model.getInstance().checkRequestExist(ownerId, walkerId, new Model.IsSucceedListener() {
+            @Override
+            public void onResult(boolean isRequestExist) {
+               if(!isRequestExist){
+                   sendRequestButton.setVisibility(View.VISIBLE);
+            }
+        }});
+    }
+
+    public void sendRequestClick(View view)
+    {
+        Model.getInstance().addRequest(ownerId, walkerId, new Model.IsSucceedListener() {
+            @Override
+            public void onResult(boolean isSucceed) {
+                if (isSucceed) {
+                    Toast.makeText(getApplicationContext(), "בקשה נשלחה בהצלחה", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext().getApplicationContext(), "אירעה שגיאה, אנא נסה שוב", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
