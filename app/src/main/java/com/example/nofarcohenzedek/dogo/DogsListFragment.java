@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.Model;
-import com.parse.codec.binary.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

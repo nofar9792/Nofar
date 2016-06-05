@@ -1,9 +1,7 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.AvoidXfermode;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -21,8 +19,6 @@ import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -138,7 +134,7 @@ public class TripsReportFragment extends Fragment {
     }
 
 
-    class CustomAdapter extends BaseAdapter {
+    private class CustomAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -229,8 +225,6 @@ public class TripsReportFragment extends Fragment {
                     switch (which)
                     {
                         case DialogInterface.BUTTON_POSITIVE: {
-
-                            // TODO : DELETE ITEM FROM DB
 
                             Model.getInstance().deleteTrip(trip.getId(), new Model.IsSucceedListener() {
                                 @Override

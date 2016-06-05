@@ -1,12 +1,9 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Activity;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;

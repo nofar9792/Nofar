@@ -143,6 +143,25 @@ public class Model {
     }
     //endregion
 
+    //region Trip Offers
+
+    public void addTripOffer(TripOffer offer, Model.IsSucceedListener listener){
+        modelParse.addTripOffer(offer,listener);
+    }
+
+    public void getTripOffersByOwnerId (long ownerId, Model.GetTripOffersListener listener){
+        modelParse.getTripOffersByOwnerId(ownerId,listener);
+    }
+
+    public void getTripOffer(long ownerId, String fromDate, String toDate, Model.GetTripOffersListener listener) {
+        modelParse.getTripOffer(ownerId,fromDate,toDate,listener);
+    }
+
+    public void getAllTripOffersByAgeAndPrice(long walkerAge, long walkerPrice, final Model.GetTripOffersListener listener) {
+        modelParse.getAllTripOffersByAgeAndPrice(walkerAge, walkerPrice, listener);
+    }
+        //endregion
+
     //region Interfaces
     public interface GetUserListener {
         void onResult(User user);
@@ -181,6 +200,10 @@ public class Model {
 
     public interface ExceptionListener {
         void onResult(String message);
+    }
+
+    public  interface GetTripOffersListener{
+        void onResult (List<TripOffer> offers);
     }
 
     //endregion

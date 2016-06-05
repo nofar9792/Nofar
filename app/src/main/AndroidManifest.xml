@@ -75,6 +75,11 @@
             android:label="@string/title_activity_owner_trip_offering"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".TripOffersList"
+            android:label="@string/title_activity_trip_offers_list"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

@@ -1,34 +1,19 @@
 package com.example.nofarcohenzedek.dogo;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.content.Context;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.ListFragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toolbar;
 
 public class ActionBarActivity extends AppCompatActivity
 {
     TabLayout tabLayout;
     ViewPager viewPager;
 
-
-//    MapsFragment mapsFragment;
-//    MyProfileFragment myProfileFragment;
-//    SearchFragment searchFragment;
-//    MessagesFragment messagesFragment;
-//    DogsListFragment dogsListFragment;
-//    TripsReportFragment tripsReportFragment;
-//    FragmentManager manager;
     Long userId;
     boolean isOwner;
     String address;
@@ -49,7 +34,7 @@ public class ActionBarActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager);
 
         if (isOwner){
-            tabLayout.getTabAt(4).select();
+            tabLayout.getTabAt(5).select();
         }
 
         // set icons
@@ -60,14 +45,14 @@ public class ActionBarActivity extends AppCompatActivity
         tabLayout.getTabAt(3).setIcon(R.drawable.graymessage);
 
         if (isOwner){
-            tabLayout.getTabAt(5).setIcon(R.drawable.graysearch);
+            tabLayout.getTabAt(6).setIcon(R.drawable.graysearch);
         }
     }
 
     private class CustomAdapter extends FragmentPagerAdapter {
 
-        private String walkerFragments [] = {"List","Profile","Report","Messages"};
-        private String ownerFragments [] = {"List", "Profile", "Report", "Messages","Map","Search","Offering" };
+        private String walkerFragments [] = {"List","Profile","Report","Messages","Offers"};
+        private String ownerFragments [] = {"List", "Profile", "Report", "Messages","Offers","Map","Search"};
 
         public CustomAdapter(android.support.v4.app.FragmentManager supportFragmentManager, Context applicationContext) {
             super(supportFragmentManager);
@@ -86,22 +71,20 @@ public class ActionBarActivity extends AppCompatActivity
                 case 3:
                     return new MessagesFragment(userId, isOwner);
                 case 4:
+                    return new TripOffersList(userId,isOwner,address);
+                case 5:
                     if (isOwner) {
                         return new MapsFragment(userId, address);
                     }
                     else {
                         return null;
                     }
-                case 5:
+                case 6:
                     if (isOwner){
                         return new SearchFragment(userId);
                     }
                         else {
                         return null;
-                    }
-                case 6:
-                    if (isOwner){
-                        return new OwnerTripOffering(userId);
                     }
                 default:
                     return null;

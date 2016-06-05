@@ -10,6 +10,7 @@ import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.Request;
 import com.example.nofarcohenzedek.dogo.Model.RequestStatus;
 import com.example.nofarcohenzedek.dogo.Model.Trip;
+import com.example.nofarcohenzedek.dogo.Model.TripOffer;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.parse.Parse;
 
@@ -259,7 +260,7 @@ public class ModelParse {
     }
 
     public void deleteTrip(long tripId, Model.IsSucceedListener listener){
-        TripParse.deleteTrip(tripId,listener);
+        TripParse.deleteTrip(tripId, listener);
     }
 
             // endregion
@@ -424,6 +425,25 @@ public class ModelParse {
     }
 
     //endregion
+
+    //region Trip Offers
+
+    public void addTripOffer(TripOffer offer, Model.IsSucceedListener listener){
+        TripsOfferingParse.addToTripsOfferingTable(offer,listener);
+    }
+
+    public void getTripOffersByOwnerId (long ownerId, Model.GetTripOffersListener listener){
+        TripsOfferingParse.getAllOffersByOwnerId(ownerId, listener);
+    }
+
+    public void getTripOffer(long ownerId, String fromDate, String toDate, Model.GetTripOffersListener listener){
+        TripsOfferingParse.getTripOffer(ownerId,fromDate,toDate,listener);
+    }
+
+    public void getAllTripOffersByAgeAndPrice(long walkerAge, long walkerPrice, final Model.GetTripOffersListener listener) {
+        TripsOfferingParse.getAllTripOffersByAgeAndPrice(walkerAge, walkerPrice, listener);
+    }
+        //endregion
 
     //region Interfaces
     public interface GetIdsListener {
