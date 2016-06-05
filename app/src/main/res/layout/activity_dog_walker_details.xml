@@ -12,13 +12,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".DogWalkerDetailsActivity">
 
-
     <ProgressBar
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_centerInParent="true"
             android:id="@+id/dogWalkerDetailsProgressBar"
             android:visibility="visible"/>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -210,6 +213,7 @@
                     android:id="@+id/checkbox6To8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/hour6To8"
                     android:textSize="15dp" />
 
@@ -217,6 +221,7 @@
                     android:id="@+id/checkbox8To10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:layout_marginRight="30dp"
                     android:text="@string/hour8To10"
                     android:textSize="15dp" />
@@ -232,6 +237,7 @@
                     android:id="@+id/checkbox10To12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/hour10To12"
                     android:textSize="15dp" />
 
@@ -239,6 +245,7 @@
                     android:id="@+id/checkbox12To14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:layout_marginRight="30dp"
                     android:text="@string/hour12To14"
                     android:textSize="15dp" />
@@ -254,6 +261,7 @@
                     android:id="@+id/checkbox14To16"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/hour14To16"
                     android:textSize="15dp" />
 
@@ -261,6 +269,7 @@
                     android:id="@+id/checkbox16To18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:layout_marginRight="30dp"
                     android:text="@string/hour16To18"
                     android:textSize="15dp" />
@@ -275,6 +284,7 @@
                     android:id="@+id/checkbox18To20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:text="@string/hour18To20"
                     android:textSize="15dp" />
 
@@ -282,6 +292,7 @@
                     android:id="@+id/checkbox20To22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:layout_marginRight="30dp"
                     android:text="@string/hour20To22"
                     android:textSize="15dp" />
@@ -296,10 +307,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="שלח בקשה"
+                android:visibility="gone"
                 android:id="@+id/sendRequest"
                 android:onClick="sendRequestClick"/>
 
-
         </LinearLayout>
     </LinearLayout>
+
+    </ScrollView>
 </RelativeLayout>

@@ -1,19 +1,18 @@
 package com.example.nofarcohenzedek.dogo.Model;
 
-/**
- * Created by Nofar Cohen Zedek on 10-Jan-16.
- */
 public class Request {
     private long dogOwnerId;
     private long dogWalkerId;
     private DogOwner dogOwner;
     private DogWalker dogWalker;
     private RequestStatus requestStatus;
+    private boolean isOwnerAskedWalker;
 
-    public Request(long dogOwnerId, long dogWalkerId, RequestStatus requestStatus) {
+    public Request(long dogOwnerId, long dogWalkerId, RequestStatus requestStatus, boolean isOwnerAskedWalker) {
         this.dogOwnerId = dogOwnerId;
         this.dogWalkerId = dogWalkerId;
         this.requestStatus = requestStatus;
+        this.isOwnerAskedWalker = isOwnerAskedWalker;
     }
 
     public long getDogOwnerId() {
@@ -46,5 +45,13 @@ public class Request {
 
     public void setRequestStatus(RequestStatus requestStatus) {
         this.requestStatus = requestStatus;
+    }
+
+    public boolean isOwnerAskedWalker() {
+        return isOwnerAskedWalker;
+    }
+
+    public void setIsOwnerAskedWalker(boolean isOwnerAskedWalker) {
+        this.isOwnerAskedWalker = isOwnerAskedWalker;
     }
 }
