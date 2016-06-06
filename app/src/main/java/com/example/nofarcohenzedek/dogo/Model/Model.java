@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import com.example.nofarcohenzedek.dogo.Model.Parse.ModelParse;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Model {
@@ -44,7 +45,7 @@ public class Model {
 
     //region Dog Walker Methods
     public void getAllDogWalkers(final Model.GetDogWalkersListener listener) {
-        modelParse.getAllDogWalkers(null,listener);
+        modelParse.getAllDogWalkers(null, listener);
     }
 
     public void addDogWalker(String userName, String password, String firstName, String lastName, String phoneNumber,
@@ -68,15 +69,21 @@ public class Model {
                             boolean isComfortable12To14, boolean isComfortable14To16, boolean isComfortable16To18, boolean isComfortable18To20,
                             boolean isComfortable20To22, GetIdListener listener, ExceptionListener exceptionListener) {
         modelParse.addDogOwner(userName, password, firstName, lastName, phoneNumber, address, city, dog,
-                                isComfortable6To8,  isComfortable8To10,  isComfortable10To12, isComfortable12To14,
-                                isComfortable14To16,  isComfortable16To18,  isComfortable18To20, isComfortable20To22,
-                                listener, exceptionListener);
+                isComfortable6To8, isComfortable8To10, isComfortable10To12, isComfortable12To14,
+                isComfortable14To16, isComfortable16To18, isComfortable18To20, isComfortable20To22,
+                listener, exceptionListener);
     }
 
     public void updateDogOwner(DogOwner dogOwner, IsSucceedListener listener){
         modelParse.updateDogOwner(dogOwner, listener);
     }
     //endregion
+
+    //region Dog Methods
+
+    public void getOwnersIdsHashMapWithDogNames(List<String> ids, Model.GetIdsAndDogNamesHashMapListener listener) {
+        modelParse.getOwnersIdsHashMapWithDogNames(ids,listener);
+    }
 
     //region Trip Methods
     public void getTripsByDogOwnerId(long dogOwnerId, final GetTripsListener listener) {
@@ -179,6 +186,10 @@ public class Model {
     }
     public interface GetDogWalkersListener {
         void onResult(List<DogWalker> dogWalkers);
+    }
+
+    public interface GetIdsAndDogNamesHashMapListener{
+        void OnResult (HashMap<Long,String> list);
     }
 
     public interface GetDogOwnersListener {

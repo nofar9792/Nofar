@@ -7,15 +7,17 @@ public class PathMilestone
 {
     PathAction type;
     int duration;
+    long userId;
     String waypoint;
 
     public PathMilestone(){}
 
-    public PathMilestone (PathAction action, int duration, String address)
+    public PathMilestone (PathAction action, int duration, long userId, String address)
     {
         this.type = action;
         this.duration = duration;
         this.waypoint = address;
+        this.userId = userId;
     }
 
     public PathAction getAction(){return this.type;}
@@ -25,6 +27,10 @@ public class PathMilestone
     public int getDuration (){return this.duration;}
 
     public void setDuration(int duration) {this.duration = duration;}
+
+    public long getOwnerId(){return userId;}
+
+    public void setOwnerId(long id){this.userId = id;}
 
     public String getAddress(){return this.waypoint;}
 

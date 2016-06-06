@@ -177,6 +177,14 @@ public class ModelParse {
 
     //endregion
 
+    //region Dog Methods
+
+    public void getOwnersIdsHashMapWithDogNames(List<String> ids, Model.GetIdsAndDogNamesHashMapListener listener) {
+        DogParse.getOwnersIdsHashMapWithDogNames(ids,listener);
+    }
+
+    //endregion
+
     //region Trip Methods
     public void getTripsByDogOwnerId(long dogOwnerId, final Model.GetTripsListener listener) {
         TripParse.getTripsDetailsByDogOwnerId(dogOwnerId, new GetTripsDetailsListener() {
@@ -389,7 +397,7 @@ public class ModelParse {
     //region Trip Offers
 
     public void addTripOffer(TripOffer offer, Model.IsSucceedListener listener){
-        TripsOfferingParse.addToTripsOfferingTable(offer,listener);
+        TripsOfferingParse.addToTripsOfferingTable(offer, listener);
     }
 
     public void getTripOffersByOwnerId (long ownerId, Model.GetTripOffersListener listener){
@@ -397,7 +405,7 @@ public class ModelParse {
     }
 
     public void getTripOffer(long ownerId, String fromDate, String toDate, Model.GetTripOffersListener listener){
-        TripsOfferingParse.getTripOffer(ownerId,fromDate,toDate,listener);
+        TripsOfferingParse.getTripOffer(ownerId, fromDate, toDate, listener);
     }
 
     public void getAllTripOffersByAgeAndPrice(long walkerAge, long walkerPrice, final Model.GetTripOffersListener listener) {

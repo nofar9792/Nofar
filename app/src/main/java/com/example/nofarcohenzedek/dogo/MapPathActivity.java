@@ -1,5 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.PathAction;
 import com.example.nofarcohenzedek.dogo.Model.PathMilestone;
 import com.example.nofarcohenzedek.dogo.Model.PathResponse;
@@ -24,25 +26,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -58,7 +49,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -67,10 +57,13 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
 
     private GoogleMap mMap;
     private ProgressBar progressBar;
+    private long userId;
+    private boolean listFull;
 
     private List<String> addrToMarkPath;
+    private HashMap<Long,String> idsAndNames;
+    private List<String> stringIds;
 
-    private List<String> tempAddrList;
     private PathResponse pathRes;
     private Calendar startTime;
     private SimpleDateFormat format;
@@ -89,6 +82,14 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        listFull = false;
+
+        Intent intent = getIntent();
+        stringIds = intent.getStringArrayListExtra("ownerIds");
+        ArrayList<String> times = intent.getStringArrayListExtra("walkTimes");
+        userId = intent.getLongExtra("userId", 0);
+
+
 
         progressBar = (ProgressBar) findViewById(R.id.mapsProgressBar);
         format = new SimpleDateFormat("HH:mm");
@@ -96,18 +97,24 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         HashMap<String,String> data = new HashMap<>();
-        data.put("OwnerId", "0");
-        data.put("DogWalks[0].Duration", "45");
-        data.put("DogWalks[0].UserId", "1");
-        data.put("DogWalks[1].Duration", "45");
-        data.put("DogWalks[1].UserId", "2");
+
+        // create data to send algorithm
+        data.put("OwnerId", Long.toString(userId));
+        for (int i=0; i< stringIds.size(); i++){
+            data.put("DogWalks["+i+"].Duration",times.get(i));
+            data.put("DogWalks["+i+"].UserId",stringIds.get(i));
+        }
+//        data.put("DogWalks[0].Duration", "45");
+//        data.put("DogWalks[0].UserId", "12");
+//        data.put("DogWalks[1].Duration", "45");
+//        data.put("DogWalks[1].UserId", "43");
         String res = performPostCall("http://db.cs.colman.ac.il/DogoServer/api/Paths", data);
         Gson gson = new Gson();
         pathRes = gson.fromJson(res,PathResponse.class);
 
         // decide which addresses to mark in path
-        addrToMarkPath = new ArrayList<String>() {
-        };
+        addrToMarkPath = new ArrayList<String>() {};
+
         for (PathMilestone currMil : pathRes.getPath()) {
             if ((currMil.getAction() == PathAction.Start || currMil.getAction() == PathAction.Walk) && !addrToMarkPath.contains(currMil.getAddress())) {
                 addrToMarkPath.add(currMil.getAddress());
@@ -117,7 +124,6 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
             {
                 homeLocation = currMil.getAddress();
             }
-
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -232,38 +238,54 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
-        LatLng center = Utilities.getLocationFromAddress(pathRes.getPath().get(0).getAddress(), getApplicationContext());
+        LatLng center = Utilities.getLocationFromAddress(homeLocation, getApplicationContext());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-        Route route = new Route();
+        final Route route = new Route();
 
-        for (int i = 0; i < addrToMarkPath.size(); i++) {
-            String title = buildTitleForMarker(addrToMarkPath.get(i));
-            String snippet = buildSnippetForMarker(addrToMarkPath.get(i));
+        // very ugly thing, please dont look
+//        while (!listFull){
+//
+//        }
 
-            ;
-            if (addrToMarkPath.get(i).equals(homeLocation)){
-                mMap.addMarker(new MarkerOptions()
-                        .position(Utilities.getLocationFromAddress(addrToMarkPath.get(i), getApplicationContext()))
-                        .title(title).snippet(snippet)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        Model.getInstance().getOwnersIdsHashMapWithDogNames(stringIds, new Model.GetIdsAndDogNamesHashMapListener() {
+            @Override
+            public void OnResult(HashMap<Long, String> list) {
+                if (list != null){
+                    idsAndNames = list;
+
+
+                    for (int i = 0; i < addrToMarkPath.size(); i++) {
+                        String title = buildTitleForMarker(addrToMarkPath.get(i));
+                        String snippet = buildSnippetForMarker(addrToMarkPath.get(i));
+
+                        ;
+                        if (addrToMarkPath.get(i).equals(homeLocation)){
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(Utilities.getLocationFromAddress(addrToMarkPath.get(i), getApplicationContext()))
+                                    .title(title).snippet(snippet)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        }
+                        else
+                        {
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(Utilities.getLocationFromAddress(addrToMarkPath.get(i), getApplicationContext()))
+                                    .title(title).snippet(snippet));
+                        }
+
+
+                        if (i != addrToMarkPath.size() - 1) {
+                            route.drawRoute(mMap, getApplicationContext(),
+                                    Utilities.getLocationFromAddress(addrToMarkPath.get(i), getApplicationContext()),
+                                    Utilities.getLocationFromAddress(addrToMarkPath.get(i + 1), getApplicationContext()),
+                                    false, "en");
+                        }
+                    }
+                }
             }
-            else
-            {
-                mMap.addMarker(new MarkerOptions()
-                        .position(Utilities.getLocationFromAddress(addrToMarkPath.get(i), getApplicationContext()))
-                        .title(title).snippet(snippet));
-            }
+        });
 
-
-            if (i != addrToMarkPath.size() - 1) {
-                route.drawRoute(mMap, getApplicationContext(),
-                        Utilities.getLocationFromAddress(addrToMarkPath.get(i), getApplicationContext()),
-                        Utilities.getLocationFromAddress(addrToMarkPath.get(i + 1), getApplicationContext()),
-                        false, "en");
-            }
-        }
     }
 
     private String buildTitleForMarker(String address) {
@@ -283,21 +305,24 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
             currentTime.add(Calendar.SECOND, currMil.getDuration());
 
             if (currMil.getAddress().equals(address)) {
-                if (currMil.getAction() != PathAction.Walk) {
+                if (currMil.getAction() != PathAction.Walk && currMil.getAction() != PathAction.Wait) {
                     result += format.format(currentTime.getTime()) + ": ";
                 }
 
                 switch (currMil.getAction()) {
                     case Pickup: {
-                        result += "איספי את " + newLine;
+                        result += "איספי את " + idsAndNames.get(currMil.getOwnerId()) +newLine;
                         break;
                     }
                     case Return: {
-                        result += "החזירי את " + newLine;
+                        result += "החזירי את " + idsAndNames.get(currMil.getOwnerId()) +newLine;
                         break;
                     }
                     case Wait: {
-                        result += "חכי במשך " + currMil.getDuration() + " שניות" + newLine;
+                        Calendar temp = Calendar.getInstance();
+                        temp.setTime(currentTime.getTime());
+                        temp.add(Calendar.SECOND,-1*currMil.getDuration());
+                        result += format.format(temp.getTime()) + ": "+ " טיילי באזור במשך "+ currMil.getDuration()/60 + " דקות" + newLine;
                         break;
                     }
                     case Start: {

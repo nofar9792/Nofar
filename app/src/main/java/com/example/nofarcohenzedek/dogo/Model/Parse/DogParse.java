@@ -4,11 +4,17 @@ import com.example.nofarcohenzedek.dogo.Model.Common.DogConsts;
 import com.example.nofarcohenzedek.dogo.Model.Dog;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Nofar Cohen Zedek on 02-Jan-16.
@@ -33,6 +39,38 @@ public class DogParse {
                 } else {
                     e.printStackTrace();
                     listener.onResult(false);
+                }
+            }
+        });
+    }
+
+    // string because android is stupid. for more information ask carmel
+    public static void getOwnersIdsHashMapWithDogNames(List<String> ids, final Model.GetIdsAndDogNamesHashMapListener listener){
+        ParseQuery<ParseObject> query = new ParseQuery<>(DogConsts.DOGS_TABLE);
+
+        ArrayList<Long> longIds = new ArrayList<>();
+        final HashMap<Long,String> returnList = new HashMap<>();
+
+        for (String id : ids){
+            longIds.add(Long.parseLong(id));
+        }
+
+        query.whereContainedIn(DogConsts.USER_ID,longIds).selectKeys(Arrays.asList(DogConsts.USER_ID,DogConsts.NAME));
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null){
+                    for (ParseObject po : list){
+                        returnList.put(po.getLong(DogConsts.USER_ID),po.getString(DogConsts.NAME));
+                    }
+
+                    listener.OnResult(returnList);
+                }
+                else{
+                    e.printStackTrace();
+
+                    listener.OnResult(null);
                 }
             }
         });

@@ -36,8 +36,8 @@ public class DogsListFragment extends Fragment
     private ProgressBar progressBar;
     private Context context;
 
-    private List<Long> ownersIDsToCalculatePath;
-    private List<Integer> walkTimesToCalculatePath;
+    private ArrayList<String> ownersIDsToCalculatePath;
+    private ArrayList<String> walkTimesToCalculatePath;
     private ListView listView;
     private ArrayList<ItemInList> itemsData;
 
@@ -89,8 +89,8 @@ public class DogsListFragment extends Fragment
                         if (isInt(itemsData.get(i).time))
                         //if (isInt(((EditText) listItem.findViewById(R.id.timeToWalkTextbox)).getText().toString()))
                         {
-                            ownersIDsToCalculatePath.add(list.get(i).getId());
-                            walkTimesToCalculatePath.add(Integer.valueOf(itemsData.get(i).time));
+                            ownersIDsToCalculatePath.add(Long.toString(list.get(i).getId()));
+                            walkTimesToCalculatePath.add(itemsData.get(i).time);
                            // walkTimesToCalculatePath.add(Integer.valueOf(((EditText) listItem.findViewById(R.id.timeToWalkTextbox)).getText().toString()));
                         }
                         else
@@ -111,14 +111,20 @@ public class DogsListFragment extends Fragment
                 if (isValid)
                 {
                     Intent intent = new Intent(getActivity().getApplicationContext(), MapPathActivity.class);
+                    //intent.putExtra("ownerIds", ownersIDsToCalculatePath.toArray(new Long[ownersIDsToCalculatePath.size()]));
+                    //intent.putExtra("walkTimes",walkTimesToCalculatePath.toArray(new Long[walkTimesToCalculatePath.size()]));
+                    intent.putStringArrayListExtra("ownerIds",ownersIDsToCalculatePath);
+                    intent.putStringArrayListExtra("walkTimes",walkTimesToCalculatePath);
+                    intent.putExtra("userId",userId);
+                    intent.putExtra("a","b");
                     startActivity(intent);
                 }
             }
         });
 
         tripsByOwnerId = new HashMap<Long, Long>();
-        ownersIDsToCalculatePath = new ArrayList<Long>();
-        walkTimesToCalculatePath = new ArrayList<Integer>();
+        ownersIDsToCalculatePath = new ArrayList<String>();
+        walkTimesToCalculatePath = new ArrayList<String>();
 
 
         Model.getInstance().getOwnersConnectToWalker(userId, new Model.GetDogOwnersListener() {
