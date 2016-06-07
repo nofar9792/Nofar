@@ -20,6 +20,7 @@ import com.example.nofarcohenzedek.dogo.Model.DogOwner;
 import com.example.nofarcohenzedek.dogo.Model.DogSize;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.User;
+import com.example.nofarcohenzedek.dogo.Model.Utilities;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -246,7 +247,11 @@ public class SignUpActivity extends Activity {
                 city.isEmpty() || address.isEmpty()) {
             errorMessage = "אנא מלא את כל שדות ההרשמה.";
             isValid = false;
-        } else if (isOwner.isChecked()) {
+        }else if (Utilities.getLocationFromAddress(address,getApplicationContext()) == null){
+            errorMessage = "כתובת לא ולידית. אנא ודא איות נכון.";
+            isValid = false;
+        }
+        else if (isOwner.isChecked()) {
             if (dogName.isEmpty() || dogAge.isEmpty() ||
                     (!isBig.isChecked() && !isMedium.isChecked() && !isSmall.isChecked())) {
                 errorMessage = "אנא מלא את פרטי הכלב.";

@@ -34,7 +34,7 @@ public class Utilities
             e.printStackTrace();
         }
 
-        if (addresses == null)
+        if (addresses == null || addresses.size() == 0)
         {
             return null;
         }

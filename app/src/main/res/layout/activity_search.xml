@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
+    android:orientation="vertical"
     android:layoutDirection="rtl"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context=".SearchFragment">
 
     <ProgressBar
@@ -21,12 +22,12 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="355dp">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="355dp"
             android:layoutDirection="rtl"
             android:orientation="vertical"
             android:paddingBottom="@dimen/activity_vertical_margin"
@@ -81,7 +82,7 @@
                         android:id="@+id/lbl_ageForSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10px"
+                        android:layout_margin="5px"
                         android:text="גיל מינימלי"
                         android:textSize="20dp" />
 
@@ -103,7 +104,7 @@
                         android:id="@+id/lbl_priceForSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10px"
+                        android:layout_margin="5px"
                         android:text="מחיר מקסימלי"
                         android:textSize="20dp" />
 
@@ -125,7 +126,7 @@
                         android:id="@+id/lbl_comfortableTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10px"
+                        android:layout_margin="5px"
                         android:text="@string/comfortableTime"
                         android:textSize="20dp" />
 
@@ -228,10 +229,28 @@
                 android:scaleType="fitCenter"
                 android:background="@color/colorBackground"/>
 
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layoutDirection="rtl">
+
+
+
             <ListView
                 android:id="@+id/searchResultList"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="143dp"
                 android:layout_gravity="right"
                 android:layoutDirection="rtl">
 
@@ -239,4 +258,4 @@
 
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+</LinearLayout>
