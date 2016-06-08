@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -61,13 +61,14 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
     private boolean listFull;
 
     private List<String> addrToMarkPath;
-    private HashMap<Long,String> idsAndNames;
+    private HashMap<Long, String> idsAndNames;
     private List<String> stringIds;
 
     private PathResponse pathRes;
     private Calendar startTime;
     private SimpleDateFormat format;
     private String homeLocation;
+    HashMap<String, String> data;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -90,59 +91,62 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         userId = intent.getLongExtra("userId", 0);
 
 
-
         progressBar = (ProgressBar) findViewById(R.id.mapsProgressBar);
         format = new SimpleDateFormat("HH:mm");
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        HashMap<String,String> data = new HashMap<>();
+        data = new HashMap<>();
 
         // create data to send algorithm
         data.put("OwnerId", Long.toString(userId));
-        for (int i=0; i< stringIds.size(); i++){
-            data.put("DogWalks["+i+"].Duration",times.get(i));
-            data.put("DogWalks["+i+"].UserId",stringIds.get(i));
-        }
-//        data.put("DogWalks[0].Duration", "45");
-//        data.put("DogWalks[0].UserId", "12");
-//        data.put("DogWalks[1].Duration", "45");
-//        data.put("DogWalks[1].UserId", "43");
-        String res = performPostCall("http://db.cs.colman.ac.il/DogoServer/api/Paths", data);
-        Gson gson = new Gson();
-        pathRes = gson.fromJson(res,PathResponse.class);
-
-        // decide which addresses to mark in path
-        addrToMarkPath = new ArrayList<String>() {};
-
-        for (PathMilestone currMil : pathRes.getPath()) {
-            if ((currMil.getAction() == PathAction.Start || currMil.getAction() == PathAction.Walk) && !addrToMarkPath.contains(currMil.getAddress())) {
-                addrToMarkPath.add(currMil.getAddress());
-            }
-
-            if(currMil.getAction() == PathAction.Start)
-            {
-                homeLocation = currMil.getAddress();
-            }
+        for (int i = 0; i < stringIds.size(); i++) {
+            data.put("DogWalks[" + i + "].Duration", times.get(i));
+            data.put("DogWalks[" + i + "].UserId", stringIds.get(i));
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String res = null;
+
         try {
-            Date date = sdf.parse(pathRes.getStartTime());
-            startTime = GregorianCalendar.getInstance(); // creates a new calendar instance
-            startTime.setTime(date);   // assigns calendar to given date
-        } catch (ParseException e) {
+            res = new HttpAsyncTask().execute("").get();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        if (res != null) {
+            Gson gson = new Gson();
+            pathRes = gson.fromJson(res, PathResponse.class);
+
+            // decide which addresses to mark in path
+            addrToMarkPath = new ArrayList<String>() {
+            };
+
+            for (PathMilestone currMil : pathRes.getPath()) {
+                if ((currMil.getAction() == PathAction.Start || currMil.getAction() == PathAction.Walk) && !addrToMarkPath.contains(currMil.getAddress())) {
+                    addrToMarkPath.add(currMil.getAddress());
+                }
+
+                if (currMil.getAction() == PathAction.Start) {
+                    homeLocation = currMil.getAddress();
+                }
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            try {
+                Date date = sdf.parse(pathRes.getStartTime());
+                startTime = GregorianCalendar.getInstance(); // creates a new calendar instance
+                startTime.setTime(date);   // assigns calendar to given date
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            // ATTENTION: This was auto-generated to implement the App Indexing API.
+            // See https://g.co/AppIndexing/AndroidStudio for more information.
+            client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        }
     }
 
-
-    public String  performPostCall(String requestURL,
-                                   HashMap<String, String> postDataParams) {
+    public String performPostCall() {
+        String requestURL = "http://db.cs.colman.ac.il/DogoServer/api/Paths";
+        HashMap<String, String> postDataParams = data;
 
         URL url;
         String response = "";
@@ -158,24 +162,22 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
 
 
             OutputStream os = conn.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
             writer.write(getPostDataString(postDataParams));
 
             writer.flush();
             writer.close();
             os.close();
-            int responseCode=conn.getResponseCode();
+            int responseCode = conn.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 String line;
-                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line=br.readLine()) != null) {
-                    response+=line;
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = br.readLine()) != null) {
+                    response += line;
                 }
-            }
-            else {
-                response="";
+            } else {
+                response = "";
 
             }
         } catch (Exception e) {
@@ -188,7 +190,7 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
+        for (Map.Entry<String, String> entry : params.entrySet()) {
             if (first)
                 first = false;
             else
@@ -244,15 +246,10 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
 
         final Route route = new Route();
 
-        // very ugly thing, please dont look
-//        while (!listFull){
-//
-//        }
-
         Model.getInstance().getOwnersIdsHashMapWithDogNames(stringIds, new Model.GetIdsAndDogNamesHashMapListener() {
             @Override
             public void OnResult(HashMap<Long, String> list) {
-                if (list != null){
+                if (list != null) {
                     idsAndNames = list;
 
 
@@ -261,14 +258,12 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
                         String snippet = buildSnippetForMarker(addrToMarkPath.get(i));
 
                         ;
-                        if (addrToMarkPath.get(i).equals(homeLocation)){
+                        if (addrToMarkPath.get(i).equals(homeLocation)) {
                             mMap.addMarker(new MarkerOptions()
                                     .position(Utilities.getLocationFromAddress(addrToMarkPath.get(i), getApplicationContext()))
                                     .title(title).snippet(snippet)
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                        }
-                        else
-                        {
+                        } else {
                             mMap.addMarker(new MarkerOptions()
                                     .position(Utilities.getLocationFromAddress(addrToMarkPath.get(i), getApplicationContext()))
                                     .title(title).snippet(snippet));
@@ -311,18 +306,18 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
 
                 switch (currMil.getAction()) {
                     case Pickup: {
-                        result += "איספי את " + idsAndNames.get(currMil.getOwnerId()) +newLine;
+                        result += "איספי את " + idsAndNames.get(currMil.getOwnerId()) + newLine;
                         break;
                     }
                     case Return: {
-                        result += "החזירי את " + idsAndNames.get(currMil.getOwnerId()) +newLine;
+                        result += "החזירי את " + idsAndNames.get(currMil.getOwnerId()) + newLine;
                         break;
                     }
                     case Wait: {
                         Calendar temp = Calendar.getInstance();
                         temp.setTime(currentTime.getTime());
-                        temp.add(Calendar.SECOND,-1*currMil.getDuration());
-                        result += format.format(temp.getTime()) + ": "+ " טיילי באזור במשך "+ currMil.getDuration()/60 + " דקות" + newLine;
+                        temp.add(Calendar.SECOND, -1 * currMil.getDuration());
+                        result += format.format(temp.getTime()) + ": " + " טיילי באזור במשך " + currMil.getDuration() / 60 + " דקות" + newLine;
                         break;
                     }
                     case Start: {
@@ -346,17 +341,8 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
     public void onStart() {
         super.onStart();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "MapPath Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, "MapPath Page", Uri.parse("http://host/path"),
                 Uri.parse("android-app://com.example.nofarcohenzedek.dogo/http/host/path")
         );
         AppIndex.AppIndexApi.start(client, viewAction);
@@ -366,19 +352,16 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
     public void onStop() {
         super.onStop();
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "MapPath Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.example.nofarcohenzedek.dogo/http/host/path")
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, "MapPath Page", Uri.parse("http://host/path"), Uri.parse("android-app://com.example.nofarcohenzedek.dogo/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            return performPostCall();
+        }
     }
 }
