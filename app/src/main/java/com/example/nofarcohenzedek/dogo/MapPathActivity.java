@@ -8,8 +8,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +74,11 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
     private SimpleDateFormat format;
     private String homeLocation;
     HashMap<String, String> data;
+
+    // for list
+    ListView listView;
+    LinkedHashMap<String,String> actionStrings;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -85,6 +95,8 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
         listFull = false;
 
+        listView = (ListView) findViewById(R.id.pathActionsList);
+
         Intent intent = getIntent();
         stringIds = intent.getStringArrayListExtra("ownerIds");
         ArrayList<String> times = intent.getStringArrayListExtra("walkTimes");
@@ -95,6 +107,7 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         format = new SimpleDateFormat("HH:mm");
 
         data = new HashMap<>();
+        actionStrings = new LinkedHashMap<>();
 
         // create data to send algorithm
         data.put("OwnerId", Long.toString(userId));
@@ -141,6 +154,62 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
             // ATTENTION: This was auto-generated to implement the App Indexing API.
             // See https://g.co/AppIndexing/AndroidStudio for more information.
             client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        }
+    }
+
+    private void buildActionStringsHashMap() {
+
+        Calendar currentTime = Calendar.getInstance();
+        currentTime.setTime(startTime.getTime());
+
+
+        for (int i=0; i< pathRes.getPath() .size(); i++){
+            PathMilestone currMil = pathRes.getPath().get(i);
+            String lineResult = "";
+            currentTime.add(Calendar.SECOND, currMil.getDuration());
+
+            if (currMil.getAction() != PathAction.Walk && currMil.getAction() != PathAction.Wait) {
+                lineResult += format.format(currentTime.getTime()) + ": ";
+            }
+
+            switch (currMil.getAction()) {
+                case Pickup: {
+                    lineResult += "איספי את " + idsAndNames.get(currMil.getOwnerId());
+                    actionStrings.put(lineResult,currMil.getAddress());
+                    break;
+                }
+                case Return: {
+                    lineResult += "החזירי את " + idsAndNames.get(currMil.getOwnerId());
+                    actionStrings.put(lineResult,currMil.getAddress());
+                    break;
+                }
+                case Wait: {
+                    Calendar temp = Calendar.getInstance();
+                    temp.setTime(currentTime.getTime());
+                    temp.add(Calendar.SECOND, -1 * currMil.getDuration());
+                    lineResult += format.format(temp.getTime()) + ": " + " טיילי באזור במשך " + currMil.getDuration() / 60 + " דקות" ;
+                    actionStrings.put(lineResult,currMil.getAddress());
+                    break;
+                }
+                case Start: {
+                    lineResult += "התחילי טיול" ;
+                    actionStrings.put(lineResult,currMil.getAddress());
+                    break;
+                }
+
+            }
+
+            lineResult = "";
+
+            if (i != pathRes.getPath().size() - 1 && pathRes.getPath().get(i + 1).getAction() == PathAction.Walk) {
+                lineResult += format.format(currentTime.getTime()) + ": " + "לכי ל" + pathRes.getPath().get(i + 1).getAddress();
+                actionStrings.put(lineResult, pathRes.getPath().get(i + 1).getAddress());
+            } else if (i == pathRes.getPath().size() - 1) {
+                lineResult += format.format(currentTime.getTime()) + ": " + "סיימי טיול";
+                actionStrings.put(lineResult,currMil.getAddress());
+            }
+
+            lineResult = "";
         }
     }
 
@@ -240,8 +309,12 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
             }
         });
 
-        LatLng center = Utilities.getLocationFromAddress(homeLocation, getApplicationContext());
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+        try {
+            LatLng center = Utilities.getLocationFromAddress(homeLocation, getApplicationContext());
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         final Route route = new Route();
@@ -277,6 +350,14 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
                                     false, "en");
                         }
                     }
+
+                    buildActionStringsHashMap();
+
+                    listView.setVisibility(View.VISIBLE);
+                    CustomAdapter adapter = new CustomAdapter();
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
                 }
             }
         });
@@ -288,8 +369,6 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
     private String buildSnippetForMarker(String address) {
-        // TODO see what about the last milestone - if i have my home again or not (although if the first milestone is my home)
-
         String newLine = "\n";
         String result = newLine;
         Calendar currentTime = Calendar.getInstance();
@@ -298,6 +377,8 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         for (int i = 0; i < pathRes.getPath().size(); i++) {
             PathMilestone currMil = pathRes.getPath().get(i);
             currentTime.add(Calendar.SECOND, currMil.getDuration());
+
+          //  String lineToAdd = "";
 
             if (currMil.getAddress().equals(address)) {
                 if (currMil.getAction() != PathAction.Walk && currMil.getAction() != PathAction.Wait) {
@@ -331,10 +412,61 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
                 } else if (i == pathRes.getPath().size() - 1) {
                     result += format.format(currentTime.getTime()) + ": " + "סיימי טיול";
                 }
+
+               // actionStrings.put(lineToAdd,currMil.getAddress());
             }
         }
 
         return result;
+    }
+
+
+
+
+    private class CustomAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return actionStrings.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return actionStrings.keySet().toArray()[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+
+                LayoutInflater inflater = getLayoutInflater();
+                convertView = inflater.inflate(R.layout.action_string_row_layout, null);
+            }
+
+            final String currAction = actionStrings.keySet().toArray(new String[actionStrings.size()])[position];
+
+            ((TextView)convertView.findViewById(R.id.actionStringText)).setText(currAction);
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        LatLng center = Utilities.getLocationFromAddress(actionStrings.get(currAction), getApplicationContext());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(center));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            return convertView;
+        }
     }
 
     @Override
