@@ -93,6 +93,7 @@ public class TripOffersList extends Fragment {
                         public void onResult(User user) {
                             if (user != null & user instanceof DogWalker) {
                                 walker = (DogWalker) user;
+                                view.findViewById(R.id.showOffersByDistance).setEnabled(true);
                             }
                         }
                     }
@@ -206,7 +207,8 @@ public class TripOffersList extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetailsActivity.class);
-                    intent.putExtra("dogOwnerId",Long.toString(allOffers.get(position).getOwnerId()));
+                    intent.putExtra("ownerId",allOffers.get(position).getOwnerId());
+                    intent.putExtra("walkerId",userId);
                     startActivity(intent);
                 }
             });

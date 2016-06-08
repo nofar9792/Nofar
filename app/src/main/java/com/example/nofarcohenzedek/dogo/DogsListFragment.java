@@ -225,7 +225,7 @@ public class DogsListFragment extends Fragment
         }
     }
 
-    class CustomAdapter extends BaseAdapter {
+    private class CustomAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {

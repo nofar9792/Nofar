@@ -63,7 +63,11 @@ public class ActionBarActivity extends AppCompatActivity
             switch (position)
             {
                 case 0:
-                    return new DogsListFragment(userId);
+                    if (isOwner) {
+                        return new MyWalkersList(userId);
+                    }else {
+                        return new DogsListFragment(userId);
+                    }
                 case 1:
                     return new MyProfileFragment(userId, isOwner);
                 case 2:

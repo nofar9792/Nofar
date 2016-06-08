@@ -44,8 +44,13 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/offersWalkerLayout">
+                android:id="@+id/offersWalkerLayout"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -58,13 +63,18 @@
                     android:id="@+id/raduisForOffersList"
                     android:inputType="number"/>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="הצג"
-                    android:id="@+id/showOffersByDistance"/>
 
             </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="הצג"
+                android:enabled="false"
+                android:id="@+id/showOffersByDistance"/>
+
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"

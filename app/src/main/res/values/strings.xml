@@ -61,5 +61,6 @@
     <string name="title_activity_map_path">MapPathActivity</string>
     <string name="title_activity_owner_trip_offering">OwnerTripOffering</string>
     <string name="title_activity_trip_offers_list">TripOffersList</string>
+    <string name="title_activity_my_walkers_list">MyWalkersList</string>
 
 </resources>
