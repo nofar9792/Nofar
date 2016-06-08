@@ -28,8 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DogsListFragment extends Fragment
-{
+public class DogsListFragment extends Fragment {
     private Long userId;
     private List<DogOwner> list;
     private Map<Long, Long> tripsByOwnerId;
@@ -41,16 +40,15 @@ public class DogsListFragment extends Fragment
     private ListView listView;
     private ArrayList<ItemInList> itemsData;
 
-    public  DogsListFragment(){}
+    public DogsListFragment() {
+    }
 
-    public DogsListFragment(Long id)
-    {
+    public DogsListFragment(Long id) {
         userId = id;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = container.getContext();
         final View view = inflater.inflate(R.layout.activity_dogs_list, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
@@ -59,7 +57,7 @@ public class DogsListFragment extends Fragment
 
         Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.dogsListProgressBar);
-        listView = (ListView)view.findViewById(R.id.dogsOfDogWalker);
+        listView = (ListView) view.findViewById(R.id.dogsOfDogWalker);
 
 //        userId = args.getLong("userId");
 
@@ -69,7 +67,7 @@ public class DogsListFragment extends Fragment
             @Override
             public void onClick(View v) {
                 View listItem;
-                TextView errorView =  (TextView)v.getRootView().findViewById(R.id.calculatePathError);
+                TextView errorView = (TextView) v.getRootView().findViewById(R.id.calculatePathError);
 
                 boolean isValid = true;
 
@@ -77,21 +75,13 @@ public class DogsListFragment extends Fragment
                 ownersIDsToCalculatePath.clear();
                 walkTimesToCalculatePath.clear();
 
-                for (int i=0;i<listView.getCount();i++)
-                {
-                  //  listItem = listView.getChildAt(i);
-                   // listItem = listView.getChildAt(i -listView.getFirstVisiblePosition()).findViewById(R.id.LinearLayout3);
-                    //listItem = listView.getAdapter().getView(i,null,null);
-
+                for (int i = 0; i < listView.getCount(); i++) {
                     if (itemsData.get(i).isChecked)
-                    //if (((CheckBox)listItem.findViewById(R.id.dogInListCheckBox)).isChecked())
                     {
                         if (isInt(itemsData.get(i).time))
-                        //if (isInt(((EditText) listItem.findViewById(R.id.timeToWalkTextbox)).getText().toString()))
                         {
                             ownersIDsToCalculatePath.add(Long.toString(list.get(i).getId()));
                             walkTimesToCalculatePath.add(itemsData.get(i).time);
-                           // walkTimesToCalculatePath.add(Integer.valueOf(((EditText) listItem.findViewById(R.id.timeToWalkTextbox)).getText().toString()));
                         }
                         else
                         {
@@ -102,21 +92,16 @@ public class DogsListFragment extends Fragment
                     }
                 }
 
-                if (isValid && ownersIDsToCalculatePath.size() == 0)
-                {
+                if (isValid && ownersIDsToCalculatePath.size() == 0) {
                     errorView.setText("בחר לפחות כלב אחד מהרשימה");
                     isValid = false;
                 }
 
-                if (isValid)
-                {
+                if (isValid) {
                     Intent intent = new Intent(getActivity().getApplicationContext(), MapPathActivity.class);
-                    //intent.putExtra("ownerIds", ownersIDsToCalculatePath.toArray(new Long[ownersIDsToCalculatePath.size()]));
-                    //intent.putExtra("walkTimes",walkTimesToCalculatePath.toArray(new Long[walkTimesToCalculatePath.size()]));
                     intent.putStringArrayListExtra("ownerIds",ownersIDsToCalculatePath);
                     intent.putStringArrayListExtra("walkTimes",walkTimesToCalculatePath);
                     intent.putExtra("userId",userId);
-                    intent.putExtra("a","b");
                     startActivity(intent);
                 }
             }
@@ -137,8 +122,7 @@ public class DogsListFragment extends Fragment
                     ListView listView = (ListView) view.findViewById(R.id.dogsOfDogWalker);
                     listView.setAdapter(adapter);
 
-                    for (int i = 0; i< list.size();i++)
-                    {
+                    for (int i = 0; i < list.size(); i++) {
                         ItemInList item = new ItemInList();
                         item.position = i;
                         itemsData.add(item);
@@ -155,38 +139,31 @@ public class DogsListFragment extends Fragment
         return view;
     }
 
-    private boolean isInt(String value)
-    {
-        try
-        {
+    private boolean isInt(String value) {
+        try {
             Integer i = Integer.parseInt(value);
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             return false;
         }
         return true;
     }
 
-    class ItemInList
-    {
+    class ItemInList {
         int position;
         boolean isChecked;
         String time;
     }
 
-    public void onItemClickListener(View view, final Long ownerId)
-    {
-        if (view.getTag().equals("startTripTag"))
-        {
+    public void onItemClickListener(View view, final Long ownerId) {
+        if (view.getTag().equals("startTripTag")) {
             View currentListItem = (View) view.getParent();
 
             currentListItem.findViewById(R.id.endTripBtn).setEnabled(true);
             currentListItem.findViewById(R.id.startTripBtn).setEnabled(false);
 
             // Replace the imageButton to disabled
-            ((ImageButton)currentListItem.findViewById(R.id.endTripBtn)).setImageResource(R.drawable.finish_trip_button);
-            ((ImageButton)currentListItem.findViewById(R.id.startTripBtn)).setImageResource(R.drawable.start_trip_disable_button);
+            ((ImageButton) currentListItem.findViewById(R.id.endTripBtn)).setImageResource(R.drawable.finish_trip_button);
+            ((ImageButton) currentListItem.findViewById(R.id.startTripBtn)).setImageResource(R.drawable.start_trip_disable_button);
 
             Model.getInstance().startTrip(ownerId, userId, new Model.GetIdListener() {
                 @Override
@@ -199,17 +176,15 @@ public class DogsListFragment extends Fragment
                     }
                 }
             });
-        }
-        else if (view.getTag().equals("endTripTag"))
-        {
+        } else if (view.getTag().equals("endTripTag")) {
             View currentListItem = (View) view.getParent();
 
             currentListItem.findViewById(R.id.endTripBtn).setEnabled(false);
             currentListItem.findViewById(R.id.startTripBtn).setEnabled(true);
 
             // Replace the imageButton to disabled
-            ((ImageButton)currentListItem.findViewById(R.id.endTripBtn)).setImageResource(R.drawable.finish_trip_disable_button);
-            ((ImageButton)currentListItem.findViewById(R.id.startTripBtn)).setImageResource(R.drawable.start_trip_button);
+            ((ImageButton) currentListItem.findViewById(R.id.endTripBtn)).setImageResource(R.drawable.finish_trip_disable_button);
+            ((ImageButton) currentListItem.findViewById(R.id.startTripBtn)).setImageResource(R.drawable.start_trip_button);
 
             Model.getInstance().endTrip(tripsByOwnerId.get(ownerId), new Model.IsSucceedListener() {
                 @Override
@@ -252,7 +227,7 @@ public class DogsListFragment extends Fragment
             TextView ownerName = (TextView) convertView.findViewById(R.id.ownerNameInDogsList);
             TextView address = (TextView) convertView.findViewById(R.id.addressInDogsList);
 
-            final LinearLayout walkTimeLayout = (LinearLayout)convertView.findViewById(R.id.timeTravelLayout);
+            final LinearLayout walkTimeLayout = (LinearLayout) convertView.findViewById(R.id.timeTravelLayout);
 
             final DogOwner owner = list.get(position);
 
@@ -332,5 +307,4 @@ public class DogsListFragment extends Fragment
             return convertView;
         }
     }
-
 }
