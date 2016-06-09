@@ -66,12 +66,14 @@
 
             </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="הצג"
-                android:enabled="false"
-                android:id="@+id/showOffersByDistance"/>
+                <ImageButton
+                    android:id="@+id/showOffersByDistance"
+                    android:layout_width="130dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/show"
+                    android:scaleType="fitCenter"
+                    android:background="@color/colorBackground"
+                    android:layout_alignParentStart="true"/>
 
             </LinearLayout>
 

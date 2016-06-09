@@ -39,13 +39,19 @@ public class ActionBarActivity extends AppCompatActivity
 
         // set icons
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.graydog);
-        tabLayout.getTabAt(1).setIcon(R.drawable.grayman);
-        tabLayout.getTabAt(2).setIcon(R.drawable.grayreport);
-        tabLayout.getTabAt(3).setIcon(R.drawable.graymessage);
+        tabLayout.getTabAt(0).setIcon(R.drawable.dog_walk);
+        tabLayout.getTabAt(1).setIcon(R.drawable.information);
+        tabLayout.getTabAt(2).setIcon(R.drawable.report);
+        tabLayout.getTabAt(3).setIcon(R.drawable.friend_request);
 
         if (isOwner){
-            tabLayout.getTabAt(6).setIcon(R.drawable.graysearch);
+            tabLayout.getTabAt(4).setIcon(R.drawable.dog_walker_search);
+            tabLayout.getTabAt(5).setIcon(R.drawable.map);
+            tabLayout.getTabAt(6).setIcon(R.drawable.search_black);
+        }
+        else
+        {
+            tabLayout.getTabAt(4).setIcon(R.drawable.dog_search);
         }
     }
 

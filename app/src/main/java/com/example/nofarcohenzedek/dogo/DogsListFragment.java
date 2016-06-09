@@ -61,7 +61,7 @@ public class DogsListFragment extends Fragment {
 
 //        userId = args.getLong("userId");
 
-        Button calculatePathBtn = (Button) view.findViewById(R.id.calculatePathButton);
+        ImageButton calculatePathBtn = (ImageButton) view.findViewById(R.id.calculatePathButton);
 
         calculatePathBtn.setOnClickListener(new View.OnClickListener() {
             @Override
