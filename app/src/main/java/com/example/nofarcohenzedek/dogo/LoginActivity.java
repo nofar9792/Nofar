@@ -2,7 +2,6 @@ package com.example.nofarcohenzedek.dogo;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -23,10 +22,10 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
 
-        FontReplacer.replaceDefaultFont(this, "DEFAULT", "fonts/Guttman Yad-Brush.ttf");
-        FontReplacer.replaceDefaultFont(this, "MONOSPACE", "fonts/Guttman Yad-Brush.ttf");
-        FontReplacer.replaceDefaultFont(this, "SERIF", "fonts/Guttman Yad-Brush.ttf");
-        FontReplacer.replaceDefaultFont(this, "SANS_SERIF", "fonts/Guttman Yad-Brush.ttf");
+        FontReplacer.replaceDefaultFont(getApplicationContext(), "DEFAULT", "fonts/Guttman Yad-Brush.ttf");
+        FontReplacer.replaceDefaultFont(getApplicationContext(), "MONOSPACE", "fonts/Guttman Yad-Brush.ttf");
+        FontReplacer.replaceDefaultFont(getApplicationContext(), "SERIF", "fonts/Guttman Yad-Brush.ttf");
+        FontReplacer.replaceDefaultFont(getApplicationContext(), "SANS_SERIF", "fonts/Guttman Yad-Brush.ttf");
         //Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Guttman Yad-Brush.ttf");
         //TextView userNameTextView = (TextView) findViewById(R.id.lbl_userNameLogin);
         //userNameTextView.setTypeface(font);

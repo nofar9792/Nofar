@@ -61,6 +61,7 @@ public class TripsReportFragment extends Fragment {
                 @Override
                 public void onResult(List<Trip> trips) {
                     allTrips = trips;
+                    Collections.sort(allTrips,new TripsComparator());
 
                     if (allTrips != null && !allTrips.isEmpty()) {
                         CustomAdapter adapter = new CustomAdapter();
@@ -218,46 +219,47 @@ public class TripsReportFragment extends Fragment {
 
             // Delete event
 
-            final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener(){
+            if (!isOwner) {
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which)
-                    {
-                        case DialogInterface.BUTTON_POSITIVE: {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE: {
 
-                            Model.getInstance().deleteTrip(trip.getId(), new Model.IsSucceedListener() {
-                                @Override
-                                public void onResult(boolean isSucceed) {
-                                    if (isSucceed) {
-                                        allTrips.remove(position);
-                                        notifyDataSetChanged();
-                                        Toast.makeText(getActivity().getApplicationContext(),"הטיול נמחק בהצלחה", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(getActivity().getApplicationContext(),"אירעה שגיאה בעת המחיקה", Toast.LENGTH_SHORT).show();
+                                Model.getInstance().deleteTrip(trip.getId(), new Model.IsSucceedListener() {
+                                    @Override
+                                    public void onResult(boolean isSucceed) {
+                                        if (isSucceed) {
+                                            allTrips.remove(position);
+                                            notifyDataSetChanged();
+                                            Toast.makeText(getActivity().getApplicationContext(), "הטיול נמחק בהצלחה", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getActivity().getApplicationContext(), "אירעה שגיאה בעת המחיקה", Toast.LENGTH_SHORT).show();
 
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                            break;
+                                break;
+                            }
                         }
                     }
-                }
-            };
+                };
 
-            convertView.setOnLongClickListener(
-                    new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                            dialog.setMessage("Delete?").setPositiveButton("Yes",dialogClickListener)
-                            .setNegativeButton("No",dialogClickListener).show();
+                convertView.setOnLongClickListener(
+                        new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                                dialog.setMessage("Delete?").setPositiveButton("Yes", dialogClickListener)
+                                        .setNegativeButton("No", dialogClickListener).show();
 
-                            return false;
+                                return false;
+                            }
                         }
-                    }
-            );
+                );
+            }
 
             return convertView;
         }

@@ -174,6 +174,11 @@ public class Model {
     public void getAllTripOffersByAgeAndPrice(long walkerAge, long walkerPrice, final Model.GetTripOffersListener listener) {
         modelParse.getAllTripOffersByAgeAndPrice(walkerAge, walkerPrice, listener);
     }
+
+    public void deleteTripOffer (long ownerId, String fromDate, String toDate, final Model.IsSucceedListener listener) {
+        modelParse.deleteTripOffer(ownerId,fromDate,toDate,listener);
+    }
+
         //endregion
 
     //region Interfaces

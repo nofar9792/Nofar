@@ -61,17 +61,17 @@
         android:orientation="vertical">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="38dp"
             android:text="פרטי ההצעה"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:id="@+id/tripOfferDetails"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="37dp"
             android:text="פרטי בעל הכלב"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:id="@+id/tripOfferOwnerDetails"
             />
 
