@@ -1,6 +1,7 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +16,12 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Model.getInstance().init(getApplicationContext());
+        Context appContext = getApplicationContext();
+        FontReplacer.replaceDefaultFont(appContext, "DEFAULT", "fonts/Guttman Yad-Brush.ttf");
+        FontReplacer.replaceDefaultFont(appContext, "MONOSPACE", "fonts/Guttman Yad-Brush.ttf");
+        FontReplacer.replaceDefaultFont(appContext, "SERIF", "fonts/Guttman Yad-Brush.ttf");
+        FontReplacer.replaceDefaultFont(appContext, "SANS_SERIF", "fonts/Guttman Yad-Brush.ttf");
+        Model.getInstance().init(appContext);
     }
 
     public void signUpBTNClick(View view)
