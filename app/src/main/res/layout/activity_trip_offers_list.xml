@@ -40,6 +40,7 @@
                 android:layout_height="80dp"
                 android:src="@drawable/new_post"
                 android:id="@+id/addNewOfferBtn"
+                android:background="@color/colorBackground"
                 android:gravity="center_horizontal"
                 android:scaleType="fitCenter"/>
 

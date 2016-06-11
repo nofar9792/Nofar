@@ -229,7 +229,10 @@
             android:layout_height="38dp"
             android:src="@drawable/new_post"
             android:id="@+id/saveOffer"
+            android:background="@color/colorBackground"
             android:scaleType="fitCenter"/>
+
+
 
     </LinearLayout>
 
