@@ -122,39 +122,34 @@ public class SignUpActivity extends Activity {
                                         Model.getInstance().saveImage(picRef, dogPic, new Model.IsSucceedListener() {
                                             @Override
                                             public void onResult(boolean isSucceed) {
-                                                if (isSucceed) {
-                                                    isSaved = true;
-                                                    Toast.makeText(getApplicationContext(), "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
-                                                } else {
+                                                if (!isSucceed) {
                                                     Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת שמירת התמונה", Toast.LENGTH_SHORT).show();
-                                                }
-
-                                                if (isSaved) {
-                                                    Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
-                                                        @Override
-                                                        public void onResult(User user) {
-                                                            if (user != null) {
-                                                                Intent intent = new Intent(getApplicationContext(), ActionBarActivity.class);
-                                                                intent.putExtra("userId", user.getId());
-
-                                                                if (user instanceof DogOwner) {
-                                                                    intent.putExtra("isOwner", true);
-                                                                    intent.putExtra("address", user.getAddress() + ", " + user.getCity());
-                                                                } else {
-                                                                    intent.putExtra("isOwner", false);
-                                                                }
-
-                                                                startActivity(intent);
-                                                            } else {
-                                                                TextView error = (TextView) findViewById(R.id.error);
-                                                                error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
-                                                            }
-                                                        }
-                                                    });
                                                 }
                                             }
                                         });
                                     }
+                                    Model.getInstance().logIn(userName, password, new Model.GetUserListener() {
+                                        @Override
+                                        public void onResult(User user) {
+                                            if (user != null) {
+                                                Intent intent = new Intent(getApplicationContext(), ActionBarActivity.class);
+                                                intent.putExtra("userId", user.getId());
+
+                                                if (user instanceof DogOwner) {
+                                                    intent.putExtra("isOwner", true);
+                                                    intent.putExtra("address", user.getAddress() + ", " + user.getCity());
+                                                } else {
+                                                    intent.putExtra("isOwner", false);
+                                                }
+
+                                                startActivity(intent);
+                                            } else {
+                                                TextView error = (TextView) findViewById(R.id.error);
+                                                error.setText("אירעה שגיאה בעת ההתחברות. ");
+                                            }
+                                        }
+                                    });
+
                                 } else {
                                     Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
                                 }
