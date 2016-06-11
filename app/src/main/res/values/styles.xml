@@ -30,5 +30,7 @@
 
     <style name="OrangeBarTheme" parent="@style/Theme.AppCompat.Light.NoActionBar" >
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/brownColor</item>
+        <item name="android:textViewStyle">@style/myTVStyle</item>
     </style>
 </resources>
