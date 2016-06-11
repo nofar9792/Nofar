@@ -74,7 +74,7 @@
                     android:layout_width="130dp"
                     android:layout_height="80dp"
                     android:gravity="center_horizontal"
-                    android:src="@drawable/show"
+                    android:src="@drawable/search_button"
                     android:background="@color/colorBackground"
                     android:scaleType="fitCenter"/>
 
