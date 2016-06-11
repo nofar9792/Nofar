@@ -43,6 +43,7 @@ public class DogOwnerDetailsActivity extends Activity {
         final TextView firstName = (TextView) findViewById(R.id.firstNameInDetails);
         firstName.setTypeface(font);
         final TextView lastName = (TextView) findViewById(R.id.lastNameInDetails);
+        final TextView phoneNumber = (TextView) findViewById(R.id.phoneNumberInDetails);
         final TextView city = (TextView) findViewById(R.id.cityInDetails);
         final TextView address = (TextView) findViewById(R.id.addressInDetails);
         final TextView dogName = (TextView) findViewById(R.id.dogNameForDetais);
@@ -68,6 +69,7 @@ public class DogOwnerDetailsActivity extends Activity {
                     if (user instanceof DogOwner) {
                         firstName.setText(user.getFirstName());
                         lastName.setText(user.getLastName());
+                        phoneNumber.setText(user.getPhoneNumber());
                         city.setText(user.getCity());
                         address.setText(user.getAddress());
                         Dog dog = ((DogOwner) user).getDog();
