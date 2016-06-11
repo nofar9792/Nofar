@@ -4,7 +4,9 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layoutDirection="rtl"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:layout_marginBottom="3dp"
+    android:layout_marginTop="3dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,8 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tripOfferStartDateInList"
-            />
+            android:id="@+id/tripOfferStartDateInList" />
 
     </LinearLayout>
 
@@ -68,7 +69,7 @@
             android:layout_gravity="left"
             android:background="@color/colorBackground"
             android:scaleType="fitCenter"
-            android:layout_marginBottom="6dp" />
+            android:paddingBottom="3dp" />
 
         <ImageButton
             android:layout_width="120dp"
@@ -78,7 +79,9 @@
             android:id="@+id/tripOfferOwnerDetails"
             android:layout_gravity="left"
             android:background="@color/colorBackground"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter"
+            android:paddingTop="3dp"
+            android:layout_marginBottom="3dp" />
 
     </LinearLayout>
 
