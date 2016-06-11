@@ -59,7 +59,7 @@ public class TripOffersList extends Fragment {
         allOffers = new ArrayList<TripOffer>();
         listView = (ListView) view.findViewById(R.id.tripOffersList);
         progressBar = (ProgressBar) view.findViewById(R.id.tripOffersProgressBar);
-
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         if (isOwner) {
 

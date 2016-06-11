@@ -66,6 +66,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         progressBar = (ProgressBar) rootView.findViewById(R.id.mapsProgressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         return rootView;
     }

@@ -44,16 +44,17 @@
             android:layoutDirection="rtl">
 
         <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
             android:src="@drawable/ok_button"
             android:scaleType="fitCenter"
             android:background="@color/colorBackground"
             android:id="@+id/acceptButton"/>
         <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:src="@drawable/cancel_button"
             android:scaleType="fitCenter"

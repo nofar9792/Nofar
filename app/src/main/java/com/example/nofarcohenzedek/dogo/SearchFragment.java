@@ -46,6 +46,7 @@ public class SearchFragment extends Fragment
         View view = inflater.inflate(R.layout.activity_search, container, false);
         currentView = view;
         progressBar = (ProgressBar) view.findViewById(R.id.searchProgressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
         super.onCreateView(inflater, container, savedInstanceState);
 
         args = getArguments();
