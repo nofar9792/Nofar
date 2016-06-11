@@ -20,7 +20,8 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        progressBar = (ProgressBar) findViewById(R.id.loginProgressBarr);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         FontReplacer.replaceDefaultFont(getApplicationContext(), "DEFAULT", "fonts/Guttman Yad-Brush.ttf");
         FontReplacer.replaceDefaultFont(getApplicationContext(), "MONOSPACE", "fonts/Guttman Yad-Brush.ttf");
@@ -39,7 +40,6 @@ public class LoginActivity extends Activity {
         EditText password = (EditText) findViewById(R.id.passwordLogin);
 
         if (isValid(userName.getText().toString(), password.getText().toString())) {
-            progressBar = (ProgressBar) findViewById(R.id.loginProgressBarr);
             progressBar.setVisibility(View.VISIBLE);
             Model.getInstance().logIn(userName.getText().toString(), password.getText().toString(), new Model.GetUserListener()
             {

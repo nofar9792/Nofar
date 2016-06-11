@@ -51,6 +51,7 @@ public class MessagesFragment extends Fragment
         super.onCreateView(inflater, container, savedInstanceState);
 
         progressBar = (ProgressBar) view.findViewById(R.id.messagesProgressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
         data = new LinkedList<>();
         progressBar.setVisibility(View.VISIBLE);
         list = (ListView) view.findViewById(R.id.messagesList);
