@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.Model;
@@ -89,7 +90,7 @@ public class OwnerTripOffering extends Activity {
             });
         }
 
-        Button saveBTN = (Button) findViewById(R.id.saveOffer);
+        ImageButton saveBTN = (ImageButton) findViewById(R.id.saveOffer);
         saveBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
