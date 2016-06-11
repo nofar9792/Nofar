@@ -104,7 +104,7 @@ public class TripsReportFragment extends Fragment {
      * pay for trip - on select 'isPaid' checkBox
      * @param view
      */
-    public void payTripBTN(View view)
+    public void payTripBTN(View view, int position)
     {
         CheckBox isPaid = ((CheckBox)view);
 
@@ -123,6 +123,7 @@ public class TripsReportFragment extends Fragment {
                 }
             });
             isPaid.setEnabled(false);
+            allTrips.get(position).setIsPaid(true);
         }
     }
 
@@ -161,7 +162,7 @@ public class TripsReportFragment extends Fragment {
             convertView.findViewById(R.id.isPaid).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    payTripBTN(v);
+                    payTripBTN(v, position);
                 }
             });
 
@@ -213,6 +214,8 @@ public class TripsReportFragment extends Fragment {
             if(isPaid.isChecked() ||  isOwner)
             {
                 isPaid.setEnabled(false);
+            }else {
+                isPaid.setEnabled(true);
             }
 
             // Delete event
@@ -250,8 +253,8 @@ public class TripsReportFragment extends Fragment {
                             @Override
                             public boolean onLongClick(View v) {
                                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                                dialog.setMessage("Delete?").setPositiveButton("Yes", dialogClickListener)
-                                        .setNegativeButton("No", dialogClickListener).show();
+                                dialog.setMessage("האם ברצונך למחוק?").setPositiveButton("כן", dialogClickListener)
+                                        .setNegativeButton("לא", dialogClickListener).show();
 
                                 return false;
                             }
