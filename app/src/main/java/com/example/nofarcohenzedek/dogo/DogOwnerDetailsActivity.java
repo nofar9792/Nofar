@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -44,6 +43,7 @@ public class DogOwnerDetailsActivity extends Activity {
         final TextView firstName = (TextView) findViewById(R.id.firstNameInDetails);
         firstName.setTypeface(font);
         final TextView lastName = (TextView) findViewById(R.id.lastNameInDetails);
+        final TextView phoneNumber = (TextView) findViewById(R.id.phoneNumberInDetails);
         final TextView city = (TextView) findViewById(R.id.cityInDetails);
         final TextView address = (TextView) findViewById(R.id.addressInDetails);
         final TextView dogName = (TextView) findViewById(R.id.dogNameForDetais);
@@ -69,6 +69,7 @@ public class DogOwnerDetailsActivity extends Activity {
                     if (user instanceof DogOwner) {
                         firstName.setText(user.getFirstName());
                         lastName.setText(user.getLastName());
+                        phoneNumber.setText(user.getPhoneNumber());
                         city.setText(user.getCity());
                         address.setText(user.getAddress());
                         Dog dog = ((DogOwner) user).getDog();

@@ -3,9 +3,9 @@ package com.example.nofarcohenzedek.dogo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -19,7 +19,7 @@ public class OwnerTripOffering extends Activity {
     private long id;
     private boolean isDetails;
     private TripOffer offer;
-
+    private ProgressBar progressBar;
     private EditText fromDate;
     private EditText toDate;
     private EditText minimalAge;
@@ -86,6 +86,7 @@ public class OwnerTripOffering extends Activity {
                         isComfortable18To20.setChecked(offer.getIsComfortable18To20());
                         isComfortable20To22.setChecked(offer.getIsComfortable20To22());
                     }
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         }
@@ -150,6 +151,8 @@ public class OwnerTripOffering extends Activity {
                     else {
                         Toast.makeText(getApplicationContext(), "אירעה שגיאה בעת פרסום הבקשה", Toast.LENGTH_SHORT).show();
                     }
+
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         }
