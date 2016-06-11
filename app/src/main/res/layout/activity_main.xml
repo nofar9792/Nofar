@@ -23,12 +23,12 @@
 
     <ImageButton
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:src="@drawable/connect_button"
         android:id="@+id/connect_button"
         android:layout_below="@+id/logo"
         android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:background="@color/colorBackground"
         android:onClick="loginBTNClick"
         android:scaleType="fitCenter"/>
@@ -36,12 +36,12 @@
 
     <ImageButton
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:src="@drawable/sign_up_button"
         android:id="@+id/sign_up_button"
         android:layout_below="@+id/connect_button"
         android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:background="@color/colorBackground"
         android:onClick="signUpBTNClick"
         android:scaleType="fitCenter"/>

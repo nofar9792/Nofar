@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -120,7 +121,7 @@ public class DogOwnerDetailsActivity extends Activity {
             }
         });
 
-        final Button sendRequestButton = (Button) findViewById(R.id.sendRequest);
+        final ImageButton sendRequestButton = (ImageButton) findViewById(R.id.sendRequest);
 
         Model.getInstance().checkRequestExist(ownerId, walkerId, new Model.IsSucceedListener() {
             @Override

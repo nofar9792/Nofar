@@ -303,13 +303,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="שלח בקשה"
-                android:visibility="gone"
+
+            <ImageButton
                 android:id="@+id/sendRequest"
-                android:onClick="sendRequestClick"/>
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="@color/colorBackground"
+                android:visibility="gone"
+                android:onClick="sendRequestClick"
+                android:scaleType="fitCenter"
+                android:src="@drawable/send_request" />
 
         </LinearLayout>
     </LinearLayout>
