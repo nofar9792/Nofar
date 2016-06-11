@@ -103,8 +103,7 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         userId = intent.getLongExtra("userId", 0);
 
 
-        progressBar = (ProgressBar) findViewById(R.id.mapsProgressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
+        progressBar = (ProgressBar) findViewById(R.id.mapsPathProgressBar);
         format = new SimpleDateFormat("HH:mm");
 
         data = new HashMap<>();

@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +58,8 @@ public class SignUpActivity extends Activity {
     private Bitmap dogPic;
     private boolean isSaved;
 
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +80,8 @@ public class SignUpActivity extends Activity {
         // Get the layouts
         LinearLayout layoutWalker = (LinearLayout) findViewById(R.id.layoutWalker);
         LinearLayout layoutOwner = (LinearLayout) findViewById(R.id.layoutOwner);
+
+        progressBar = (ProgressBar) findViewById(R.id.signUpProgressBar);
 
         // Check which radio chosen
         if (isOwner.isChecked()) {
@@ -103,6 +108,7 @@ public class SignUpActivity extends Activity {
         // Check if all details are validate
         if (isValid()) {
             // Check the type of user, and save this user on db
+            progressBar.setVisibility(View.VISIBLE);
             if (isOwner.isChecked()) {
 
                 // Create the dog object
@@ -146,12 +152,14 @@ public class SignUpActivity extends Activity {
                                             } else {
                                                 TextView error = (TextView) findViewById(R.id.error);
                                                 error.setText("אירעה שגיאה בעת ההתחברות. ");
+                                                progressBar.setVisibility(View.GONE);
                                             }
                                         }
                                     });
 
                                 } else {
                                     Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             }
                         }, new Model.ExceptionListener() {
@@ -159,6 +167,7 @@ public class SignUpActivity extends Activity {
                             public void onResult(String message) {
                                 if (message.equals("user already exist")) {
                                     error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             }
                         });
@@ -176,6 +185,8 @@ public class SignUpActivity extends Activity {
                                     Toast.makeText(getApplicationContext(), "שמירה בוצעה בהצלחה", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "אירעה שגיאה בתהליך ההרשמה", Toast.LENGTH_SHORT).show();
+                                    progressBar.setVisibility(View.GONE);
+
                                 }
 
                                 // Connect to dogo with the new username and password - only if user succeed to sign.
@@ -198,6 +209,7 @@ public class SignUpActivity extends Activity {
                                             } else {
                                                 TextView error = (TextView) findViewById(R.id.error);
                                                 error.setText("הייתה בעיה עם ההרשמה, אנא נסה מאוחר יותר.");
+                                                progressBar.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -208,11 +220,15 @@ public class SignUpActivity extends Activity {
                             public void onResult(String message) {
                                 if (message.equals("user already exist")) {
                                     error.setText("שם משתמש זה קיים כבר, אנא בחר שם משתמש אחר.");
+                                    progressBar.setVisibility(View.GONE);
                                 }
                             }
                         });
             }
         }
+
+        progressBar.setVisibility(View.GONE);
+
     }
 
     /**

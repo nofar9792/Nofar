@@ -1,5 +1,6 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.location.Location;
@@ -13,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.nofarcohenzedek.dogo.Model.DogOwner;
@@ -32,8 +34,9 @@ public class SearchFragment extends Fragment
     private DogOwner owner;
     private Long userId;
 
+
     private View currentView;
-    private Bundle args;
+    private ScrollView mainScrollLayout;
 
     public SearchFragment(){}
 
@@ -46,10 +49,8 @@ public class SearchFragment extends Fragment
         View view = inflater.inflate(R.layout.activity_search, container, false);
         currentView = view;
         progressBar = (ProgressBar) view.findViewById(R.id.searchProgressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
+        mainScrollLayout = (ScrollView) view.findViewById(R.id.searchMainScrollView);
         super.onCreateView(inflater, container, savedInstanceState);
-
-        args = getArguments();
 
         ((ListView)view.findViewById(R.id.searchResultList)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -180,6 +181,13 @@ public class SearchFragment extends Fragment
                 adapter.notifyDataSetChanged();
 
                 progressBar.setVisibility(View.GONE);
+                ViewGroup.LayoutParams params = mainScrollLayout.getLayoutParams();
+                params.height = 1500;
+
+                mainScrollLayout.setLayoutParams(params);
+
+                getActivity().findViewById(R.id.searchListScrollView).setVisibility(View.VISIBLE);
+
             }
         });
     }

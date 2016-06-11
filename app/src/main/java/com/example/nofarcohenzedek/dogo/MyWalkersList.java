@@ -35,7 +35,6 @@ public class MyWalkersList extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         progressBar = (ProgressBar) view.findViewById(R.id.walkersListProgressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
         listView = (ListView)view.findViewById(R.id.myWalkersList);
 
         Model.getInstance().getWalkersConnectToOwner(userId, new Model.GetDogWalkersListener() {

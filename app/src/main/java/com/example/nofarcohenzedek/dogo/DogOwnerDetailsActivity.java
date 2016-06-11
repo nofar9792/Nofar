@@ -33,7 +33,6 @@ public class DogOwnerDetailsActivity extends Activity {
         setContentView(R.layout.activity_dog_owner_details);
 
         progressBar = (ProgressBar) findViewById(R.id.dogOwnerProgressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         ownerId = getIntent().getLongExtra("ownerId", 0);
         walkerId = getIntent().getLongExtra("walkerId", 0);

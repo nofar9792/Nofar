@@ -21,7 +21,6 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         progressBar = (ProgressBar) findViewById(R.id.loginProgressBarr);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         FontReplacer.replaceDefaultFont(getApplicationContext(), "DEFAULT", "fonts/Guttman Yad-Brush.ttf");
         FontReplacer.replaceDefaultFont(getApplicationContext(), "MONOSPACE", "fonts/Guttman Yad-Brush.ttf");

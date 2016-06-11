@@ -530,5 +530,12 @@
                 android:src="@drawable/sign_up_button" />
         </LinearLayout>
     </ScrollView>
+
+    <ProgressBar
+    android:id="@+id/signUpProgressBar"
+    android:layout_width="110dp"
+    android:layout_height="110dp"
+    android:layout_centerInParent="true"
+    android:visibility="gone" />
 </LinearLayout>
 

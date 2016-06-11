@@ -57,7 +57,6 @@ public class DogsListFragment extends Fragment {
 
         Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.dogsListProgressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
         listView = (ListView) view.findViewById(R.id.dogsOfDogWalker);
 
 //        userId = args.getLong("userId");
@@ -300,7 +299,8 @@ public class DogsListFragment extends Fragment {
                 public void onClick(View v) {
                     // on click - open the dog owner details
                     Intent intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetailsActivity.class);
-                    intent.putExtra("dogOwnerId", Long.toString(owner.getId()));
+                    intent.putExtra("ownerId", owner.getId());
+                    intent.putExtra("walkerId", userId);
                     startActivity(intent);
                 }
             });
