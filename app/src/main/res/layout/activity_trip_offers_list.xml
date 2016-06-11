@@ -70,10 +70,10 @@
                     android:id="@+id/showOffersByDistance"
                     android:layout_width="130dp"
                     android:layout_height="80dp"
+                    android:gravity="center_horizontal"
                     android:src="@drawable/show"
                     android:scaleType="fitCenter"
-                    android:background="@color/colorBackground"
-                    android:layout_alignParentStart="true"/>
+                    android:background="@color/colorBackground"/>
 
             </LinearLayout>
 

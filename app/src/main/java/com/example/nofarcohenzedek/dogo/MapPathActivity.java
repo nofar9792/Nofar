@@ -481,6 +481,13 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
     @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+
+        finish();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
 

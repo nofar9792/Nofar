@@ -4,6 +4,7 @@ import com.example.nofarcohenzedek.dogo.Model.Common.RequestConsts;
 import com.example.nofarcohenzedek.dogo.Model.Common.TripOfferConsts;
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.TripOffer;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -107,7 +108,7 @@ public class TripsOfferingParse {
     public static void getTripOffer(long ownerId, String fromDate, String toDate, final Model.GetTripOffersListener listener){
         ParseQuery<ParseObject> query = new ParseQuery<>(TripOfferConsts.TRIP_OFFER_TABLE);
         query.whereEqualTo(TripOfferConsts.OWNER_ID,ownerId).whereEqualTo(TripOfferConsts.FROM_DATE,fromDate)
-        .whereEqualTo(TripOfferConsts.TO_DATE,toDate);
+        .whereEqualTo(TripOfferConsts.TO_DATE, toDate);
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -125,6 +126,30 @@ public class TripsOfferingParse {
 
                     listener.onResult(null);
                 }
+            }
+        });
+    }
+
+    public static void deleteTripOffer (long ownerId, String fromDate, String toDate, final Model.IsSucceedListener listener) {
+        ParseQuery<ParseObject> query = new ParseQuery<>(TripOfferConsts.TRIP_OFFER_TABLE);
+        query.whereEqualTo(TripOfferConsts.OWNER_ID, ownerId).whereEqualTo(TripOfferConsts.FROM_DATE, fromDate)
+                .whereEqualTo(TripOfferConsts.TO_DATE, toDate);
+
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+
+                parseObject.deleteInBackground(new DeleteCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            listener.onResult(true);
+                        } else {
+                            e.printStackTrace();
+                            listener.onResult(false);
+                        }
+                    }
+                });
             }
         });
     }

@@ -1,5 +1,7 @@
 package com.example.nofarcohenzedek.dogo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.Fragment;
@@ -13,15 +15,22 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
+import com.example.nofarcohenzedek.dogo.Model.Trip;
 import com.example.nofarcohenzedek.dogo.Model.TripOffer;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class TripOffersList extends Fragment {
@@ -155,7 +164,6 @@ public class TripOffersList extends Fragment {
         return view;
     }
 
-
     class CustomAdapter extends BaseAdapter {
 
         @Override
@@ -212,6 +220,53 @@ public class TripOffersList extends Fragment {
                     startActivity(intent);
                 }
             });
+
+
+            // Delete event
+
+            if (isOwner) {
+                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE: {
+
+                                Model.getInstance().deleteTripOffer(allOffers.get(position).getOwnerId(),
+                                        allOffers.get(position).getFromDate(),allOffers.get(position).getToDate()
+                                        , new Model.IsSucceedListener() {
+                                    @Override
+                                    public void onResult(boolean isSucceed) {
+                                        if (isSucceed) {
+                                            allOffers.remove(position);
+                                            notifyDataSetChanged();
+                                            Toast.makeText(getActivity().getApplicationContext(), "ההצעה נמחקה בהצלחה", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getActivity().getApplicationContext(), "אירעה שגיאה בעת המחיקה", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                });
+
+                                break;
+                            }
+                        }
+                    }
+                };
+
+                convertView.setOnLongClickListener(
+                        new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                                dialog.setMessage("Delete?").setPositiveButton("Yes", dialogClickListener)
+                                        .setNegativeButton("No", dialogClickListener).show();
+
+                                return false;
+                            }
+                        }
+                );
+            }
 
             return convertView;
         }

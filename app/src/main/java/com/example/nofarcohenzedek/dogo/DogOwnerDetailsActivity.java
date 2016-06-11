@@ -1,6 +1,7 @@
 package com.example.nofarcohenzedek.dogo;
 
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
@@ -36,7 +37,10 @@ public class DogOwnerDetailsActivity extends Activity {
         ownerId = getIntent().getLongExtra("ownerId", 0);
         walkerId = getIntent().getLongExtra("walkerId", 0);
 
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Guttman Yad-Brush.ttf");
+
         final TextView firstName = (TextView) findViewById(R.id.firstNameInDetails);
+        firstName.setTypeface(font);
         final TextView lastName = (TextView) findViewById(R.id.lastNameInDetails);
         final TextView city = (TextView) findViewById(R.id.cityInDetails);
         final TextView address = (TextView) findViewById(R.id.addressInDetails);

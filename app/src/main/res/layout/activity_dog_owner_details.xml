@@ -131,6 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10px"
+                android:fontFamily="tahoma"
                 android:text="@string/dogName"
                 android:textSize="20dp" />
 
