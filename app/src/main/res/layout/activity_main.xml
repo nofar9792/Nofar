@@ -28,7 +28,7 @@
         android:id="@+id/connect_button"
         android:layout_below="@+id/logo"
         android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="60dp"
         android:background="@color/colorBackground"
         android:onClick="loginBTNClick"
         android:scaleType="fitCenter"/>
@@ -41,7 +41,7 @@
         android:id="@+id/sign_up_button"
         android:layout_below="@+id/connect_button"
         android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="60dp"
         android:background="@color/colorBackground"
         android:onClick="signUpBTNClick"
         android:scaleType="fitCenter"/>
