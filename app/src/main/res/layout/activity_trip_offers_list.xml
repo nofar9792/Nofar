@@ -66,7 +66,6 @@
                     android:id="@+id/raduisForOffersList"
                     android:inputType="number"/>
 
-
             </LinearLayout>
 
                 <ImageButton
@@ -80,7 +79,6 @@
 
 
             </LinearLayout>
-
 
             <TextView
                 android:layout_width="wrap_content"

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -20,18 +19,12 @@ import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.DogWalker;
 import com.example.nofarcohenzedek.dogo.Model.Model;
-import com.example.nofarcohenzedek.dogo.Model.Trip;
 import com.example.nofarcohenzedek.dogo.Model.TripOffer;
 import com.example.nofarcohenzedek.dogo.Model.User;
 import com.example.nofarcohenzedek.dogo.Model.Utilities;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 public class TripOffersList extends Fragment {
@@ -45,9 +38,10 @@ public class TripOffersList extends Fragment {
     private ListView listView;
     private List<TripOffer> allOffers;
 
-    public TripOffersList(){}
+    public TripOffersList() {
+    }
 
-    public TripOffersList(long id, boolean isOwner,String ownerAddress){
+    public TripOffersList(long id, boolean isOwner, String ownerAddress) {
         this.userId = id;
         this.isOwner = isOwner;
         this.ownerAddress = ownerAddress;
@@ -118,46 +112,45 @@ public class TripOffersList extends Fragment {
 
                     Model.getInstance().getAllTripOffersByAgeAndPrice(walker.getAge(), walker.getPriceForHour(),
                             new Model.GetTripOffersListener() {
-                        @Override
-                        public void onResult(List<TripOffer> offers) {
+                                @Override
+                                public void onResult(List<TripOffer> offers) {
 
-                            if (((EditText) view.findViewById(R.id.raduisForOffersList)).getText().toString().equals("")){
-                                allOffers = offers;
-                            }
-                            // calculate distance
-                            else {
-                                long maxDistanceIsMeters = Long.parseLong(((EditText) view.findViewById(R.id.raduisForOffersList)).getText().toString());
+                                    if (((EditText) view.findViewById(R.id.raduisForOffersList)).getText().toString().equals("")) {
+                                        allOffers = offers;
+                                    }
+                                    // calculate distance
+                                    else {
+                                        long maxDistanceIsMeters = Long.parseLong(((EditText) view.findViewById(R.id.raduisForOffersList)).getText().toString());
 
-                                final LatLng walkerCoor = Utilities.getLocationFromAddress(walker.getAddress() + ", " + walker.getCity(), getActivity().getApplicationContext());
-                                final Location walkerLocation = new Location("walker");
-                                walkerLocation.setLatitude(walkerCoor.latitude);
-                                walkerLocation.setLongitude(walkerCoor.longitude);
+                                        final LatLng walkerCoor = Utilities.getLocationFromAddress(walker.getAddress() + ", " + walker.getCity(), getActivity().getApplicationContext());
+                                        final Location walkerLocation = new Location("walker");
+                                        walkerLocation.setLatitude(walkerCoor.latitude);
+                                        walkerLocation.setLongitude(walkerCoor.longitude);
 
-                                for (TripOffer offer: offers){
+                                        for (TripOffer offer : offers) {
 
-                                    LatLng offerCoor = Utilities.getLocationFromAddress(offer.getOwnerAddress(), getActivity().getApplicationContext());
-                                    Location offerLocation = new Location("offer");
-                                    offerLocation.setLatitude(offerCoor.latitude);
-                                    offerLocation.setLongitude(offerCoor.longitude);
+                                            LatLng offerCoor = Utilities.getLocationFromAddress(offer.getOwnerAddress(), getActivity().getApplicationContext());
+                                            Location offerLocation = new Location("offer");
+                                            offerLocation.setLatitude(offerCoor.latitude);
+                                            offerLocation.setLongitude(offerCoor.longitude);
 
-                                    if (walkerLocation.distanceTo(offerLocation) <= (float) maxDistanceIsMeters) {
-                                        allOffers.add(offer);
+                                            if (walkerLocation.distanceTo(offerLocation) <= (float) maxDistanceIsMeters) {
+                                                allOffers.add(offer);
+                                            }
+                                        }
                                     }
 
+                                    CustomAdapter adapter = new CustomAdapter();
+                                    listView.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+
+                                    if (allOffers.size() == 0) {
+                                        ((TextView) getActivity().findViewById(R.id.errorInTripOffersList)).setText("לא נמצאו פרסומי טיולים");
+                                    }
+
+                                    progressBar.setVisibility(View.GONE);
                                 }
-                            }
-
-                            CustomAdapter adapter = new CustomAdapter();
-                            listView.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
-
-                            if (allOffers.size() == 0){
-                                ((TextView) getActivity().findViewById(R.id.errorInTripOffersList)).setText("לא נמצאו פרסומי טיולים");
-                            }
-
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    });
+                            });
                 }
             });
         }
@@ -195,7 +188,7 @@ public class TripOffersList extends Fragment {
             startDate.setText(allOffers.get(position).getFromDate());
             endDate.setText(allOffers.get(position).getToDate());
 
-            if (isOwner){
+            if (isOwner) {
                 convertView.findViewById(R.id.tripOfferOwnerDetails).setVisibility(View.GONE);
             }
 
@@ -216,8 +209,8 @@ public class TripOffersList extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity().getApplicationContext(), DogOwnerDetailsActivity.class);
-                    intent.putExtra("ownerId",allOffers.get(position).getOwnerId());
-                    intent.putExtra("walkerId",userId);
+                    intent.putExtra("ownerId", allOffers.get(position).getOwnerId());
+                    intent.putExtra("walkerId", userId);
                     startActivity(intent);
                 }
             });
@@ -234,20 +227,20 @@ public class TripOffersList extends Fragment {
                             case DialogInterface.BUTTON_POSITIVE: {
 
                                 Model.getInstance().deleteTripOffer(allOffers.get(position).getOwnerId(),
-                                        allOffers.get(position).getFromDate(),allOffers.get(position).getToDate()
+                                        allOffers.get(position).getFromDate(), allOffers.get(position).getToDate()
                                         , new Model.IsSucceedListener() {
-                                    @Override
-                                    public void onResult(boolean isSucceed) {
-                                        if (isSucceed) {
-                                            allOffers.remove(position);
-                                            notifyDataSetChanged();
-                                            Toast.makeText(getActivity().getApplicationContext(), "ההצעה נמחקה בהצלחה", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getActivity().getApplicationContext(), "אירעה שגיאה בעת המחיקה", Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void onResult(boolean isSucceed) {
+                                                if (isSucceed) {
+                                                    allOffers.remove(position);
+                                                    notifyDataSetChanged();
+                                                    Toast.makeText(getActivity().getApplicationContext(), "ההצעה נמחקה בהצלחה", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    Toast.makeText(getActivity().getApplicationContext(), "אירעה שגיאה בעת המחיקה", Toast.LENGTH_SHORT).show();
 
-                                        }
-                                    }
-                                });
+                                                }
+                                            }
+                                        });
 
                                 break;
                             }
@@ -272,5 +265,4 @@ public class TripOffersList extends Fragment {
             return convertView;
         }
     }
-
 }

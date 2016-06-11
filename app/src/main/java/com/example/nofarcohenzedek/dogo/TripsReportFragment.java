@@ -52,8 +52,6 @@ public class TripsReportFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.tripsReportProgressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
         listView = (ListView) view.findViewById(R.id.tripsList);
-        //isOwner = args.getBoolean("isOwner");
-        //userId = args.getLong("userId");
 
         // Get all trips that connected to current user
         if(isOwner)
@@ -216,7 +214,6 @@ public class TripsReportFragment extends Fragment {
             {
                 isPaid.setEnabled(false);
             }
-
 
             // Delete event
 
