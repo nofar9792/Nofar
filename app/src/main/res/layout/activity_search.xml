@@ -13,16 +13,21 @@
 
     tools:context=".SearchFragment">
 
-    <ProgressBar
-        android:id="@+id/searchProgressBar"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="355dp">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="355dp">
+
+        <ProgressBar
+            android:id="@+id/searchProgressBar"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -231,9 +236,8 @@
 
 
         </LinearLayout>
-
+</LinearLayout>
     </ScrollView>
-
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -244,8 +248,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layoutDirection="rtl">
-
-
 
             <ListView
                 android:id="@+id/searchResultList"
