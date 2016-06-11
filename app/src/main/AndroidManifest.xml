@@ -53,32 +53,44 @@
         <activity
             android:name=".DogWalkerDetailsActivity"
             android:label="@string/title_activity_dog_walker_details"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".ActionBarActivity"
             android:label="@string/title_activity_action_bar"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/OrangeBarTheme"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".DogOwnerDetailsActivity"
-            android:label="@string/title_activity_dog_owner_details" />
+            android:label="@string/title_activity_dog_owner_details"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".MapPathActivity"
             android:label="@string/title_activity_map_path"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
             android:name=".OwnerTripOffering"
             android:label="@string/title_activity_owner_trip_offering"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
             android:name=".TripOffersList"
             android:label="@string/title_activity_trip_offers_list"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".MyWalkersList"
