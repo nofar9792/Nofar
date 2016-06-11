@@ -40,6 +40,7 @@
                 android:layout_height="80dp"
                 android:src="@drawable/new_post"
                 android:id="@+id/addNewOfferBtn"
+                android:background="@color/colorBackground"
                 android:gravity="center_horizontal"
                 android:scaleType="fitCenter"/>
 
@@ -73,7 +74,7 @@
                     android:layout_width="130dp"
                     android:layout_height="80dp"
                     android:gravity="center_horizontal"
-                    android:src="@drawable/show"
+                    android:src="@drawable/search_button"
                     android:background="@color/colorBackground"
                     android:scaleType="fitCenter"/>
 
@@ -93,7 +94,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="10px"
-                />
+                android:divider="#ED7D31"
+                android:dividerHeight="3dp" />
 
         </LinearLayout>
 
