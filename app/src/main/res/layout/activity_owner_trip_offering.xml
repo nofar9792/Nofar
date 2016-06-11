@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MyProfileFragment">
+    android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/tripOfferingProgressBar"
@@ -246,11 +246,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="פרסם בקשה"
-                android:id="@+id/saveOffer"/>
+                <ImageButton
+                    android:layout_width="120dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/new_post"
+                    android:id="@+id/saveOffer"
+                    android:scaleType="fitCenter"/>
 
             </LinearLayout>
 

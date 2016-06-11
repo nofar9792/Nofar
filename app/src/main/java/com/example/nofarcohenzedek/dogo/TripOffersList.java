@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -65,7 +66,7 @@ public class TripOffersList extends Fragment {
 
             view.findViewById(R.id.offersWalkerLayout).setVisibility(View.GONE);
 
-            ((Button) view.findViewById(R.id.addNewOfferBtn)).setOnClickListener(new View.OnClickListener() {
+            ((ImageButton) view.findViewById(R.id.addNewOfferBtn)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity().getApplicationContext(), OwnerTripOffering.class);

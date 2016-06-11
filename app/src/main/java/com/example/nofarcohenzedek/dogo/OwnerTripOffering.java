@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.Model;
@@ -37,9 +38,6 @@ public class OwnerTripOffering extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_trip_offering);
-
-        progressBar = (ProgressBar) findViewById(R.id.tripOfferingProgressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         id = getIntent().getLongExtra("ownerId", 0);
         isDetails = getIntent().getBooleanExtra("isDetails", true);
@@ -94,7 +92,7 @@ public class OwnerTripOffering extends Activity {
             });
         }
 
-        Button saveBTN = (Button) findViewById(R.id.saveOffer);
+        ImageButton saveBTN = (ImageButton) findViewById(R.id.saveOffer);
         saveBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,8 +128,6 @@ public class OwnerTripOffering extends Activity {
             final TripOffer newOffer = new TripOffer(id,getIntent().getStringExtra("ownerAddress"),fromDate,toDate,minimalAge,maximalPrice, isComfortable6To8,
                     isComfortable8To10,isComfortable10To12,isComfortable12To14,isComfortable14To16,isComfortable16To18,
                     isComfortable18To20,isComfortable20To22);
-
-            progressBar.setVisibility(View.VISIBLE);
 
             Model.getInstance().getTripOffer(id, fromDate, toDate, new Model.GetTripOffersListener() {
                 @Override

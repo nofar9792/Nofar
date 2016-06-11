@@ -35,11 +35,13 @@
             android:visibility="visible"
             android:orientation="vertical">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="פרסם בקשה חדשה"
-                android:id="@+id/addNewOfferBtn" />
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:src="@drawable/new_post"
+                android:id="@+id/addNewOfferBtn"
+                android:gravity="center_horizontal"
+                android:scaleType="fitCenter"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -72,8 +74,9 @@
                     android:layout_height="80dp"
                     android:gravity="center_horizontal"
                     android:src="@drawable/show"
-                    android:scaleType="fitCenter"
-                    android:background="@color/colorBackground"/>
+                    android:background="@color/colorBackground"
+                    android:scaleType="fitCenter"/>
+
 
             </LinearLayout>
 
