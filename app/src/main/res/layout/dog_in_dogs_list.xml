@@ -122,6 +122,7 @@
             <ImageButton
                 android:layout_width="130dp"
                 android:layout_height="80dp"
+                android:layout_marginRight="20dp"
                 android:scaleType="fitCenter"
                 android:background="@color/colorBackground"
                 android:src="@drawable/finish_trip_disable_button"

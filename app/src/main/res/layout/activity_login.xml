@@ -87,11 +87,13 @@
 
         <ImageButton
             android:id="@+id/loginBtn"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
             android:onClick="loginBtnClick"
             android:src="@drawable/login_button"
+            android:layout_marginTop="20dp"
             android:scaleType="fitCenter"
+            android:gravity="center_horizontal"
             android:background="@color/colorBackground"/>
 
     </LinearLayout>
