@@ -29,5 +29,7 @@
     <ListView
         android:id="@+id/messagesList"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:divider="#ED7D31"
+        android:dividerHeight="3dp" />
 </RelativeLayout>

@@ -67,7 +67,8 @@
             android:id="@+id/tripOfferDetails"
             android:layout_gravity="left"
             android:background="@color/colorBackground"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="6dp" />
 
         <ImageButton
             android:layout_width="120dp"

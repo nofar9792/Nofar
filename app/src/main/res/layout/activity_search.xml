@@ -252,7 +252,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="143dp"
                 android:layout_gravity="right"
-                android:layoutDirection="rtl">
+                android:layoutDirection="rtl"
+                android:divider="#ED7D31"
+                android:dividerHeight="3dp">
 
             </ListView>
 
