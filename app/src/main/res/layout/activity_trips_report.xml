@@ -46,7 +46,9 @@
             <ListView
                 android:id="@+id/tripsList"
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:divider="#ED7D31"
+                android:dividerHeight="3dp" />
 
         </LinearLayout>
 
