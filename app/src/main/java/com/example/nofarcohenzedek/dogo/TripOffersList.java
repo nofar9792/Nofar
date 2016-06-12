@@ -256,8 +256,8 @@ public class TripOffersList extends Fragment {
                             @Override
                             public boolean onLongClick(View v) {
                                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                                dialog.setMessage("Delete?").setPositiveButton("Yes", dialogClickListener)
-                                        .setNegativeButton("No", dialogClickListener).show();
+                                dialog.setMessage("האם ברצונך למחוק הצעה?").setPositiveButton("כן", dialogClickListener)
+                                        .setNegativeButton("לא", dialogClickListener).show();
 
                                 return false;
                             }
