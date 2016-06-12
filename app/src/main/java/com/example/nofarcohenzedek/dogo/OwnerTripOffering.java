@@ -38,6 +38,8 @@ public class OwnerTripOffering extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_trip_offering);
 
+        progressBar = (ProgressBar)findViewById(R.id.tripOfferingProgressBar);
+
         id = getIntent().getLongExtra("ownerId", 0);
         isDetails = getIntent().getBooleanExtra("isDetails", true);
 
@@ -162,5 +164,4 @@ public class OwnerTripOffering extends Activity {
     {
        return true;
     }
-
 }

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -55,18 +54,14 @@ public class DogsListFragment extends Fragment {
 
         itemsData = new ArrayList<ItemInList>();
 
-        Bundle args = getArguments();
         progressBar = (ProgressBar) view.findViewById(R.id.dogsListProgressBar);
         listView = (ListView) view.findViewById(R.id.dogsOfDogWalker);
-
-//        userId = args.getLong("userId");
 
         ImageButton calculatePathBtn = (ImageButton) view.findViewById(R.id.calculatePathButton);
 
         calculatePathBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View listItem;
                 TextView errorView = (TextView) v.getRootView().findViewById(R.id.calculatePathError);
 
                 boolean isValid = true;

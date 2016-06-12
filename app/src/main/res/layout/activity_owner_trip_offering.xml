@@ -12,13 +12,6 @@
     tools:context=".OwnerTripOffering"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/tripOfferingProgressBar"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_centerInParent="true"
-        android:visibility="visible" />
-
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -261,4 +254,12 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/tripOfferingProgressBar"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_centerInParent="true"
+        android:visibility="visible" />
+
 </RelativeLayout>

@@ -26,11 +26,6 @@ public class LoginActivity extends Activity {
         FontReplacer.replaceDefaultFont(getApplicationContext(), "MONOSPACE", "fonts/Guttman Yad-Brush.ttf");
         FontReplacer.replaceDefaultFont(getApplicationContext(), "SERIF", "fonts/Guttman Yad-Brush.ttf");
         FontReplacer.replaceDefaultFont(getApplicationContext(), "SANS_SERIF", "fonts/Guttman Yad-Brush.ttf");
-        //Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Guttman Yad-Brush.ttf");
-        //TextView userNameTextView = (TextView) findViewById(R.id.lbl_userNameLogin);
-        //userNameTextView.setTypeface(font);
-        //TextView passwordTextView = (TextView) findViewById(R.id.lbl_passwordLogin);
-        //userNameTextView.setTypeface(font);
     }
 
     public void loginBtnClick(View view)

@@ -54,7 +54,6 @@ public class TripOffersList extends Fragment {
         allOffers = new ArrayList<TripOffer>();
         listView = (ListView) view.findViewById(R.id.tripOffersList);
         progressBar = (ProgressBar) view.findViewById(R.id.tripOffersProgressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFFFF0000, android.graphics.PorterDuff.Mode.MULTIPLY);
 
         if (isOwner) {
 
@@ -97,65 +96,69 @@ public class TripOffersList extends Fragment {
                         public void onResult(User user) {
                             if (user != null & user instanceof DogWalker) {
                                 walker = (DogWalker) user;
-                                view.findViewById(R.id.showOffersByDistance).setEnabled(true);
+                                createShowOffersButton(view);
+
                             }
                         }
                     }
             );
-
-            view.findViewById(R.id.showOffersByDistance).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((TextView) getActivity().findViewById(R.id.errorInTripOffersList)).setText("");
-                    allOffers.clear();
-                    progressBar.setVisibility(View.VISIBLE);
-
-                    Model.getInstance().getAllTripOffersByAgeAndPrice(walker.getAge(), walker.getPriceForHour(),
-                            new Model.GetTripOffersListener() {
-                                @Override
-                                public void onResult(List<TripOffer> offers) {
-
-                                    if (((EditText) view.findViewById(R.id.raduisForOffersList)).getText().toString().equals("")) {
-                                        allOffers = offers;
-                                    }
-                                    // calculate distance
-                                    else {
-                                        long maxDistanceIsMeters = Long.parseLong(((EditText) view.findViewById(R.id.raduisForOffersList)).getText().toString());
-
-                                        final LatLng walkerCoor = Utilities.getLocationFromAddress(walker.getAddress() + ", " + walker.getCity(), getActivity().getApplicationContext());
-                                        final Location walkerLocation = new Location("walker");
-                                        walkerLocation.setLatitude(walkerCoor.latitude);
-                                        walkerLocation.setLongitude(walkerCoor.longitude);
-
-                                        for (TripOffer offer : offers) {
-
-                                            LatLng offerCoor = Utilities.getLocationFromAddress(offer.getOwnerAddress(), getActivity().getApplicationContext());
-                                            Location offerLocation = new Location("offer");
-                                            offerLocation.setLatitude(offerCoor.latitude);
-                                            offerLocation.setLongitude(offerCoor.longitude);
-
-                                            if (walkerLocation.distanceTo(offerLocation) <= (float) maxDistanceIsMeters) {
-                                                allOffers.add(offer);
-                                            }
-                                        }
-                                    }
-
-                                    CustomAdapter adapter = new CustomAdapter();
-                                    listView.setAdapter(adapter);
-                                    adapter.notifyDataSetChanged();
-
-                                    if (allOffers.size() == 0) {
-                                        ((TextView) getActivity().findViewById(R.id.errorInTripOffersList)).setText("לא נמצאו פרסומי טיולים");
-                                    }
-
-                                    progressBar.setVisibility(View.GONE);
-                                }
-                            });
-                }
-            });
         }
 
         return view;
+    }
+
+    private void createShowOffersButton(final View view) {
+        view.findViewById(R.id.showOffersByDistance).setEnabled(true);
+        view.findViewById(R.id.showOffersByDistance).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((TextView) getActivity().findViewById(R.id.errorInTripOffersList)).setText("");
+                allOffers.clear();
+                progressBar.setVisibility(View.VISIBLE);
+
+                Model.getInstance().getAllTripOffersByAgeAndPrice(walker.getAge(), walker.getPriceForHour(),
+                        new Model.GetTripOffersListener() {
+                            @Override
+                            public void onResult(List<TripOffer> offers) {
+
+                                if (((EditText) view.findViewById(R.id.raduisForOffersList)).getText().toString().equals("")) {
+                                    allOffers = offers;
+                                }
+                                // calculate distance
+                                else {
+                                    long maxDistanceIsMeters = Long.parseLong(((EditText) view.findViewById(R.id.raduisForOffersList)).getText().toString());
+
+                                    final LatLng walkerCoor = Utilities.getLocationFromAddress(walker.getAddress() + ", " + walker.getCity(), getActivity().getApplicationContext());
+                                    final Location walkerLocation = new Location("walker");
+                                    walkerLocation.setLatitude(walkerCoor.latitude);
+                                    walkerLocation.setLongitude(walkerCoor.longitude);
+
+                                    for (TripOffer offer : offers) {
+
+                                        LatLng offerCoor = Utilities.getLocationFromAddress(offer.getOwnerAddress(), getActivity().getApplicationContext());
+                                        Location offerLocation = new Location("offer");
+                                        offerLocation.setLatitude(offerCoor.latitude);
+                                        offerLocation.setLongitude(offerCoor.longitude);
+
+                                        if (walkerLocation.distanceTo(offerLocation) <= (float) maxDistanceIsMeters) {
+                                            allOffers.add(offer);
+                                        }
+                                    }
+                                }
+
+                                CustomAdapter adapter = new CustomAdapter();
+                                listView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+
+                                if (allOffers.size() == 0) {
+                                    ((TextView) getActivity().findViewById(R.id.errorInTripOffersList)).setText("לא נמצאו פרסומי טיולים");
+                                }
+
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        });
+            }
+        });
     }
 
     class CustomAdapter extends BaseAdapter {
