@@ -70,11 +70,19 @@ public class OwnerTripOffering extends Activity {
             isComfortable18To20.setEnabled(false);
             isComfortable20To22.setEnabled(false);
 
+            ImageButton saveBTN = (ImageButton) findViewById(R.id.saveOffer);
+            saveBTN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onSaveOfferClick(v);
+                }
+            });
+
             Model.getInstance().getTripOffer(id, getIntent().getStringExtra("fromDate"), getIntent().getStringExtra("toDate"),
                     new Model.GetTripOffersListener() {
                 @Override
                 public void onResult(List<TripOffer> offers) {
-                    if (offers != null && offers.size() >0){
+                    if (offers != null && offers.size() > 0){
                         offer = offers.get(0);
 
                         fromDate.setText(offer.getFromDate());
@@ -91,15 +99,9 @@ public class OwnerTripOffering extends Activity {
                     progressBar.setVisibility(View.GONE);
                 }
             });
+        }else{
+            progressBar.setVisibility(View.GONE);
         }
-
-        ImageButton saveBTN = (ImageButton) findViewById(R.id.saveOffer);
-        saveBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSaveOfferClick(v);
-            }
-        });
     }
 
     public void onSaveOfferClick(View view)
@@ -133,7 +135,7 @@ public class OwnerTripOffering extends Activity {
             Model.getInstance().getTripOffer(id, fromDate, toDate, new Model.GetTripOffersListener() {
                 @Override
                 public void onResult(List<TripOffer> offers) {
-                    // if the offer doesnt already exist
+                    // if the offer doesn't already exist
                     if (offers != null && offers.size() == 0) {
                         Model.getInstance().addTripOffer(newOffer, new Model.IsSucceedListener() {
                             @Override
