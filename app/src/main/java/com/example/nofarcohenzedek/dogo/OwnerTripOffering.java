@@ -56,6 +56,14 @@ public class OwnerTripOffering extends Activity {
         minimalAge = (EditText) findViewById(R.id.ageForTripOffering);
         maximalPrice = (EditText) findViewById(R.id.priceForTripOffering);
 
+        ImageButton saveBTN = (ImageButton) findViewById(R.id.saveOffer);
+        saveBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSaveOfferClick(v);
+            }
+        });
+
         if (isDetails){
             findViewById(R.id.ownerSectionInTripOffering).setVisibility(View.GONE);
 
@@ -69,14 +77,6 @@ public class OwnerTripOffering extends Activity {
             isComfortable16To18.setEnabled(false);
             isComfortable18To20.setEnabled(false);
             isComfortable20To22.setEnabled(false);
-
-            ImageButton saveBTN = (ImageButton) findViewById(R.id.saveOffer);
-            saveBTN.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onSaveOfferClick(v);
-                }
-            });
 
             Model.getInstance().getTripOffer(id, getIntent().getStringExtra("fromDate"), getIntent().getStringExtra("toDate"),
                     new Model.GetTripOffersListener() {
