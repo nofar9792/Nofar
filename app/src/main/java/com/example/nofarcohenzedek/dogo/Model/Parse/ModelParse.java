@@ -269,8 +269,8 @@ public class ModelParse {
     // endregion
 
     //region Request Methods
-    public void addRequest(long dogOwnerId, long dogWalkerId, Model.IsSucceedListener listener) {
-        RequestParse.addToRequestTable(dogOwnerId, dogWalkerId, RequestStatus.Waiting, listener);
+    public void addRequest(long dogOwnerId, long dogWalkerId,boolean isOwnerAskedWalker, Model.IsSucceedListener listener) {
+        RequestParse.addToRequestTable(dogOwnerId, dogWalkerId, isOwnerAskedWalker, RequestStatus.Waiting, listener);
     }
 
     public void acceptRequest(long dogOwnerId, long dogWalkerId, Model.IsSucceedListener listener) {

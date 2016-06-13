@@ -112,8 +112,8 @@ public class Model {
     //endregion
 
     //region Request Methods
-    public void addRequest(long dogOwnerId, long dogWalkerId, IsSucceedListener listener) {
-        modelParse.addRequest(dogOwnerId, dogWalkerId, listener);
+    public void addRequest(long dogOwnerId, long dogWalkerId,boolean isOwnerAskedWalker, IsSucceedListener listener) {
+        modelParse.addRequest(dogOwnerId, dogWalkerId,isOwnerAskedWalker, listener);
     }
 
     public void acceptRequest(long dogOwnerId, long dogWalkerId, IsSucceedListener listener) {

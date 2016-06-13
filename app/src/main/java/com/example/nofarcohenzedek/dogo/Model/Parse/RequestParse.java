@@ -17,12 +17,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class RequestParse {
-    public static void addToRequestTable(long dogOwnerId, long dogWalkerId, RequestStatus requestStatus, final Model.IsSucceedListener listener){
+    public static void addToRequestTable(long dogOwnerId, long dogWalkerId,boolean isOwnerAskedWalker, RequestStatus requestStatus, final Model.IsSucceedListener listener){
         ParseObject newDogOwnerConnectDogWalkerParseObject = new ParseObject(RequestConsts.REQUESTS_TABLE);
 
         newDogOwnerConnectDogWalkerParseObject.put(RequestConsts.DOG_OWNER_ID, dogOwnerId);
         newDogOwnerConnectDogWalkerParseObject.put(RequestConsts.DOG_WALKER_ID, dogWalkerId);
         newDogOwnerConnectDogWalkerParseObject.put(RequestConsts.REQUEST_STATUS, requestStatus.name());
+        newDogOwnerConnectDogWalkerParseObject.put(RequestConsts.IS_OWNER_ASKED_WALKER, isOwnerAskedWalker);
 
         newDogOwnerConnectDogWalkerParseObject.saveInBackground(new SaveCallback() {
             @Override

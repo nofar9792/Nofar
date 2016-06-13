@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nofarcohenzedek.dogo.Model.Model;
 import com.example.nofarcohenzedek.dogo.Model.PathAction;
@@ -91,69 +92,78 @@ public class MapPathActivity extends FragmentActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_path);
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        listFull = false;
-
-        listView = (ListView) findViewById(R.id.pathActionsList);
-
-        Intent intent = getIntent();
-        stringIds = intent.getStringArrayListExtra("ownerIds");
-        ArrayList<String> times = intent.getStringArrayListExtra("walkTimes");
-        userId = intent.getLongExtra("userId", 0);
-
-
-        progressBar = (ProgressBar) findViewById(R.id.mapsPathProgressBar);
-        format = new SimpleDateFormat("HH:mm");
-
-        data = new HashMap<>();
-        actionStrings = new LinkedHashMap<>();
-
-        // create data to send algorithm
-        data.put("OwnerId", Long.toString(userId));
-        for (int i = 0; i < stringIds.size(); i++) {
-            data.put("DogWalks[" + i + "].Duration", times.get(i));
-            data.put("DogWalks[" + i + "].UserId", stringIds.get(i));
-        }
-
-        String res = null;
-
         try {
-            res = new HttpAsyncTask().execute("").get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        if (res != null) {
-            Gson gson = new Gson();
-            pathRes = gson.fromJson(res, PathResponse.class);
+            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            listFull = false;
 
-            // decide which addresses to mark in path
-            addrToMarkPath = new ArrayList<String>() {
-            };
+            listView = (ListView) findViewById(R.id.pathActionsList);
 
-            for (PathMilestone currMil : pathRes.getPath()) {
-                if ((currMil.getAction() == PathAction.Start || currMil.getAction() == PathAction.Walk) && !addrToMarkPath.contains(currMil.getAddress())) {
-                    addrToMarkPath.add(currMil.getAddress());
-                }
+            Intent intent = getIntent();
+            stringIds = intent.getStringArrayListExtra("ownerIds");
+            ArrayList<String> times = intent.getStringArrayListExtra("walkTimes");
+            userId = intent.getLongExtra("userId", 0);
 
-                if (currMil.getAction() == PathAction.Start) {
-                    homeLocation = currMil.getAddress();
-                }
+
+            progressBar = (ProgressBar) findViewById(R.id.mapsPathProgressBar);
+            format = new SimpleDateFormat("HH:mm");
+
+            data = new HashMap<>();
+            actionStrings = new LinkedHashMap<>();
+
+            // create data to send algorithm
+            data.put("OwnerId", Long.toString(userId));
+            for (int i = 0; i < stringIds.size(); i++) {
+                data.put("DogWalks[" + i + "].Duration", times.get(i));
+                data.put("DogWalks[" + i + "].UserId", stringIds.get(i));
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            String res = null;
+
             try {
-                Date date = sdf.parse(pathRes.getStartTime());
-                startTime = GregorianCalendar.getInstance(); // creates a new calendar instance
-                startTime.setTime(date);   // assigns calendar to given date
-            } catch (ParseException e) {
+                res = new HttpAsyncTask().execute("").get();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            // ATTENTION: This was auto-generated to implement the App Indexing API.
-            // See https://g.co/AppIndexing/AndroidStudio for more information.
-            client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+            if (res != null) {
+                Gson gson = new Gson();
+                pathRes = gson.fromJson(res, PathResponse.class);
+
+                // decide which addresses to mark in path
+                addrToMarkPath = new ArrayList<String>() {
+                };
+
+                for (PathMilestone currMil : pathRes.getPath()) {
+                    if ((currMil.getAction() == PathAction.Start || currMil.getAction() == PathAction.Walk) && !addrToMarkPath.contains(currMil.getAddress())) {
+                        addrToMarkPath.add(currMil.getAddress());
+                    }
+
+                    if (currMil.getAction() == PathAction.Start) {
+                        homeLocation = currMil.getAddress();
+                    }
+                }
+
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                try {
+                    Date date = sdf.parse(pathRes.getStartTime());
+                    startTime = GregorianCalendar.getInstance(); // creates a new calendar instance
+                    startTime.setTime(date);   // assigns calendar to given date
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                // ATTENTION: This was auto-generated to implement the App Indexing API.
+                // See https://g.co/AppIndexing/AndroidStudio for more information.
+                client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+            Toast.makeText(getApplicationContext(), "אירעה שגיאה בחישוב המסלול, נסה שנית", Toast.LENGTH_SHORT).show();
+
         }
     }
 

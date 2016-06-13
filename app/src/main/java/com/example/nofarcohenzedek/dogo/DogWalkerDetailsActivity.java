@@ -83,7 +83,7 @@ public class DogWalkerDetailsActivity extends Activity
 
     public void sendRequestClick(View view)
     {
-        Model.getInstance().addRequest(ownerId, walkerId, new Model.IsSucceedListener() {
+        Model.getInstance().addRequest(ownerId, walkerId, true, new Model.IsSucceedListener() {
             @Override
             public void onResult(boolean isSucceed) {
                 if (isSucceed) {
